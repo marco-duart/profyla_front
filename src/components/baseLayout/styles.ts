@@ -1,8 +1,14 @@
 import styled from "styled-components";
+import backgroundImage from '../../assets/image/BG.jpg'
 
-export const BaseLayoutPageStyled = styled.nav`
+export const BaseLayoutPageStyled = styled.div`
   display: flex;
+  width: 100vw;
+  height: 100vh;
+  background-image: url(${backgroundImage});
+  background-position: 50% 0;
 `;
+
 
 export const BaseLayoutSidebarStyled = styled.div`
   display: flex;
