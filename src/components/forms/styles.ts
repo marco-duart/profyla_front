@@ -41,6 +41,21 @@ export const RegisterFormStyle = styled.form`
   }
 `;
 
+export const ForgotPasswordFormStyle = styled.form`
+  width: ${(props) => props.theme.widths.forms.xsm};
+  height: ${(props) => props.theme.widths.forms.sm};
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+
+  div {
+    height: 65px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+`;
+
 export const BaseTitleFormStyle = styled.h1`
   width: 100%;
   margin-bottom: 15px;

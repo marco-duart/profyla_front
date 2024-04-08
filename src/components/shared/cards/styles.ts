@@ -27,3 +27,29 @@ export const RegisterCardStyle = styled.div`
   box-shadow: ${props => props.theme.glows.glow100};
   padding: 20px 0;
 `
+export const ForgotPasswordCardStyle = styled.div`
+  width: ${props => props.theme.widths.cards.xxl};
+  height: ${props => props.theme.heights.cards.xl};
+  position: relative;
+  background-color: ${props => props.theme.colors.white};
+  border-radius: ${props => props.theme.radius.md};
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: ${props => props.theme.glows.glow100};
+  padding: 20px 0;
+`
+export const ConfirmAccountCardStyle = styled.div`
+  width: ${props => props.theme.widths.cards.xxl};
+  height: ${props => props.theme.heights.cards.lg};
+  position: relative;
+  background-color: ${props => props.theme.colors.white};
+  border-radius: ${props => props.theme.radius.md};
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: ${props => props.theme.glows.glow100};
+  padding: 20px 0;
+`

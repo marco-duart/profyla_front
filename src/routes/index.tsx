@@ -7,6 +7,9 @@ import BaseLayout from "../components/baseLayout";
 import { PrivateRoute } from "../components/auth/privateRoute";
 import Login from "../pages/login/login";
 import Register from "../pages/register/register";
+import ForgotPassword from "../pages/forgot_password/forgot-password";
+import { ConfirmAccount } from "../services/register";
+import Confirm from "../pages/confirm_account/confirm_account";
 
 import Dashboard from "../pages/dashboard/dashboard";
 import Cnpj from "../pages/cnpj/cnpj";
@@ -32,6 +35,8 @@ export default function Router() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/confirm/:id/:action_key" element={<Confirm />} />
         {/* <Route path="/" element={<PasswordRecovery />} /> */}
         <Route path="/admin" element={<PrivateRoute requiredRoles={CONSTANTS.ADMIN_ONLY} redirectTo="/"><BaseLayout /></PrivateRoute>}>
           <Route path="/admin/" element={<Dashboard />} />

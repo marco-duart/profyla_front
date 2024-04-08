@@ -179,11 +179,8 @@ export const GetToken = async (params: GetTokenDTO.IParams) => {
 
 export const ConfirmAccount = async (params: ConfirmAccountDTO.IParams) => {
   try {
-    const { id, ...restParams } = params;
-    const response = await api.post<ConfirmAccountDTO.IResponse>(
-      `/users/confirm/${id}`,
-      { params: restParams }
-    );
+    const { id, ...restParams } = params
+    const response = await api.post<ConfirmAccountDTO.IResponse>(`/users/confirm/${id}`, restParams )
 
     return {
       success: true,
