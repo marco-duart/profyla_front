@@ -1,5 +1,12 @@
+//NATIVE
 import React, { ReactNode } from 'react';
-import { LoginCardStyle } from './styles';
+//LIBRARIES
+
+//COMPONENTS
+
+//STYLES
+import * as S from './styles';
+//UTILS
 
 interface CardProps {
   children: ReactNode;
@@ -7,9 +14,9 @@ interface CardProps {
 
 const LoginCard: React.FC<CardProps> = ({children}) => {
   return (
-    <LoginCardStyle>
+    <S.LoginCardStyle>
       {children}
-    </LoginCardStyle>
+    </S.LoginCardStyle>
   );
 };
 

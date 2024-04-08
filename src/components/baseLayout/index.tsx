@@ -1,6 +1,15 @@
+
+//NATIVE
+//LIBRARIES
 import { Outlet } from "react-router-dom";
-import * as S from "./styles";
+
+//COMPONENTS
 import Sidebar from "../sidebar/sidebar"
+
+//STYLES
+import * as S from "./styles";
+
+//UTILS
 
 const BaseLayout = () => {
   return (

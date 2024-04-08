@@ -1,5 +1,13 @@
+//NATIVE
 import React, { ReactNode } from 'react';
+
+//LIBRARIES
+//COMPONENTS
+
+//STYLES
 import { BaseButtonStyle } from './styles';
+
+//UTILS
 
 interface ButtonProps {
   onClick?: () => void;

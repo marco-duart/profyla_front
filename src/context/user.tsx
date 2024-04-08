@@ -1,5 +1,12 @@
+//NATIVE
 import React, { createContext, useEffect, useState } from "react";
+//LIBRARIES
+
+//COMPONENTS
 import { LoggedUser } from "../services/register";
+//STYLES
+
+//UTILS
 
 type User = {
   id: number;

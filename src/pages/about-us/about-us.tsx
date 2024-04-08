@@ -1,9 +1,15 @@
+//NATIVE
+
+//LIBRARIES
+
+//COMPONENTS
+
+//STYLES
+
+//UTILS
+
 const AboutUs = () => {
-  return (
-    <div>
-      About us
-    </div>
-  )
+  return <div>About us</div>;
 };
 
 export default AboutUs;

@@ -18,9 +18,7 @@ import { EyeFill, EyeSlashFill } from "@styled-icons/bootstrap";
 
 //UTILS
 import { FORM_MESSAGE } from "../../utils/enums/form-message";
-
-const regexPassword =
-  /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+import * as CONSTANTS from "../../utils/constants/constants"
 
 const registerFormSchema = z
   .object({
@@ -37,7 +35,7 @@ const registerFormSchema = z
     password: z
       .string()
       .min(8, FORM_MESSAGE.PASSWORD_SIZE)
-      .regex(regexPassword, FORM_MESSAGE.PASSWORD_RULE),
+      .regex(CONSTANTS.PASSWORD_REGEX, FORM_MESSAGE.PASSWORD_RULE),
     confirm: z.string().min(8, FORM_MESSAGE.CONFIRM_PASSWORD),
     photo: z
       .instanceof(FileList)

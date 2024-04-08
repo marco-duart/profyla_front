@@ -1,39 +1,57 @@
+//NATIVE
+//LIBRARIES
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+//COMPONENTS
 import BaseLayout from "../components/baseLayout";
+import { PrivateRoute } from "../components/auth/privateRoute";
 import Login from "../pages/login/login";
 import Register from "../pages/register/register";
-import { PrivateRoute } from "../components/auth/PrivateRoute";
+
+import Dashboard from "../pages/dashboard/dashboard";
+import Cnpj from "../pages/cnpj/cnpj";
+import Candidates from "../pages/candidates/candidates";
+import Exams from "../pages/exams/exams";
+import Traits from "../pages/traits/traits";
+import Configurations from "../pages/configurations/configurations";
+import Notifications from "../pages/notifications/notifications";
+import Profile from "../pages/profile/profile";
+import Jobs from "../pages/jobs/jobs";
+import HiringProcess from "../pages/hiring-process/hiring-process";
+import Support from "../pages/support/support";
 import AboutUs from "../pages/about-us/about-us";
-import { Support } from "styled-icons/boxicons-regular";
+
+//STYLES
+//UTILS
+import * as CONSTANTS from "../utils/constants/constants"
+
 
 export default function Router() {
-  const ADMIN_ONLY = ['ti', 'admin']
-  const USERS_ONLY = ['ti', 'admin', 'user']
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
         {/* <Route path="/" element={<PasswordRecovery />} /> */}
-        {/* <Route path="/admin" element={<PrivateRoute requiredRoles={ADMIN_ONLY} redirectTo="/"><BaseLayout /></PrivateRoute>}>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/" element={<CNPJ />} />
-          <Route path="/" element={<Kanban />} />
-          <Route path="/" element={<Candidates />} />
-          <Route path="/" element={<Exams />} />
-          <Route path="/" element={<Configurações />} />
-          <Route path="/" element={<Notificações />} />
-          <Route path="/" element={<Skills-Knowledges-Profiles />} />
-        </Route> */}
-        <Route path="/user" element={<PrivateRoute requiredRoles={USERS_ONLY} redirectTo="/"><BaseLayout /></PrivateRoute>}>
-          {/* <Route path="/" element={<Dashboard />} />
-          <Route path="/" element={<Profile />} />
-          <Route path="/" element={<Vagas />} />
-          <Route path="/" element={<Processos />} />
-          <Route path="/" element={<Configurações />} />
-          <Route path="/" element={<Notificações />} /> */}
-          <Route path="/user/about-us" element={<PrivateRoute requiredRoles={USERS_ONLY} redirectTo="/"><AboutUs /></PrivateRoute>}/>
-          <Route path="/user/support" element={<PrivateRoute requiredRoles={USERS_ONLY} redirectTo="/"><Support /></PrivateRoute>}/>
+        <Route path="/admin" element={<PrivateRoute requiredRoles={CONSTANTS.ADMIN_ONLY} redirectTo="/"><BaseLayout /></PrivateRoute>}>
+          <Route path="/admin/" element={<Dashboard />} />
+          <Route path="/admin/" element={<Cnpj />} />
+          {/* <Route path="/admin/" element={<Kanban />} /> */}
+          <Route path="/admin/" element={<Candidates />} />
+          <Route path="/admin/" element={<Exams />} />
+          <Route path="/admin/" element={<Traits />} />
+          <Route path="/admin/" element={<Configurations />} />
+          <Route path="/admin/" element={<Notifications />} />
+        </Route>
+        <Route path="/user" element={<PrivateRoute requiredRoles={CONSTANTS.USERS_ONLY} redirectTo="/"><BaseLayout /></PrivateRoute>}>
+          <Route path="/user/dashboard" element={<Dashboard />} />
+          <Route path="/user/profile" element={<Profile />} />
+          <Route path="/user/jobs" element={<Jobs />} />
+          <Route path="/user/hiring-process" element={<HiringProcess />} />
+          <Route path="/user/configurations" element={<Configurations />} />
+          <Route path="/user/notifications" element={<Notifications />} />
+          <Route path="/user/about-us" element={<AboutUs />}/>
+          <Route path="/user/support" element={<Support />}/>
         </Route>
       </Routes>
     </BrowserRouter>
