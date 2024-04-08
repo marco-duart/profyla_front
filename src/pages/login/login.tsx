@@ -15,7 +15,7 @@ const Login = () => {
           <S.FooterLoginPageStyle>
             <small>Não tem cadastro?</small>
             <div>
-              <S.LinkLoginPageStyle to="/register">Cadastre-se aqui</S.LinkLoginPageStyle> | <S.LinkLoginPageStyle to="ROTA">Esqueci a senha</S.LinkLoginPageStyle>
+              <S.LinkLoginPageStyle to="/register">Cadastre-se aqui</S.LinkLoginPageStyle> | <S.LinkLoginPageStyle to="/forgot-password">Esqueci a senha</S.LinkLoginPageStyle>
             </div>
           </S.FooterLoginPageStyle>
         </LoginCard>

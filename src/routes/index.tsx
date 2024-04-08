@@ -2,6 +2,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import BaseLayout from "../components/baseLayout";
 import Login from "../pages/login/login";
 import Register from "../pages/register/register";
+import ForgotPassword from "../pages/forgot_password/forgot-password";
+import { ConfirmAccount } from "../services/register";
+import Confirm from "../pages/confirm_account/confirm_account";
 
 export default function Router() {
   return (
@@ -9,6 +12,8 @@ export default function Router() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/confirm/:id/:action_key" element={<Confirm />} />
         {/* <Route path="/" element={<PasswordRecovery />} />
         <Route path="/admin" element={<BaseLayout />}>
           <Route path="/" element={<Dashboard />} />

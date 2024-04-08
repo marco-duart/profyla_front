@@ -95,7 +95,7 @@ export const ForgetPassword = async (params: ForgetPasswordDTO.IParams) => {
     const response = await api.post<ForgetPasswordDTO.IResponse>('/users/forget-password', params)
 
     return {
-      error: false,
+      error: response.data.error,
       message: "MESSAGE",
       code: response.data.code
     }
@@ -168,7 +168,7 @@ export const GetToken = async (params: GetTokenDTO.IParams) => {
 export const ConfirmAccount = async (params: ConfirmAccountDTO.IParams) => {
   try {
     const { id, ...restParams } = params
-    const response = await api.post<ConfirmAccountDTO.IResponse>(`/users/confirm/${id}`, { params: restParams })
+    const response = await api.post<ConfirmAccountDTO.IResponse>(`/users/confirm/${id}`, restParams )
 
     return {
       error: false,
