@@ -88,6 +88,7 @@ export const HandlePasswordDivStyle = styled.div`
 export const BaseCheckboxFormStyle = styled.input`
   all: unset;
   display: inline-block;
+  cursor: pointer;
   border: 1px solid ${(props) => props.theme.colors.white200};
   width: 18px;
   height: 18px;

@@ -15,10 +15,12 @@ export const BaseLayoutSidebarStyled = styled.div`
 `;
 
 export const BaseLayoutDivStyled = styled.div`
+  position: relative;
   width: 100%;
-  padding: 25px;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
+
 `;
 
 export const IcoSidebarDivStyled = styled.img`

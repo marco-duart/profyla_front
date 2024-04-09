@@ -120,6 +120,8 @@ declare module "styled-components" {
       Poppins: string;
       Sora: string;
       Candal: string;
+      Roboto: string;
+      OpenSans: string;
     };
   }
 }
