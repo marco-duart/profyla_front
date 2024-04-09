@@ -19,21 +19,20 @@ export const GetEmploymentHistory = async (
     );
 
     return {
-      error: false,
+      success: true,
       message: "MESSAGE",
-      code: response.data.code,
       employmentHistory: response.data.employment,
     };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
-        error: true,
+        success: false,
         message: "MESSAGE",
         code: "CODIGO",
       };
     }
     return {
-      error: true,
+      success: false,
       message: "MESSAGE",
       code: "CODIGO",
     };
@@ -51,21 +50,20 @@ export const GetEmploymentHistories = async (
     );
 
     return {
-      error: false,
+      success: true,
       message: "MESSAGE",
-      code: response.data.code,
       EmploymentHistories: response.data.employment,
     };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
-        error: true,
+        success: false,
         message: "MESSAGE",
         code: "CODIGO",
       };
     }
     return {
-      error: true,
+      success: false,
       message: "MESSAGE",
       code: "CODIGO",
     };
@@ -83,21 +81,20 @@ export const CreateEmploymentHistory = async (
     );
 
     return {
-      error: false,
+      success: true,
       message: "MESSAGE",
-      code: response.data.code,
       employmentHistory: response.data.employment,
     };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
-        error: true,
+        success: false,
         message: "MESSAGE",
         code: "CODIGO",
       };
     }
     return {
-      error: true,
+      success: false,
       message: "MESSAGE",
       code: "CODIGO",
     };
@@ -115,21 +112,20 @@ export const UpdateEmploymentHistory = async (
     );
 
     return {
-      error: false,
+      success: true,
       message: "MESSAGE",
-      code: response.data.code,
       employmentHistory: response.data.employment,
     };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
-        error: true,
+        success: false,
         message: "MESSAGE",
         code: "CODIGO",
       };
     }
     return {
-      error: true,
+      success: false,
       message: "MESSAGE",
       code: "CODIGO",
     };
@@ -147,21 +143,20 @@ export const DeleteEmploymentHistory = async (
     );
 
     return {
-      error: false,
+      success: true,
       message: "MESSAGE",
-      code: response.data.code,
       employmentHistory: response.data.employment,
     };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
-        error: true,
+        success: false,
         message: "MESSAGE",
         code: "CODIGO",
       };
     }
     return {
-      error: true,
+      success: false,
       message: "MESSAGE",
       code: "CODIGO",
     };

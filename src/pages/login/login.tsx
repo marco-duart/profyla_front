@@ -1,7 +1,16 @@
+//NATIVE
+
+//LIBRARIES
+
+//COMPONENTS
 import LoginForm from "../../components/forms/login-form";
 import LoginCard from "../../components/shared/cards/login-card";
 import TalentflowLogo from "../../components/shared/talentflow-logo";
+
+//STYLES
 import * as S from "./styles";
+
+//UTILS
 
 const Login = () => {
   return (

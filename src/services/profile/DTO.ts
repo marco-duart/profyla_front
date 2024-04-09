@@ -1,40 +1,35 @@
 type Profile = {
-  id: number
-  title: string
-  created_at: Date
-  updated_at: Date
+  id: number;
+  title: string;
+  created_at: Date;
+  updated_at: Date;
 };
 
 type CandidateProfile = {
-  id: number
-  candidate_id: number
-  profile_id: number
-  created_at: Date
-  updated_at: Date
-}
-
+  id: number;
+  candidate_id: number;
+  profile_id: number;
+  created_at: Date;
+  updated_at: Date;
+};
 
 export namespace GetProfilesDTO {
   export interface IParams {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     profile: Profile[];
   }
 }
 
 export namespace CreateProfileDTO {
   export interface IParams {
-    title: string
+    title: string;
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     profile: Profile;
   }
 }
@@ -45,37 +40,31 @@ export namespace DeleteProfileDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     profile: Profile;
   }
 }
 
 export namespace AssignProfileDTO {
   export interface IParams {
-    user_id: number
-    profile_id: number
+    user_id: number;
+    profile_id: number;
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     candidateProfile: CandidateProfile;
   }
 }
 
 export namespace RemoveProfileDTO {
   export interface IParams {
-    user_id: number
-    candidate_profile_id: number
+    user_id: number;
+    candidate_profile_id: number;
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     candidateProfile: CandidateProfile;
   }
 }

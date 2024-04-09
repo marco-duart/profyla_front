@@ -40,9 +40,7 @@ export namespace GetCandidateDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     candidate: Candidate;
   }
 }
@@ -54,9 +52,7 @@ export namespace GetCandidatesDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     candidates: Candidate[];
     pageable: {
       offset: number;
@@ -101,9 +97,7 @@ export namespace CreateCandidateDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     candidate: Candidate;
   }
 }

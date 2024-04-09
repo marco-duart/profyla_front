@@ -1,12 +1,12 @@
 type Company = {
-  id: number
-  company_name: string
-  cnpj: string
-  sector: string
-  company_size: number 
-  company_location: string
-  created_at: Date
-  updated_at: Date
+  id: number;
+  company_name: string;
+  cnpj: string;
+  sector: string;
+  company_size: number;
+  company_location: string;
+  created_at: Date;
+  updated_at: Date;
 };
 
 export namespace GetCompanyDTO {
@@ -15,9 +15,7 @@ export namespace GetCompanyDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     company: Company;
   }
 }
@@ -27,26 +25,22 @@ export namespace GetCompaniesDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     companies: Company[];
   }
 }
 
 export namespace CreateCompanyDTO {
   export interface IParams {
-    company_name: string
-    cnpj: string
-    sector: string
-    company_size: number
-    company_location: string
+    company_name: string;
+    cnpj: string;
+    sector: string;
+    company_size: number;
+    company_location: string;
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     company: Company;
   }
 }
@@ -62,9 +56,7 @@ export namespace UpdateCompanyDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     company: Company;
   }
 }
@@ -75,9 +67,7 @@ export namespace DeleteCompanyDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     company: Company;
   }
 }

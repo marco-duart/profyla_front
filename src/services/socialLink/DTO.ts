@@ -1,10 +1,10 @@
 type SocialLink = {
-  id: number
-  title: string
-  link: string
-  created_at: Date
-  updated_at: Date
-  candidate_id: number
+  id: number;
+  title: string;
+  link: string;
+  created_at: Date;
+  updated_at: Date;
+  candidate_id: number;
 };
 
 export namespace GetSocialLinkDTO {
@@ -13,9 +13,7 @@ export namespace GetSocialLinkDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     social: SocialLink;
   }
 }
@@ -25,38 +23,32 @@ export namespace GetSocialLinksDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     social: SocialLink[];
   }
 }
 
 export namespace CreateSocialLinkDTO {
   export interface IParams {
-    title: string
-    link: string
+    title: string;
+    link: string;
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     social: SocialLink;
   }
 }
 
 export namespace UpdateSocialLinkDTO {
   export interface IParams {
-    title: string
-    link: string
+    title: string;
+    link: string;
     id: string;
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     social: SocialLink;
   }
 }
@@ -67,9 +59,7 @@ export namespace DeleteSocialLinkDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     social: SocialLink;
   }
 }

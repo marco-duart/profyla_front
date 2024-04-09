@@ -19,21 +19,20 @@ export const GetAcademicHistory = async (
     );
 
     return {
-      error: false,
+      success: true,
       message: "MESSAGE",
-      code: response.data.code,
       academicHistory: response.data.academic,
     };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
-        error: true,
+        success: false,
         message: "MESSAGE",
         code: "CODIGO",
       };
     }
     return {
-      error: true,
+      success: false,
       message: "MESSAGE",
       code: "CODIGO",
     };
@@ -51,21 +50,20 @@ export const GetAcademicHistories = async (
     );
 
     return {
-      error: false,
+      success: true,
       message: "MESSAGE",
-      code: response.data.code,
       academicHistories: response.data.academic,
     };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
-        error: true,
+        success: false,
         message: "MESSAGE",
         code: "CODIGO",
       };
     }
     return {
-      error: true,
+      success: false,
       message: "MESSAGE",
       code: "CODIGO",
     };
@@ -83,21 +81,20 @@ export const CreateAcademicHistory = async (
     );
 
     return {
-      error: false,
+      success: true,
       message: "MESSAGE",
-      code: response.data.code,
       academicHistory: response.data.academic,
     };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
-        error: true,
+        success: false,
         message: "MESSAGE",
         code: "CODIGO",
       };
     }
     return {
-      error: true,
+      success: false,
       message: "MESSAGE",
       code: "CODIGO",
     };
@@ -115,21 +112,20 @@ export const UpdateAcademicHistory = async (
     );
 
     return {
-      error: false,
+      success: true,
       message: "MESSAGE",
-      code: response.data.code,
       academicHistory: response.data.academic,
     };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
-        error: true,
+        success: false,
         message: "MESSAGE",
         code: "CODIGO",
       };
     }
     return {
-      error: true,
+      success: false,
       message: "MESSAGE",
       code: "CODIGO",
     };
@@ -147,21 +143,20 @@ export const DeleteAcademicHistory = async (
     );
 
     return {
-      error: false,
+      success: true,
       message: "MESSAGE",
-      code: response.data.code,
       academicHistory: response.data.academic,
     };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
-        error: true,
+        success: false,
         message: "MESSAGE",
         code: "CODIGO",
       };
     }
     return {
-      error: true,
+      success: false,
       message: "MESSAGE",
       code: "CODIGO",
     };

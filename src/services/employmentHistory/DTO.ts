@@ -16,9 +16,7 @@ export namespace GetEmploymentHistoryDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     employment: EmploymentHistory;
   }
 }
@@ -28,9 +26,7 @@ export namespace GetEmploymentHistoriesDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     employment: EmploymentHistory[];
   }
 }
@@ -45,9 +41,7 @@ export namespace CreateEmploymentHistoryDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     employment: EmploymentHistory;
   }
 }
@@ -63,9 +57,7 @@ export namespace UpdateEmploymentHistoryDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     employment: EmploymentHistory;
   }
 }
@@ -76,9 +68,7 @@ export namespace DeleteEmploymentHistoryDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     employment: EmploymentHistory;
   }
 }

@@ -18,3 +18,12 @@ export const TalentflowLogoStyle = styled.div`
   margin-left: -275px;
   top: -150px;
 `;
+
+export const BaseTitleFormStyle = styled.h1`
+  width: 100%;
+  margin-bottom: 15px;
+  text-align: center;
+  font-family: ${(props) => props.theme.fontFamily.Sora};
+  font-size: ${(props) => props.theme.fontSizes.md};
+  margin-bottom: 20px;
+`;

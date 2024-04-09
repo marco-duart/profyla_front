@@ -11,9 +11,7 @@ export namespace GetSkillsDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     skill: Skill[];
   }
 }
@@ -24,9 +22,7 @@ export namespace CreateSkillDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     skill: Skill;
   }
 }
@@ -37,9 +33,7 @@ export namespace DeleteSkillDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     skill: Skill;
   }
 }
@@ -50,9 +44,7 @@ export namespace AssignSkillDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     skill: Skill;
   }
 }
@@ -63,9 +55,7 @@ export namespace RemoveSkillDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     skill: Skill;
   }
 }

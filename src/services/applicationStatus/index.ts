@@ -17,21 +17,20 @@ export const GetApplication = async (params: GetApplicationDTO.IParams) => {
     );
 
     return {
-      error: false,
+      success: true,
       message: "MESSAGE",
-      code: response.data.code,
       application: response.data.application,
     };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
-        error: true,
+        success: false,
         message: "MESSAGE",
         code: "CODIGO",
       };
     }
     return {
-      error: true,
+      success: false,
       message: "MESSAGE",
       code: "CODIGO",
     };
@@ -47,22 +46,21 @@ export const GetApplications = async (params: GetApplicationsDTO.IParams) => {
     );
 
     return {
-      error: false,
+      success: true,
       message: "MESSAGE",
-      code: response.data.code,
       applications: response.data.applications,
       pageable: response.data.pageable,
     };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
-        error: true,
+        success: false,
         message: "MESSAGE",
         code: "CODIGO",
       };
     }
     return {
-      error: true,
+      success: false,
       message: "MESSAGE",
       code: "CODIGO",
     };
@@ -80,21 +78,20 @@ export const CreateApplication = async (
     );
 
     return {
-      error: false,
+      success: true,
       message: "MESSAGE",
-      code: response.data.code,
       application: response.data.application,
     };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
-        error: true,
+        success: false,
         message: "MESSAGE",
         code: "CODIGO",
       };
     }
     return {
-      error: true,
+      success: false,
       message: "MESSAGE",
       code: "CODIGO",
     };
@@ -112,21 +109,20 @@ export const UpdateApplication = async (
     );
 
     return {
-      error: false,
+      success: true,
       message: "MESSAGE",
-      code: response.data.code,
       application: response.data.application,
     };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
-        error: true,
+        success: false,
         message: "MESSAGE",
         code: "CODIGO",
       };
     }
     return {
-      error: true,
+      success: false,
       message: "MESSAGE",
       code: "CODIGO",
     };
@@ -144,21 +140,20 @@ export const DeleteApplication = async (
     );
 
     return {
-      error: false,
+      success: true,
       message: "MESSAGE",
-      code: response.data.code,
       application: response.data.application,
     };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
-        error: true,
+        success: false,
         message: "MESSAGE",
         code: "CODIGO",
       };
     }
     return {
-      error: true,
+      success: false,
       message: "MESSAGE",
       code: "CODIGO",
     };

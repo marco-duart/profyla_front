@@ -1,10 +1,10 @@
 type ProfessionalLink = {
-  id: number
-  title: string
-  link: string
-  created_at: Date
-  updated_at: Date
-  candidate_id: number
+  id: number;
+  title: string;
+  link: string;
+  created_at: Date;
+  updated_at: Date;
+  candidate_id: number;
 };
 
 export namespace GetProfessionalLinkDTO {
@@ -13,9 +13,7 @@ export namespace GetProfessionalLinkDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     professional: ProfessionalLink;
   }
 }
@@ -25,38 +23,32 @@ export namespace GetProfessionalLinksDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     professional: ProfessionalLink[];
   }
 }
 
 export namespace CreateProfessionalLinkDTO {
   export interface IParams {
-    title: string
-    link: string
+    title: string;
+    link: string;
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     professional: ProfessionalLink;
   }
 }
 
 export namespace UpdateProfessionalLinkDTO {
   export interface IParams {
-    title: string
-    link: string
+    title: string;
+    link: string;
     id: string;
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     professional: ProfessionalLink;
   }
 }
@@ -67,9 +59,7 @@ export namespace DeleteProfessionalLinkDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     professional: ProfessionalLink;
   }
 }

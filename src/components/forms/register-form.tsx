@@ -14,13 +14,11 @@ import { Register } from "../../services/register";
 
 //STYLES
 import * as S from "./styles";
-import { EyeFill, EyeSlashFill } from "@styled-icons/bootstrap"
+import { EyeFill, EyeSlashFill } from "@styled-icons/bootstrap";
 
 //UTILS
 import { FORM_MESSAGE } from "../../utils/enums/form-message";
-
-const regexPassword =
-  /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+import * as CONSTANTS from "../../utils/constants/constants"
 
 const registerFormSchema = z
   .object({
@@ -37,11 +35,12 @@ const registerFormSchema = z
     password: z
       .string()
       .min(8, FORM_MESSAGE.PASSWORD_SIZE)
-      .regex(regexPassword, FORM_MESSAGE.PASSWORD_RULE),
+      .regex(CONSTANTS.PASSWORD_REGEX, FORM_MESSAGE.PASSWORD_RULE),
     confirm: z.string().min(8, FORM_MESSAGE.CONFIRM_PASSWORD),
     photo: z
-      .instanceof(FileList).optional()
-      .transform((list ) => list && list.item(0))
+      .instanceof(FileList)
+      .optional()
+      .transform((list) => list && list.item(0)),
   })
   .refine((data) => data.password === data.confirm, {
     message: FORM_MESSAGE.PASSWORD_CONFIRM_MATCH,
@@ -51,9 +50,9 @@ const registerFormSchema = z
 type registerFormData = z.infer<typeof registerFormSchema>;
 
 const RegisterForm = () => {
-  const navigate = useNavigate()
-  const [ passwordIsOpen, setPasswordIsOpen ] = useState(false)
-  const [ confirmIsOpen, setConfirmIsOpen ] = useState(false)
+  const navigate = useNavigate();
+  const [passwordIsOpen, setPasswordIsOpen] = useState(false);
+  const [confirmIsOpen, setConfirmIsOpen] = useState(false);
 
   const {
     register,
@@ -64,19 +63,21 @@ const RegisterForm = () => {
   });
 
   const handleRegister = async (data: registerFormData) => {
-    const { confirm, ...restData } = data
+    const { confirm, ...restData } = data;
     const result = await Register(restData);
-    if(!result.error) {
-      navigate("ENTIDADE /home")
-      console.log("Deu certo!")
+    if (result.success) {
+      navigate("/");
+      console.log("Deu certo!"); //criar uma notificação informando o sucesso!
     } else {
-      console.log("Deu ruim!")
+      console.log("Deu ruim!");
     }
   };
 
   const handlePassword = (name: "password" | "confirm") => {
-    name === "password" ? setPasswordIsOpen(!passwordIsOpen) : setConfirmIsOpen(!confirmIsOpen)
-  }
+    name === "password"
+      ? setPasswordIsOpen(!passwordIsOpen)
+      : setConfirmIsOpen(!confirmIsOpen);
+  };
 
   return (
     <S.RegisterFormStyle onSubmit={handleSubmit(handleRegister)}>
@@ -90,7 +91,6 @@ const RegisterForm = () => {
           type="text"
           placeholder="Nome"
           error={errors.name ? true : false}
-          
         />
         {errors.name && (
           <S.BaseSmallFormStyle>{errors.name.message}</S.BaseSmallFormStyle>
@@ -137,9 +137,9 @@ const RegisterForm = () => {
           placeholder="Senha"
           error={errors.password ? true : false}
         />
-        <div onClick={() => handlePassword("password")}>
+        <S.HandlePasswordDivStyle onClick={() => handlePassword("password")}>
           {passwordIsOpen ? <EyeFill /> : <EyeSlashFill />}
-        </div>
+        </S.HandlePasswordDivStyle>
         {errors.password && (
           <S.BaseSmallFormStyle>{errors.password.message}</S.BaseSmallFormStyle>
         )}
@@ -155,9 +155,9 @@ const RegisterForm = () => {
           placeholder="Confirmar Senha"
           error={errors.confirm ? true : false}
         />
-        <div onClick={() => handlePassword("confirm")}>
+        <S.HandlePasswordDivStyle onClick={() => handlePassword("confirm")}>
           {confirmIsOpen ? <EyeFill /> : <EyeSlashFill />}
-        </div>
+        </S.HandlePasswordDivStyle>
         {errors.confirm && (
           <S.BaseSmallFormStyle>{errors.confirm.message}</S.BaseSmallFormStyle>
         )}

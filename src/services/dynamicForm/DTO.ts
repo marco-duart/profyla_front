@@ -30,9 +30,7 @@ export namespace GetDynamicFormDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     form: DynamicFormDetail;
   }
 }
@@ -42,9 +40,7 @@ export namespace GetDynamicFormsDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     forms: DynamicForm[];
   }
 }
@@ -58,9 +54,7 @@ export namespace CreateDynamicFormDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     form: DynamicForm;
   }
 }
@@ -74,9 +68,7 @@ export namespace UpdateDynamicFormDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     form: DynamicForm;
   }
 }
@@ -87,9 +79,7 @@ export namespace DeleteDynamicFormDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     form: DynamicForm;
   }
 }

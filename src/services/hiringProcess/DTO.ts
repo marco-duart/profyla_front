@@ -36,9 +36,7 @@ export namespace GetHiringProcessDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     hiring: HiringProcessDetail;
   }
 }
@@ -48,9 +46,7 @@ export namespace GetHiringProcessesDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     hirings: HiringProcess[];
   }
 }
@@ -64,9 +60,7 @@ export namespace CreateHiringProcessDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     hiring: HiringProcess;
   }
 }
@@ -81,9 +75,7 @@ export namespace UpdateHiringProcessDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     hiring: HiringProcess;
   }
 }
@@ -94,9 +86,7 @@ export namespace DeleteHiringProcessDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     hiring: HiringProcess;
   }
 }

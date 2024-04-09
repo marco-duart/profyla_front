@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const LoginFormStyle = styled.form`
   width: ${(props) => props.theme.widths.forms.xsm};
-  height: ${(props) => props.theme.widths.forms.xsm};
+  height: ${(props) => props.theme.heights.forms.sm};
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -28,7 +28,7 @@ export const LoginFormStyle = styled.form`
 
 export const RegisterFormStyle = styled.form`
   width: ${(props) => props.theme.widths.forms.xsm};
-  height: ${(props) => props.theme.widths.forms.sm};
+  height: ${(props) => props.theme.heights.forms.md};
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -43,7 +43,7 @@ export const RegisterFormStyle = styled.form`
 
 export const ForgotPasswordFormStyle = styled.form`
   width: ${(props) => props.theme.widths.forms.xsm};
-  height: ${(props) => props.theme.widths.forms.sm};
+  height: ${(props) => props.theme.heights.forms.xsm};
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -79,6 +79,10 @@ export const BaseInputFormStyle = styled("input")<{ error: boolean }>`
     outline: none;
     border: ${(props) => !props.error && "1px outset white"};
   }
+`;
+
+export const HandlePasswordDivStyle = styled.div`
+  cursor: pointer;
 `;
 
 export const BaseCheckboxFormStyle = styled.input`

@@ -1,4 +1,3 @@
-
 export namespace BanUserDTO {
   export interface IParams {
     user_id: number;
@@ -6,8 +5,6 @@ export namespace BanUserDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
   }
 }

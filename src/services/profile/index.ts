@@ -17,21 +17,20 @@ export const GetProfiles = async (params: GetProfilesDTO.IParams) => {
     );
 
     return {
-      error: false,
+      success: true,
       message: "MESSAGE",
-      code: response.data.code,
       profiles: response.data.profile,
     };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
-        error: true,
+        success: false,
         message: "MESSAGE",
         code: "CODIGO",
       };
     }
     return {
-      error: true,
+      success: false,
       message: "MESSAGE",
       code: "CODIGO",
     };
@@ -47,21 +46,20 @@ export const CreateProfile = async (params: CreateProfileDTO.IParams) => {
     );
 
     return {
-      error: false,
+      success: true,
       message: "MESSAGE",
-      code: response.data.code,
       profile: response.data.profile,
     };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
-        error: true,
+        success: false,
         message: "MESSAGE",
         code: "CODIGO",
       };
     }
     return {
-      error: true,
+      success: false,
       message: "MESSAGE",
       code: "CODIGO",
     };
@@ -77,21 +75,20 @@ export const DeleteProfile = async (params: DeleteProfileDTO.IParams) => {
     );
 
     return {
-      error: false,
+      success: true,
       message: "MESSAGE",
-      code: response.data.code,
       profile: response.data.profile,
     };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
-        error: true,
+        success: false,
         message: "MESSAGE",
         code: "CODIGO",
       };
     }
     return {
-      error: true,
+      success: false,
       message: "MESSAGE",
       code: "CODIGO",
     };
@@ -107,21 +104,20 @@ export const AssignProfile = async (params: AssignProfileDTO.IParams) => {
     );
 
     return {
-      error: false,
+      success: true,
       message: "MESSAGE",
-      code: response.data.code,
       candidateProfile: response.data.candidateProfile,
     };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
-        error: true,
+        success: false,
         message: "MESSAGE",
         code: "CODIGO",
       };
     }
     return {
-      error: true,
+      success: false,
       message: "MESSAGE",
       code: "CODIGO",
     };
@@ -137,21 +133,20 @@ export const RemoveProfile = async (params: RemoveProfileDTO.IParams) => {
     );
 
     return {
-      error: false,
+      success: true,
       message: "MESSAGE",
-      code: response.data.code,
       candidateProfile: response.data.candidateProfile,
     };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
-        error: true,
+        success: false,
         message: "MESSAGE",
         code: "CODIGO",
       };
     }
     return {
-      error: true,
+      success: false,
       message: "MESSAGE",
       code: "CODIGO",
     };

@@ -37,9 +37,7 @@ export namespace GetDynamicExamDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     exam: DynamicExamDetail;
   }
 }
@@ -49,9 +47,7 @@ export namespace GetDynamicExamsDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     exams: DynamicExam[];
   }
 }
@@ -65,9 +61,7 @@ export namespace CreateDynamicExamDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     exam: DynamicExam;
   }
 }
@@ -81,9 +75,7 @@ export namespace UpdateDynamicExamDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     exam: DynamicExam;
   }
 }
@@ -94,9 +86,7 @@ export namespace DeleteDynamicExamDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     exam: DynamicExam;
   }
 }

@@ -8,9 +8,7 @@ import {
   DeleteJobPostingDTO,
 } from "./DTO";
 
-export const GetJobPosting = async (
-  params: GetJobPostingDTO.IParams
-) => {
+export const GetJobPosting = async (params: GetJobPostingDTO.IParams) => {
   try {
     const { id, token } = params;
     const response = await api.get<GetJobPostingDTO.IResponse>(
@@ -19,30 +17,27 @@ export const GetJobPosting = async (
     );
 
     return {
-      error: false,
+      success: true,
       message: "MESSAGE",
-      code: response.data.code,
       jobPosting: response.data.job,
     };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
-        error: true,
+        success: false,
         message: "MESSAGE",
         code: "CODIGO",
       };
     }
     return {
-      error: true,
+      success: false,
       message: "MESSAGE",
       code: "CODIGO",
     };
   }
 };
 
-export const GetJobPostings = async (
-  params: GetJobPostingsDTO.IParams
-) => {
+export const GetJobPostings = async (params: GetJobPostingsDTO.IParams) => {
   try {
     const { token } = params;
     const response = await api.get<GetJobPostingsDTO.IResponse>(
@@ -51,30 +46,27 @@ export const GetJobPostings = async (
     );
 
     return {
-      error: false,
+      success: true,
       message: "MESSAGE",
-      code: response.data.code,
       jobPostings: response.data.jobs,
     };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
-        error: true,
+        success: false,
         message: "MESSAGE",
         code: "CODIGO",
       };
     }
     return {
-      error: true,
+      success: false,
       message: "MESSAGE",
       code: "CODIGO",
     };
   }
 };
 
-export const CreateJobPosting = async (
-  params: CreateJobPostingDTO.IParams
-) => {
+export const CreateJobPosting = async (params: CreateJobPostingDTO.IParams) => {
   try {
     const { token, ...restParams } = params;
     const response = await api.post<CreateJobPostingDTO.IResponse>(
@@ -83,30 +75,27 @@ export const CreateJobPosting = async (
     );
 
     return {
-      error: false,
+      success: true,
       message: "MESSAGE",
-      code: response.data.code,
       jobPosting: response.data.job,
     };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
-        error: true,
+        success: false,
         message: "MESSAGE",
         code: "CODIGO",
       };
     }
     return {
-      error: true,
+      success: false,
       message: "MESSAGE",
       code: "CODIGO",
     };
   }
 };
 
-export const UpdateJobPosting = async (
-  params: UpdateJobPostingDTO.IParams
-) => {
+export const UpdateJobPosting = async (params: UpdateJobPostingDTO.IParams) => {
   try {
     const { id, token, ...restParams } = params;
     const response = await api.patch<UpdateJobPostingDTO.IResponse>(
@@ -115,30 +104,27 @@ export const UpdateJobPosting = async (
     );
 
     return {
-      error: false,
+      success: true,
       message: "MESSAGE",
-      code: response.data.code,
       jobPosting: response.data.job,
     };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
-        error: true,
+        success: false,
         message: "MESSAGE",
         code: "CODIGO",
       };
     }
     return {
-      error: true,
+      success: false,
       message: "MESSAGE",
       code: "CODIGO",
     };
   }
 };
 
-export const DeleteJobPosting = async (
-  params: DeleteJobPostingDTO.IParams
-) => {
+export const DeleteJobPosting = async (params: DeleteJobPostingDTO.IParams) => {
   try {
     const { id, token } = params;
     const response = await api.delete<DeleteJobPostingDTO.IResponse>(
@@ -147,21 +133,20 @@ export const DeleteJobPosting = async (
     );
 
     return {
-      error: false,
+      success: true,
       message: "MESSAGE",
-      code: response.data.code,
       jobPosting: response.data.job,
     };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
-        error: true,
+        success: false,
         message: "MESSAGE",
         code: "CODIGO",
       };
     }
     return {
-      error: true,
+      success: false,
       message: "MESSAGE",
       code: "CODIGO",
     };

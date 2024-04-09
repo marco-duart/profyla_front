@@ -16,9 +16,7 @@ export namespace GetAcademicHistoryDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     academic: AcademicHistory;
   }
 }
@@ -28,9 +26,7 @@ export namespace GetAcademicHistoriesDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     academic: AcademicHistory[];
   }
 }
@@ -45,9 +41,7 @@ export namespace CreateAcademicHistoryDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     academic: AcademicHistory;
   }
 }
@@ -63,9 +57,7 @@ export namespace UpdateAcademicHistoryDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     academic: AcademicHistory;
   }
 }
@@ -76,9 +68,7 @@ export namespace DeleteAcademicHistoryDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     academic: AcademicHistory;
   }
 }

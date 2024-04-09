@@ -8,9 +8,7 @@ import {
   DeleteDynamicFormDTO,
 } from "./DTO";
 
-export const GetDynamicForm = async (
-  params: GetDynamicFormDTO.IParams
-) => {
+export const GetDynamicForm = async (params: GetDynamicFormDTO.IParams) => {
   try {
     const { id, token } = params;
     const response = await api.get<GetDynamicFormDTO.IResponse>(
@@ -19,30 +17,27 @@ export const GetDynamicForm = async (
     );
 
     return {
-      error: false,
+      success: true,
       message: "MESSAGE",
-      code: response.data.code,
       dynamicForm: response.data.form,
     };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
-        error: true,
+        success: false,
         message: "MESSAGE",
         code: "CODIGO",
       };
     }
     return {
-      error: true,
+      success: false,
       message: "MESSAGE",
       code: "CODIGO",
     };
   }
 };
 
-export const GetDynamicForms = async (
-  params: GetDynamicFormsDTO.IParams
-) => {
+export const GetDynamicForms = async (params: GetDynamicFormsDTO.IParams) => {
   try {
     const { token } = params;
     const response = await api.get<GetDynamicFormsDTO.IResponse>(
@@ -51,21 +46,20 @@ export const GetDynamicForms = async (
     );
 
     return {
-      error: false,
+      success: true,
       message: "MESSAGE",
-      code: response.data.code,
       dynamicForms: response.data.forms,
     };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
-        error: true,
+        success: false,
         message: "MESSAGE",
         code: "CODIGO",
       };
     }
     return {
-      error: true,
+      success: false,
       message: "MESSAGE",
       code: "CODIGO",
     };
@@ -83,21 +77,20 @@ export const CreateDynamicForm = async (
     );
 
     return {
-      error: false,
+      success: true,
       message: "MESSAGE",
-      code: response.data.code,
       dynamicForm: response.data.form,
     };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
-        error: true,
+        success: false,
         message: "MESSAGE",
         code: "CODIGO",
       };
     }
     return {
-      error: true,
+      success: false,
       message: "MESSAGE",
       code: "CODIGO",
     };
@@ -115,21 +108,20 @@ export const UpdateDynamicForm = async (
     );
 
     return {
-      error: false,
+      success: true,
       message: "MESSAGE",
-      code: response.data.code,
       dynamicForm: response.data.form,
     };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
-        error: true,
+        success: false,
         message: "MESSAGE",
         code: "CODIGO",
       };
     }
     return {
-      error: true,
+      success: false,
       message: "MESSAGE",
       code: "CODIGO",
     };
@@ -147,21 +139,20 @@ export const DeleteDynamicForm = async (
     );
 
     return {
-      error: false,
+      success: true,
       message: "MESSAGE",
-      code: response.data.code,
       dynamicForm: response.data.form,
     };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
-        error: true,
+        success: false,
         message: "MESSAGE",
         code: "CODIGO",
       };
     }
     return {
-      error: true,
+      success: false,
       message: "MESSAGE",
       code: "CODIGO",
     };

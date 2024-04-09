@@ -1,12 +1,12 @@
 type Document = {
-  id: string
-  document_name: string
-  document_number: string
-  issue_date: Date
-  location: string
-  created_at: Date
-  updated_at: Date
-  candidate_id: number
+  id: string;
+  document_name: string;
+  document_number: string;
+  issue_date: Date;
+  location: string;
+  created_at: Date;
+  updated_at: Date;
+  candidate_id: number;
 };
 
 export namespace GetDocumentDTO {
@@ -15,9 +15,7 @@ export namespace GetDocumentDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     document: Document;
   }
 }
@@ -27,43 +25,37 @@ export namespace GetDocumentsDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     document: Document[];
   }
 }
 
 export namespace CreateDocumentDTO {
   export interface IParams {
-    document_name: string
-    document_number: string
-    issue_date: Date
-    location: string
-    image: File
+    document_name: string;
+    document_number: string;
+    issue_date: Date;
+    location: string;
+    image: File;
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     document: Document;
   }
 }
 
 export namespace UpdateDocumentDTO {
   export interface IParams {
-    document_name: string
-    document_number: string
-    issue_date: Date
-    location: string
+    document_name: string;
+    document_number: string;
+    issue_date: Date;
+    location: string;
     id: string;
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     document: Document;
   }
 }
@@ -74,9 +66,7 @@ export namespace DeleteDocumentDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     document: Document;
   }
 }

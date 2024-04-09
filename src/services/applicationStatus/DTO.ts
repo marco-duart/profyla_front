@@ -19,9 +19,7 @@ export namespace GetApplicationDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     application: ApplicationDetail;
   }
 }
@@ -32,9 +30,7 @@ export namespace GetApplicationsDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     applications: Application[];
     pageable: {
       offset: number;
@@ -53,9 +49,7 @@ export namespace CreateApplicationDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     application: Application;
   }
 }
@@ -67,9 +61,7 @@ export namespace UpdateApplicationDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     application: Application;
   }
 }
@@ -80,9 +72,7 @@ export namespace DeleteApplicationDTO {
     token: string;
   }
   export interface IResponse {
-    error: boolean;
     message: string;
-    code: number;
     application: Application;
   }
 }
