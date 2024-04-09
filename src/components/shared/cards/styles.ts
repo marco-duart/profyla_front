@@ -41,7 +41,7 @@ export const ForgotPasswordCardStyle = styled.div`
   padding: 20px 0;
 `
 export const ConfirmAccountCardStyle = styled.div`
-  width: ${props => props.theme.widths.cards.xxl};
+  width: ${props => props.theme.widths.cards.xxxl};
   height: ${props => props.theme.heights.cards.lg};
   position: relative;
   background-color: ${props => props.theme.colors.white};

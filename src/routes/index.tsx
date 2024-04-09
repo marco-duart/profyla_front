@@ -8,8 +8,7 @@ import { PrivateRoute } from "../components/auth/privateRoute";
 import Login from "../pages/login/login";
 import Register from "../pages/register/register";
 import ForgotPassword from "../pages/forgot_password/forgot-password";
-import { ConfirmAccount } from "../services/register";
-import Confirm from "../pages/confirm_account/confirm_account";
+import Confirm from "../pages/confirm/confirm";
 
 import Dashboard from "../pages/dashboard/dashboard";
 import Cnpj from "../pages/cnpj/cnpj";

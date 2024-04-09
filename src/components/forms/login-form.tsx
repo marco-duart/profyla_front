@@ -105,9 +105,9 @@ const LoginForm = () => {
           placeholder="Senha"
           error={errors.password ? true : false}
         />
-        <div onClick={() => handlePassword()}>
+        <S.HandlePasswordDivStyle onClick={() => handlePassword()}>
           {passwordIsOpen ? <EyeFill /> : <EyeSlashFill />}
-        </div>
+        </S.HandlePasswordDivStyle>
         {errors.password && (
           <S.BaseSmallFormStyle>{errors.password.message}</S.BaseSmallFormStyle>
         )}

@@ -137,9 +137,9 @@ const RegisterForm = () => {
           placeholder="Senha"
           error={errors.password ? true : false}
         />
-        <div onClick={() => handlePassword("password")}>
+        <S.HandlePasswordDivStyle onClick={() => handlePassword("password")}>
           {passwordIsOpen ? <EyeFill /> : <EyeSlashFill />}
-        </div>
+        </S.HandlePasswordDivStyle>
         {errors.password && (
           <S.BaseSmallFormStyle>{errors.password.message}</S.BaseSmallFormStyle>
         )}
@@ -155,9 +155,9 @@ const RegisterForm = () => {
           placeholder="Confirmar Senha"
           error={errors.confirm ? true : false}
         />
-        <div onClick={() => handlePassword("confirm")}>
+        <S.HandlePasswordDivStyle onClick={() => handlePassword("confirm")}>
           {confirmIsOpen ? <EyeFill /> : <EyeSlashFill />}
-        </div>
+        </S.HandlePasswordDivStyle>
         {errors.confirm && (
           <S.BaseSmallFormStyle>{errors.confirm.message}</S.BaseSmallFormStyle>
         )}

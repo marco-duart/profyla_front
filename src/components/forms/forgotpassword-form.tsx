@@ -1,5 +1,5 @@
 //NATIVE
-import { useState } from "react";
+
 //LIBRARIES
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -41,7 +41,7 @@ const ForgotPasswordForm = () => {
 
   const handleForget = async (data: forgotpasswordFormData) => {
     const result = await ForgetPassword(data);
-    if (!result.error) {
+    if (result.success) {
       navigate("/");
       console.log("Deu certo!", result);
       window.alert("Deu certo!");
