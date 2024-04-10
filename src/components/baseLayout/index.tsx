@@ -19,8 +19,10 @@ const BaseLayout = () => {
         <Sidebar />
       </S.BaseLayoutSidebarStyled>
       <S.BaseLayoutDivStyled>
-        <Header />
-        <Outlet />
+        <div>Header</div>
+        <div>
+          <Outlet />
+        </div>
         <Footer />
       </S.BaseLayoutDivStyled>
     </S.BaseLayoutPageStyled>
