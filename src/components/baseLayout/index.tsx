@@ -4,11 +4,12 @@ import { Outlet } from "react-router-dom";
 
 //COMPONENTS
 import Sidebar from "../sidebar/sidebar";
+import Footer from "../common/footer";
+import Header from "../common/header";
 
 //STYLES
 import * as S from "./styles";
-import Footer from "../common/footer";
-import Header from "../common/header";
+
 
 //UTILS
 
@@ -19,7 +20,7 @@ const BaseLayout = () => {
         <Sidebar />
       </S.BaseLayoutSidebarStyled>
       <S.BaseLayoutDivStyled>
-        <div>Header</div>
+        <Header />
         <div>
           <Outlet />
         </div>
