@@ -20,7 +20,9 @@ const BaseLayout = () => {
       </S.BaseLayoutSidebarStyled>
       <S.BaseLayoutDivStyled>
         <div>Header</div>
-        <Outlet />
+        <div>
+          <Outlet />
+        </div>
         <Footer />
       </S.BaseLayoutDivStyled>
     </S.BaseLayoutPageStyled>
