@@ -1,12 +1,8 @@
 import styled from "styled-components";
-import backgroundImage from '../../assets/image/BG.jpg'
 
 export const BaseLayoutPageStyled = styled.div`
   display: flex;
   width: 100vw;
-  height: 100vh;
-  background-image: url(${backgroundImage});
-  background-position: 50% 0;
 `;
 
 
@@ -15,8 +11,9 @@ export const BaseLayoutSidebarStyled = styled.div`
 `;
 
 export const BaseLayoutDivStyled = styled.div`
+  position: relative;
   width: 100%;
-  padding: 25px;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
 `;

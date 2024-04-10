@@ -8,6 +8,7 @@ import Sidebar from "../sidebar/sidebar"
 
 //STYLES
 import * as S from "./styles";
+import Footer from "../common/footer";
 
 //UTILS
 
@@ -19,7 +20,10 @@ const BaseLayout = () => {
       </S.BaseLayoutSidebarStyled>
       <S.BaseLayoutDivStyled>
         <div>Header</div>
-        <Outlet />
+        <div>
+          <Outlet />
+        </div>
+        <Footer />
       </S.BaseLayoutDivStyled>
     </S.BaseLayoutPageStyled>
   );

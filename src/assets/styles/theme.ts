@@ -117,6 +117,8 @@ const light = {
     Poppins: "'Poppins', sans-serif",
     Sora: "'Sora', sans-serif",
     Candal: "'Candal', sans-serif",
+    Roboto: "'Roboto', sans-serif",
+    OpenSans: "'Open Sans', sans-serif",
   },
 };
 
