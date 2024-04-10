@@ -63,8 +63,8 @@ const RegisterForm = () => {
   });
 
   const handleRegister = async (data: registerFormData) => {
-    const { confirm, ...restData } = data;
-    const result = await Register(restData);
+    const { confirm, ...rest } = data;
+    const result = await Register(rest);
     if (result.success) {
       navigate("/");
       console.log("Deu certo!"); //criar uma notificação informando o sucesso!

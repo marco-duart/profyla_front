@@ -9,6 +9,7 @@ import Login from "../pages/login/login";
 import Register from "../pages/register/register";
 import ForgotPassword from "../pages/forgot_password/forgot-password";
 import Confirm from "../pages/confirm/confirm";
+import ChangePassword from "../pages/change_password/change-password";
 
 import Dashboard from "../pages/dashboard/dashboard";
 import Cnpj from "../pages/cnpj/cnpj";
@@ -28,6 +29,7 @@ import AboutUs from "../pages/about-us/about-us";
 import * as CONSTANTS from "../utils/constants/constants"
 
 
+
 export default function Router() {
   return (
     <BrowserRouter>
@@ -36,7 +38,7 @@ export default function Router() {
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/confirm/:id/:action_key" element={<Confirm />} />
-        {/* <Route path="/" element={<PasswordRecovery />} /> */}
+        <Route path="/change-password/:email/:action_key" element={<ChangePassword />} />
         <Route path="/admin" element={<PrivateRoute requiredRoles={CONSTANTS.ADMIN_ONLY} redirectTo="/"><BaseLayout /></PrivateRoute>}>
           <Route path="/admin/" element={<Dashboard />} />
           <Route path="/admin/" element={<Cnpj />} />

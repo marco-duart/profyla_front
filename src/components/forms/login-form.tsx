@@ -41,11 +41,11 @@ const LoginForm = () => {
   });
 
   const handleLogin = async (data: loginFormData) => {
-    const { remember, ...restData } = data;
+    const { remember, ...rest } = data;
 
     remember ? handleLocalStorage(data.email) : handleLocalStorage();
 
-    const result = await LoginAPI(restData);
+    const result = await LoginAPI(rest);
 
     if (result.success && result.user?.token) {
       const { token, ...userData } = result.user;
