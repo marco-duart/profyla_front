@@ -7,6 +7,7 @@ import { LoggedUser } from "../services/register";
 //STYLES
 
 //UTILS
+import * as CONSTANTS from "../utils/constants/constants"
 
 type User = {
   id: number;
@@ -23,6 +24,7 @@ type UserContext = {
   user: User | null;
   updateUser: (user: User, token: string) => void;
   logout: () => void;
+  isAdmin: () => boolean
 };
 
 type Props = {
@@ -33,6 +35,7 @@ export const UserContext = createContext<UserContext>({
   user: null,
   updateUser: () => {},
   logout: () => {},
+  isAdmin: () => false
 });
 
 export const UserContextProvider: React.FC<Props> = ({ children }) => {
@@ -69,6 +72,14 @@ export const UserContextProvider: React.FC<Props> = ({ children }) => {
     });
   };
 
+  const isAdmin = () => {
+    const role = state.user?.role
+    if(!role) {
+      return false
+    }
+    return CONSTANTS.ADMIN_ONLY.includes(role)
+  }
+
   useEffect(() => {
     if (!state.user) {
       autoLogin();
@@ -81,6 +92,7 @@ export const UserContextProvider: React.FC<Props> = ({ children }) => {
         user: state.user,
         updateUser,
         logout: cleanUser,
+        isAdmin
       }}
     >
       {children}

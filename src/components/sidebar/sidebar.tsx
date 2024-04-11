@@ -10,12 +10,14 @@ import { Info } from "@styled-icons/entypo/Info";
 import { ExitToApp } from "styled-icons/material-twotone";
 //COMPONENTS
 import SideBarIcons from "../shared/icons/sidebar-icons";
+import { useUserContext } from "../../hooks/use-user-context";
 //STYLES
 import * as S from "./styles";
 //UTILS
 import Image from "../../assets/image/IBC_GROUP_branco-01.png";
 
 const Sidebar = () => {
+  const { isAdmin } = useUserContext()
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -93,6 +95,7 @@ const Sidebar = () => {
             </S.Link>
           </S.IconStyle>
         </S.SidebarIconStyle>
+        {isAdmin() ? <div>Admin</div> : <div>User</div> }
       </S.SidebarStyle>
     </S.SidebarNavStyle>
   );
