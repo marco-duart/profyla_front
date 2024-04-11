@@ -47,6 +47,7 @@ export default function Router() {
           <Route path="/admin/" element={<Traits />} />
           <Route path="/admin/" element={<Configurations />} />
           <Route path="/admin/" element={<Notifications />} />
+          <Route path="/admin/about-us" element={<AboutUs />}/>
         </Route>
         <Route path="/user" element={<PrivateRoute requiredRoles={CONSTANTS.USERS_ONLY} redirectTo="/"><BaseLayout /></PrivateRoute>}>
           <Route path="/user/dashboard" element={<Home />} />
