@@ -19,7 +19,7 @@ export const TalentflowLogoStyle = styled.div`
   top: -150px;
 `;
 
-export const BaseTitleFormStyle = styled.h1`
+export const BaseTitleStyle = styled.h1`
   width: 100%;
   margin-bottom: 15px;
   text-align: center;

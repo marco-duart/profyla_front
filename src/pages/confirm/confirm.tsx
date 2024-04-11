@@ -45,9 +45,9 @@ const Confirm = () => {
           <S.TalentflowLogoStyle>
             <TalentflowLogo />
           </S.TalentflowLogoStyle>
-          <S.BaseTitleFormStyle>
+          <S.BaseTitleStyle>
             {message}
-          </S.BaseTitleFormStyle>
+          </S.BaseTitleStyle>
         </ConfirmAccountCard>
       </S.ConfirmPageStyle>
     </>

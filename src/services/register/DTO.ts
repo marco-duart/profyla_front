@@ -49,8 +49,7 @@ export namespace ForgetPasswordDTO {
 
 export namespace ChangePasswordDTO {
   export interface IParams {
-    cpf: string;
-    email: string;
+    id: string;
     action_key: string;
     password: string;
   }
