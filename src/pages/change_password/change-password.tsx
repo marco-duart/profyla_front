@@ -12,7 +12,7 @@ import * as S from "./styles";
 import { EXCEPTION_MESSAGE } from "../../utils/enums/exception-message";
 
 const ChangePassword = () => {
-  const { email, action_key } = useParams();
+  const { id, action_key } = useParams();
   const [ message, setMessage ] = useState("")
   const [ messageScreen, setMessageScreen ] = useState(false)
 
@@ -22,7 +22,7 @@ const ChangePassword = () => {
   }
 
   useEffect(() => {
-    if(!email || !action_key) {
+    if(!id || !action_key) {
       handleMessage(EXCEPTION_MESSAGE.INVALID_PARAMS_FETCH)
     }
   }, [])
@@ -34,7 +34,7 @@ const ChangePassword = () => {
           <S.TalentflowLogoStyle>
             <TalentflowLogo />
           </S.TalentflowLogoStyle>
-          {messageScreen ? <div>{message}</div> : <ChangePasswordForm email={email} action_key={action_key} handleMessage={handleMessage} />}
+          {messageScreen ? <S.BaseTitleStyle>{message}</S.BaseTitleStyle> : <ChangePasswordForm id={id} action_key={action_key} handleMessage={handleMessage} />}
         </ForgotPasswordCard>
       </S.ChangePasswordPageStyle>
     </>

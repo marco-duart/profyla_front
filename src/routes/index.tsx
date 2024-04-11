@@ -38,7 +38,7 @@ export default function Router() {
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/confirm/:id/:action_key" element={<Confirm />} />
-        <Route path="/change-password/:email/:action_key" element={<ChangePassword />} />
+        <Route path="/change-password/:id/:action_key" element={<ChangePassword />} />
         <Route path="/admin" element={<PrivateRoute requiredRoles={CONSTANTS.ADMIN_ONLY} redirectTo="/"><BaseLayout /></PrivateRoute>}>
           <Route path="/admin/" element={<Dashboard />} />
           <Route path="/admin/" element={<Cnpj />} />

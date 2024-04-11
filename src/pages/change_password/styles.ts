@@ -19,6 +19,15 @@ export const TalentflowLogoStyle = styled.div`
   top: -150px;
 `;
 
+export const BaseTitleStyle = styled.h1`
+  width: 100%;
+  margin-bottom: 15px;
+  text-align: center;
+  font-family: ${(props) => props.theme.fontFamily.Sora};
+  font-size: ${(props) => props.theme.fontSizes.md};
+  margin-bottom: 20px;
+`;
+
 export const FooterChangePassswordPageStyle = styled.div`
   display: flex;
   flex-direction: column;

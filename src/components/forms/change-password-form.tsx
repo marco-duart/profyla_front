@@ -36,15 +36,14 @@ const changePasswordFormSchema = z
 type changePasswordFormData = z.infer<typeof changePasswordFormSchema>;
 
 type Props = {
-  email?: string
+  id?: string
   action_key?: string
   handleMessage: (message: string) => void
 }
 
-const ChangePasswordForm: React.FC<Props> = ({email, action_key, handleMessage}) => {
+const ChangePasswordForm: React.FC<Props> = ({id, action_key, handleMessage}) => {
   const [passwordIsOpen, setPasswordIsOpen] = useState(false);
   const [confirmIsOpen, setConfirmIsOpen] = useState(false);
-  console.log(email, "  -  ", action_key)
 
   const {
     register,
@@ -57,12 +56,12 @@ const ChangePasswordForm: React.FC<Props> = ({email, action_key, handleMessage})
   const handleRegister = async (data: changePasswordFormData) => {
     const { confirm, ...rest } = data;
 
-    if(!email || !action_key) {
+    if(!id || !action_key) {
       handleMessage(EXCEPTION_MESSAGE.INVALID_PARAMS_FETCH)
       return
     }
 
-    const fetchData = { ...rest, email, action_key}
+    const fetchData = { ...rest, id, action_key}
     const result = await ChangePassword(fetchData);
 
     if (result.success) {
