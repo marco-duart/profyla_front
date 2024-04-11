@@ -130,6 +130,3 @@ export const PasswordSectionFormStyle = styled.div`
     right: 10px;
   }
 `;
-
-//Verificar como alterar a cor de quando preenche automático, atualmente está amarelo.
-//Verificar como alterar a cor de outline focus/target no input

@@ -12,6 +12,7 @@ import Confirm from "../pages/confirm/confirm";
 import ChangePassword from "../pages/change_password/change-password";
 
 import Dashboard from "../pages/dashboard/dashboard";
+import Home from "../pages/home/home";
 import Cnpj from "../pages/cnpj/cnpj";
 import Candidates from "../pages/candidates/candidates";
 import Exams from "../pages/exams/exams";
@@ -27,8 +28,6 @@ import AboutUs from "../pages/about-us/about-us";
 //STYLES
 //UTILS
 import * as CONSTANTS from "../utils/constants/constants"
-
-
 
 export default function Router() {
   return (
@@ -50,7 +49,7 @@ export default function Router() {
           <Route path="/admin/" element={<Notifications />} />
         </Route>
         <Route path="/user" element={<PrivateRoute requiredRoles={CONSTANTS.USERS_ONLY} redirectTo="/"><BaseLayout /></PrivateRoute>}>
-          <Route path="/user/dashboard" element={<Dashboard />} />
+          <Route path="/user/dashboard" element={<Home />} />
           <Route path="/user/profile" element={<Profile />} />
           <Route path="/user/jobs" element={<Jobs />} />
           <Route path="/user/hiring-process" element={<HiringProcess />} />
