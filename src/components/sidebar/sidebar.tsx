@@ -83,7 +83,7 @@ const Sidebar = () => {
 
           {isAdmin() ? (
             <S.IconStyle>
-              <S.Link to={"/user/jobs"}>
+              <S.Link to={"/admin/manager"}>
                 <SideBarIcons icon={GridKanban} />
                 {expanded && <S.NameStyle>Kanban</S.NameStyle>}
               </S.Link>

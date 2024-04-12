@@ -24,10 +24,12 @@ import Jobs from "../pages/jobs/jobs";
 import HiringProcess from "../pages/hiring-process/hiring-process";
 import Support from "../pages/support/support";
 import AboutUs from "../pages/about-us/about-us";
+import Kanban from "../pages/kanban/kanban";
 
 //STYLES
 //UTILS
 import * as CONSTANTS from "../utils/constants/constants"
+
 
 export default function Router() {
   return (
@@ -41,7 +43,7 @@ export default function Router() {
         <Route path="/admin" element={<PrivateRoute requiredRoles={CONSTANTS.ADMIN_ONLY} redirectTo="/"><BaseLayout /></PrivateRoute>}>
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/admin/cnpj" element={<Cnpj />} />
-          {/* <Route path="/admin/" element={<Kanban />} /> */}
+          <Route path="/admin/manager" element={<Kanban />} />
           <Route path="/admin/candidates" element={<Candidates />} />
           <Route path="/admin/exams" element={<Exams />} />
           <Route path="/admin/traits" element={<Traits />} />
