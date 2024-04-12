@@ -39,18 +39,18 @@ export default function Router() {
         <Route path="/confirm/:id/:action_key" element={<Confirm />} />
         <Route path="/change-password/:id/:action_key" element={<ChangePassword />} />
         <Route path="/admin" element={<PrivateRoute requiredRoles={CONSTANTS.ADMIN_ONLY} redirectTo="/"><BaseLayout /></PrivateRoute>}>
-          <Route path="/admin/" element={<Dashboard />} />
-          <Route path="/admin/" element={<Cnpj />} />
+          <Route path="/admin/dashboard" element={<Dashboard />} />
+          <Route path="/admin/cnpj" element={<Cnpj />} />
           {/* <Route path="/admin/" element={<Kanban />} /> */}
-          <Route path="/admin/" element={<Candidates />} />
-          <Route path="/admin/" element={<Exams />} />
-          <Route path="/admin/" element={<Traits />} />
+          <Route path="/admin/candidates" element={<Candidates />} />
+          <Route path="/admin/exams" element={<Exams />} />
+          <Route path="/admin/traits" element={<Traits />} />
           <Route path="/admin/" element={<Configurations />} />
           <Route path="/admin/" element={<Notifications />} />
           <Route path="/admin/about-us" element={<AboutUs />}/>
         </Route>
         <Route path="/user" element={<PrivateRoute requiredRoles={CONSTANTS.USERS_ONLY} redirectTo="/"><BaseLayout /></PrivateRoute>}>
-          <Route path="/user/dashboard" element={<Home />} />
+          <Route path="/user/home" element={<Home />} />
           <Route path="/user/profile" element={<Profile />} />
           <Route path="/user/jobs" element={<Jobs />} />
           <Route path="/user/hiring-process" element={<HiringProcess />} />
