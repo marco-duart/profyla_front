@@ -38,6 +38,7 @@ const light = {
     xl: "24px",
   },
   shadows: {
+    shadow: "box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1)",
     shadow100: "20px 20px 60px #bebebe, -20px -20px 60px #ffffff",
   },
   glows: {

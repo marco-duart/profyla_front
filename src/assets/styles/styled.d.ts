@@ -41,6 +41,7 @@ declare module "styled-components" {
       xl: string;
     };
     shadows: {
+      shadow: string;
       shadow100: string;
     };
     glows: {

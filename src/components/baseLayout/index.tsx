@@ -9,8 +9,6 @@ import Header from "../common/header";
 
 //STYLES
 import * as S from "./styles";
-import { BaseBackgroundStyle } from "../../assets/styles/style";
-
 
 //UTILS
 
@@ -22,9 +20,9 @@ const BaseLayout = () => {
       </S.BaseLayoutSidebarStyled>
       <S.BaseLayoutDivStyled>
         <Header />
-        <BaseBackgroundStyle>
+        <S.BaseBackgroundStyle>
           <Outlet />
-        </BaseBackgroundStyle>
+        </S.BaseBackgroundStyle>
         <Footer />
       </S.BaseLayoutDivStyled>
     </S.BaseLayoutPageStyled>

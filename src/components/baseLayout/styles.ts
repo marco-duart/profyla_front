@@ -5,7 +5,6 @@ export const BaseLayoutPageStyled = styled.div`
   width: 100vw;
 `;
 
-
 export const BaseLayoutSidebarStyled = styled.div`
   display: flex;
 `;
@@ -22,4 +21,10 @@ export const IcoSidebarDivStyled = styled.img`
   width: 24px;
   height: 24px;
   margin-right: 10px;
+`;
+
+export const BaseBackgroundStyle = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: ${(props) => props.theme.colors.white100};
 `;

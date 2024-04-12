@@ -53,3 +53,17 @@ export const ConfirmAccountCardStyle = styled.div`
   box-shadow: ${props => props.theme.glows.glow100};
   padding: 20px 0;
 `
+
+export const CompanyCardStyle = styled.div`
+  width: ${props => props.theme.widths.cards.xxxl};
+  height: ${props => props.theme.heights.cards.lg};
+  position: relative;
+  background-color: ${props => props.theme.colors.white};
+  border-radius: ${props => props.theme.radius.md};
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: ${props => props.theme.glows.glow100};
+  padding: 20px 0;
+`
