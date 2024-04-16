@@ -12,7 +12,7 @@ import { ModalButtonStyle } from './styles';
 interface ButtonProps {
   onClick?: () => void;
   children: ReactNode;
-  action: "close" | "edit" | "delete"
+  action: "close" | "edit" | "delete" | "cancel"
 }
 
 const ModalButton: React.FC<ButtonProps> = ({ onClick, children, action }) => {

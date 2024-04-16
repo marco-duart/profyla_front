@@ -2,7 +2,9 @@
 //LIBRARIES
 //COMPONENTS
 //STYLES
+import { useEffect, useState } from "react";
 import { Company } from "../../../services/company/DTO";
+import CompanyForm from "../../forms/company-form";
 import ModalButton from "../buttons/modal-button";
 import * as S from "./style";
 
@@ -11,30 +13,37 @@ import * as S from "./style";
 interface Props {
   isOpen: boolean;
   company?: Company
-  onEdit?: () => void;
   onDelete?: () => void;
   onClose: () => void;
 }
 
-const CompanyModal: React.FC<Props> = ({ isOpen, company, onEdit, onDelete, onClose, }) => {
+const CompanyModal: React.FC<Props> = ({ isOpen, company, onDelete, onClose, }) => {
+  const [ disabled, setDisabled ] = useState<boolean>(company ? true : false)
+
+  // Disable input when action is view
+  const handleDisableInput = () => {
+    setDisabled(!disabled)
+  }
+
+  useEffect(() => {
+    if(company) {
+      setDisabled(true)
+    }
+  }, [company])
+
   return (
     <S.ModalOverlay isOpen={isOpen} onClick={onClose}>
       <S.ModalContainer onClick={(e) => e.stopPropagation()}>
         <S.ModalHeader>
           <S.ModalTitle>Detalhes</S.ModalTitle>
-          <ModalButton onClick={onClose} action="close">Fechar</ModalButton>
+          <ModalButton onClick={onClose} action="close">X</ModalButton>
         </S.ModalHeader>
         <S.ModalBody>
-          <p>ID: {company?.id}</p>
-          <p>Nome: {company?.company_name}</p>
-          <p>CNPJ: {company?.cnpj}</p>
-          <p>Setor: {company?.sector}</p>
-          <p>Cidade: {company?.company_location}</p>
-          <p>Qtd. de funcionátios: {company?.company_size}</p>
+          <CompanyForm company={company} disabled={disabled} handleDisableInput={handleDisableInput}/>
         </S.ModalBody>
         <S.ModalActions>
-          <ModalButton onClick={onEdit} action="edit">Editar</ModalButton>
-          <ModalButton onClick={onDelete} action="delete">Excluir</ModalButton>
+          {disabled ? <ModalButton onClick={handleDisableInput} action="edit">Editar</ModalButton> : <ModalButton onClick={handleDisableInput} action="cancel">Cancelar</ModalButton>}
+          {company && <ModalButton onClick={onDelete} action="delete">Excluir</ModalButton>}
         </S.ModalActions>
       </S.ModalContainer>
     </S.ModalOverlay>

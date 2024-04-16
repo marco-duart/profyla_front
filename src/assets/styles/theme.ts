@@ -51,6 +51,7 @@ const light = {
   },
   widths: {
     buttons: {
+      close: "25px",
       xsm: "50px",
       sm: "100px",
       md: "150px",
@@ -86,6 +87,7 @@ const light = {
   },
   heights: {
     buttons: {
+      close: "25px",
       xsm: "30px",
       sm: "40px",
       md: "50px",

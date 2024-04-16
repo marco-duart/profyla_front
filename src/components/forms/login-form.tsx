@@ -50,7 +50,6 @@ const LoginForm = () => {
     if (result.success && result.user?.token) {
       const { token, ...userData } = result.user;
       updateUser(userData, token);
-      console.log(userData);
       navigate("/user");
     } else {
       console.log("Deu ruim!");

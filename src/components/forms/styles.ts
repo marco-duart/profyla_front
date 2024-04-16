@@ -56,6 +56,16 @@ export const ForgotPasswordFormStyle = styled.form`
   }
 `;
 
+export const CompanyFormStyle = styled.form`
+  width: ${(props) => props.theme.widths.forms.xsm};
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 20px;
+  gap: 10px;
+  margin-bottom: 10px;
+`;
+
 export const BaseTitleFormStyle = styled.h1`
   width: 100%;
   margin-bottom: 15px;

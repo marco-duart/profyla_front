@@ -25,7 +25,7 @@ export const ModalContainer = styled.div`
 
 export const ModalHeader = styled.div`
   width: 100%;
-  height: 30%;
+  height: 70px;
   padding: 0 30px;
   display: flex;
   justify-content: space-between;
@@ -39,23 +39,21 @@ export const ModalTitle = styled.h2`
   font-family: ${(props) => props.theme.fontFamily.OpenSans};
   font-size: ${(props) => props.theme.fontSizes.lg};
   color: ${props => props.theme.colors.white100};
-  margin: 0;
 `;
 
 export const ModalBody = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  //align-items: center;
+  align-items: center;
   font-family: ${(props) => props.theme.fontFamily.OpenSans};
   font-size: ${(props) => props.theme.fontSizes.sm};
   padding: 0 30px;
-  margin-bottom: 160px;
 `;
 
 export const ModalActions = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-around;
   gap: 15px;
   padding: 0 30px;
 `;

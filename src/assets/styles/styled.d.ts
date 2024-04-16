@@ -54,6 +54,7 @@ declare module "styled-components" {
     };
     widths: {
       buttons: {
+        close: string;
         xsm: string;
         sm: string;
         md: string;
@@ -89,6 +90,7 @@ declare module "styled-components" {
     };
     heights: {
       buttons: {
+        close: string;
         xsm: string;
         sm: string;
         md: string;
