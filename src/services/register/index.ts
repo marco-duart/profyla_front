@@ -14,7 +14,6 @@ import {
 
 export const Register = async (params: RegisterDTO.IParams) => {
   try {
-    console.log(params);
     const response = await api.post<RegisterDTO.IResponse>("/users", params, {
       headers: { "Content-Type": "multipart/form-data" },
     });

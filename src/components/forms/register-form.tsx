@@ -47,7 +47,7 @@ const registerFormSchema = z
     path: ["confirm"],
   });
 
-type registerFormData = z.infer<typeof registerFormSchema>;
+type RegisterFormData = z.infer<typeof registerFormSchema>;
 
 const RegisterForm = () => {
   const navigate = useNavigate();
@@ -58,11 +58,11 @@ const RegisterForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<registerFormData>({
+  } = useForm<RegisterFormData>({
     resolver: zodResolver(registerFormSchema),
   });
 
-  const handleRegister = async (data: registerFormData) => {
+  const handleRegister = async (data: RegisterFormData) => {
     const { confirm, ...rest } = data;
     const result = await Register(rest);
     if (result.success) {

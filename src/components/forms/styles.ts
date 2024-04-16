@@ -92,7 +92,7 @@ export const BaseCheckboxFormStyle = styled.input`
   border: 1px solid ${(props) => props.theme.colors.white200};
   width: 18px;
   height: 18px;
-  border-radius: 5px;
+  border-radius: ${(props) => props.theme.radius.sm};
 
   &:checked {
     background-color: ${(props) => props.theme.colors.lightBlue100};

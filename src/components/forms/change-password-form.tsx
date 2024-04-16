@@ -33,7 +33,7 @@ const changePasswordFormSchema = z
     path: ["confirm"],
   });
 
-type changePasswordFormData = z.infer<typeof changePasswordFormSchema>;
+type ChangePasswordFormData = z.infer<typeof changePasswordFormSchema>;
 
 type Props = {
   id?: string
@@ -49,11 +49,11 @@ const ChangePasswordForm: React.FC<Props> = ({id, action_key, handleMessage}) =>
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<changePasswordFormData>({
+  } = useForm<ChangePasswordFormData>({
     resolver: zodResolver(changePasswordFormSchema),
   });
 
-  const handleRegister = async (data: changePasswordFormData) => {
+  const handleRegister = async (data: ChangePasswordFormData) => {
     const { confirm, ...rest } = data;
 
     if(!id || !action_key) {

@@ -18,6 +18,9 @@ declare module "styled-components" {
       black100: string;
       black200: string;
     };
+    gradients: {
+      ibcBlue: string;
+    },
     weights: {
       normal: string;
       semiBold: string;
@@ -39,6 +42,8 @@ declare module "styled-components" {
       sm: string;
       md: string;
       xl: string;
+      header1: string;
+      header2: string;
     };
     shadows: {
       shadow: string;

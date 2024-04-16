@@ -25,7 +25,7 @@ const loginFormSchema = z.object({
   remember: z.boolean().default(false),
 });
 
-type loginFormData = z.infer<typeof loginFormSchema>;
+type LoginFormData = z.infer<typeof loginFormSchema>;
 
 const LoginForm = () => {
   const { updateUser } = useUserContext();
@@ -36,11 +36,11 @@ const LoginForm = () => {
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm<loginFormData>({
+  } = useForm<LoginFormData>({
     resolver: zodResolver(loginFormSchema),
   });
 
-  const handleLogin = async (data: loginFormData) => {
+  const handleLogin = async (data: LoginFormData) => {
     const { remember, ...rest } = data;
 
     remember ? handleLocalStorage(data.email) : handleLocalStorage();

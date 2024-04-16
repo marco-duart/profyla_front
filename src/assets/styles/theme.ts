@@ -15,6 +15,9 @@ const light = {
     black100: "#0D1117",
     black200: "#021128",
   },
+  gradients: {
+    ibcBlue: "linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(41,117,195,1) 35%, rgba(0,212,255,1) 100%)"
+  },
   weights: {
     normal: "400",
     semiBold: "600",
@@ -36,9 +39,11 @@ const light = {
     sm: "8px",
     md: "16px",
     xl: "24px",
+    header1: "8px 8px 0 0",
+    header2: "16px 16px 0 0",
   },
   shadows: {
-    shadow: "box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1)",
+    shadow: "0px 10px 15px -3px rgba(0,0,0,0.1)",
     shadow100: "20px 20px 60px #bebebe, -20px -20px 60px #ffffff",
   },
   glows: {

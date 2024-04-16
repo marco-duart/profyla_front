@@ -13,7 +13,6 @@ const Header = () => {
   const { user } = useUserContext();
   const abrev = user ? user.name.split(" ") : "";
   const nome = abrev[0].concat(" ", abrev[1]);
-  console.log(nome);
   return (
     <S.HeaderStyle>
       <S.HeaderContentStyle>

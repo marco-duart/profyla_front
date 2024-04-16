@@ -7,7 +7,7 @@ type State = {
 };
 
 type Props = {
-  token: string
+  token: string | null
 }
 
 const INITIAL_STATE = {
@@ -16,9 +16,12 @@ const INITIAL_STATE = {
 
 export const useFetchCompanies = ({ token }: Props) => {
   const [state, setState] = useState<State>(INITIAL_STATE);
-
   const fetch = async () => {
     setState((prev) => ({ ...prev, loading: true }));
+    if(!token) {
+      return
+    }
+
     const { companies } = await GetCompanies({token});
     if (companies) {
       setState({companies});

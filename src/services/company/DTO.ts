@@ -24,8 +24,7 @@ export namespace GetCompaniesDTO {
   export interface IParams {
     token: string;
   }
-  export interface IResponse {
-    message: string;
+  export interface IResponse <>{
     companies: Company[];
   }
 }

@@ -26,7 +26,7 @@ const forgotpasswordFormSchema = z.object({
     .toLowerCase(),
 });
 
-type forgotpasswordFormData = z.infer<typeof forgotpasswordFormSchema>;
+type ForgotpasswordFormData = z.infer<typeof forgotpasswordFormSchema>;
 
 const ForgotPasswordForm = () => {
   const navigate = useNavigate();
@@ -35,11 +35,11 @@ const ForgotPasswordForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<forgotpasswordFormData>({
+  } = useForm<ForgotpasswordFormData>({
     resolver: zodResolver(forgotpasswordFormSchema),
   });
 
-  const handleForget = async (data: forgotpasswordFormData) => {
+  const handleForget = async (data: ForgotpasswordFormData) => {
     const result = await ForgetPassword(data);
     if (result.success) {
       navigate("/");

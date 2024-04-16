@@ -7,23 +7,28 @@ import React from "react";
 import { Company } from "../../../services/company/DTO"
 
 //STYLES
-import { CompanyCardStyle } from "./styles";
+import * as S from "./styles";
 
 //UTILS
 
 interface CardProps {
   company: Company;
+  onClick: (company: Company) => void
 }
 
-const ConfirmAccountCard: React.FC<CardProps> = ({ company }) => {
+const CompanyCard: React.FC<CardProps> = ({ company, onClick }) => {
   
   return (
-    <CompanyCardStyle>
-      <div>{company.company_name}</div>
-      <div>{company.cnpj}</div>
-      <div>{company.company_location}</div>
-    </CompanyCardStyle>
+    <S.CompanyCardStyle onClick={() => onClick(company)}>
+      <S.CompanyCardTitleDivStyle>
+        <S.CompanyCardTitleStyle>{company.company_name}</S.CompanyCardTitleStyle>
+      </S.CompanyCardTitleDivStyle>
+      <S.CompanyCardContentStyle>
+        <div><span>CNPJ: </span> {company.cnpj}</div>
+        <div><span>Cidade: </span> {company.company_location}</div>
+      </S.CompanyCardContentStyle>
+    </S.CompanyCardStyle>
   );
 };
 
-export default ConfirmAccountCard;
+export default CompanyCard;
