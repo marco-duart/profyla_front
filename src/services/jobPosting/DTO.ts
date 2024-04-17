@@ -1,4 +1,4 @@
-type JobPosting = {
+export type JobPosting = {
   id: number;
   title: string;
   description: string;
@@ -17,7 +17,7 @@ type JobPosting = {
 
 export namespace GetJobPostingDTO {
   export interface IParams {
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {
@@ -28,6 +28,7 @@ export namespace GetJobPostingDTO {
 
 export namespace GetJobPostingsDTO {
   export interface IParams {
+    company_id: number; 
     token: string;
   }
   export interface IResponse {
@@ -69,7 +70,7 @@ export namespace UpdateJobPostingDTO {
     work_schedule?: string;
     start_date?: Date;
     end_date?: Date;
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {
@@ -80,7 +81,7 @@ export namespace UpdateJobPostingDTO {
 
 export namespace DeleteJobPostingDTO {
   export interface IParams {
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {

@@ -12,6 +12,7 @@ const light = {
     darkBlue100: "#17224E",
     darkBlue200: "#0F152C",
     lightRed100: "#F24547",
+    lightRed200: "#FF777A",
     black100: "#0D1117",
     black200: "#021128",
   },

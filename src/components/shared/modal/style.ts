@@ -48,7 +48,7 @@ export const ModalBody = styled.div`
   align-items: center;
   font-family: ${(props) => props.theme.fontFamily.OpenSans};
   font-size: ${(props) => props.theme.fontSizes.sm};
-  padding: 0 30px;
+  padding: 30px 30px 0 30px;
 `;
 
 export const ModalActions = styled.div`

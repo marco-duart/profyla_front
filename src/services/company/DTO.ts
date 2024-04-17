@@ -11,7 +11,7 @@ export type Company = {
 
 export namespace GetCompanyDTO {
   export interface IParams {
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {
@@ -51,7 +51,7 @@ export namespace UpdateCompanyDTO {
     sector?: string;
     company_size?: number;
     company_location?: string;
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {
@@ -62,7 +62,7 @@ export namespace UpdateCompanyDTO {
 
 export namespace DeleteCompanyDTO {
   export interface IParams {
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {

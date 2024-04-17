@@ -13,13 +13,14 @@ import * as S from "./styles";
 
 interface CardProps {
   company: Company;
-  onClick: (company: Company) => void
+  onDetail: (company: Company) => void
+  onJob: (company: Company, page: "company" | "job") => void
 }
 
-const CompanyCard: React.FC<CardProps> = ({ company, onClick }) => {
+const CompanyCard: React.FC<CardProps> = ({ company, onDetail, onJob }) => {
   
   return (
-    <S.CompanyCardStyle onClick={() => onClick(company)}>
+    <S.CompanyCardStyle>
       <S.CompanyCardTitleDivStyle>
         <S.CompanyCardTitleStyle>{company.company_name}</S.CompanyCardTitleStyle>
       </S.CompanyCardTitleDivStyle>
@@ -27,6 +28,10 @@ const CompanyCard: React.FC<CardProps> = ({ company, onClick }) => {
         <div><span>CNPJ: </span> {company.cnpj}</div>
         <div><span>Cidade: </span> {company.company_location}</div>
       </S.CompanyCardContentStyle>
+      <S.CompanyCardFooterStyle>
+        <button onClick={() => onDetail(company)}>Detalhes</button>
+        <button onClick={() => onJob(company, "job")}>Vagas</button>
+      </S.CompanyCardFooterStyle>
     </S.CompanyCardStyle>
   );
 };

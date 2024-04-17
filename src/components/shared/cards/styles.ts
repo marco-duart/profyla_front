@@ -27,6 +27,7 @@ export const RegisterCardStyle = styled.div`
   box-shadow: ${(props) => props.theme.glows.glow100};
   padding: 20px 0;
 `;
+
 export const ForgotPasswordCardStyle = styled.div`
   width: ${(props) => props.theme.widths.cards.xxl};
   height: ${(props) => props.theme.heights.cards.xl};
@@ -66,7 +67,7 @@ export const CompanyCardStyle = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 35px;
+  //gap: 35px;
   box-shadow: ${(props) => props.theme.shadows.shadow100};
   padding: 20px 0;
 
@@ -86,14 +87,14 @@ export const CompanyCardTitleDivStyle = styled.div`
   align-items: center;
   justify-content: center;
   background: rgb(2, 0, 36);
-  background: ${props => props.theme.gradients.ibcBlue}
+  background: ${(props) => props.theme.gradients.ibcBlue};
 `;
 
 export const CompanyCardTitleStyle = styled.h3`
   font-family: ${(props) => props.theme.fontFamily.OpenSans};
   font-size: ${(props) => props.theme.fontSizes.md};
   font-weight: ${(props) => props.theme.weights.bold};
-  color: ${props => props.theme.colors.white};
+  color: ${(props) => props.theme.colors.white};
 `;
 
 export const CompanyCardContentStyle = styled.div`
@@ -105,3 +106,22 @@ export const CompanyCardContentStyle = styled.div`
     font-weight: ${(props) => props.theme.weights.bold};
   }
 `;
+
+export const CompanyCardFooterStyle = styled.div`
+  button {
+    width: ${(props) => props.theme.widths.buttons.sm};
+    height: ${(props) => props.theme.heights.buttons.xsm};
+
+    border: none;
+    border-radius: ${(props) => props.theme.radius.xl};
+    color: ${(props) => props.theme.colors.white};
+    font-family: ${(props) => props.theme.fontFamily.Sora};
+    font-size: ${(props) => props.theme.fontSizes.xsm};
+    cursor: pointer;
+  }
+`;
+
+// background-color: ${(props) =>
+// props.action === "detail"
+// ? props.theme.colors.lightGrey300
+// : props.theme.colors.lightBlue100};

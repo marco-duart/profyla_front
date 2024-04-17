@@ -56,14 +56,35 @@ export const ForgotPasswordFormStyle = styled.form`
   }
 `;
 
+//COMPANY
 export const CompanyFormStyle = styled.form`
   width: ${(props) => props.theme.widths.forms.xsm};
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   padding-top: 20px;
-  gap: 10px;
+  gap: 20px;
   margin-bottom: 10px;
+`;
+
+export const CompanyInputDiv = styled.div`
+  position: relative;
+
+  label {
+    border-radius: ${(props) => props.theme.radius.xm};
+    padding: 0 5px;
+    position: absolute;
+    top: -17px;
+    left: -10px;
+    font-size: ${(props) => props.theme.fontSizes.xsm};
+    color: ${(props) => props.theme.colors.black100};
+    font-weight: bold;
+  }
+`;
+
+export const CrudButtonsDiv = styled.div`
+  display: flex;
+  gap: 50px;
 `;
 
 export const BaseTitleFormStyle = styled.h1`
