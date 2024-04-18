@@ -33,6 +33,7 @@ type CompanyFormData = z.infer<typeof companyFormSchema>;
 
 type Props = {
   company?: Company;
+  isOpen: boolean;
   onDelete: (params: DeleteCompanyData) => void;
   onEdit: (params: UpdateCompanyData) => void;
   onCreate: (params: CreateCompanyData) => void;
@@ -41,6 +42,7 @@ type Props = {
 
 const CompanyForm: React.FC<Props> = ({
   company,
+  isOpen,
   onClose,
   onCreate,
   onDelete,
@@ -100,11 +102,11 @@ const CompanyForm: React.FC<Props> = ({
       setValue("company_location", "");
       setValue("company_size", 0);
     }
-  }, [company]);
+  }, [company, isOpen]);
 
   return (
-    <S.CompanyFormStyle onSubmit={handleSubmit(handleSubmitForm)}>
-      <S.CompanyInputDiv>
+    <S.CrudFormStyle onSubmit={handleSubmit(handleSubmitForm)}>
+      <S.CrudInputDiv>
         <label htmlFor="company_name">Nome da Empresa</label>
         <S.BaseInputFormStyle
           {...register("company_name")}
@@ -118,8 +120,8 @@ const CompanyForm: React.FC<Props> = ({
             {errors.company_name.message}
           </S.BaseSmallFormStyle>
         )}
-      </S.CompanyInputDiv>
-      <S.CompanyInputDiv>
+      </S.CrudInputDiv>
+      <S.CrudInputDiv>
         <label htmlFor="cnpj">CNPJ</label>
         <S.BaseInputFormStyle
           {...register("cnpj")}
@@ -131,8 +133,8 @@ const CompanyForm: React.FC<Props> = ({
         {errors.cnpj && (
           <S.BaseSmallFormStyle>{errors.cnpj.message}</S.BaseSmallFormStyle>
         )}
-      </S.CompanyInputDiv>
-      <S.CompanyInputDiv>
+      </S.CrudInputDiv>
+      <S.CrudInputDiv>
         <label htmlFor="sector">Setor/Área</label>
         <S.BaseInputFormStyle
           {...register("sector")}
@@ -144,8 +146,8 @@ const CompanyForm: React.FC<Props> = ({
         {errors.sector && (
           <S.BaseSmallFormStyle>{errors.sector.message}</S.BaseSmallFormStyle>
         )}
-      </S.CompanyInputDiv>
-      <S.CompanyInputDiv>
+      </S.CrudInputDiv>
+      <S.CrudInputDiv>
         <label htmlFor="company_location">Cidade/Estado</label>
         <S.BaseInputFormStyle
           {...register("company_location")}
@@ -159,8 +161,8 @@ const CompanyForm: React.FC<Props> = ({
             {errors.company_location.message}
           </S.BaseSmallFormStyle>
         )}
-      </S.CompanyInputDiv>
-      <S.CompanyInputDiv>
+      </S.CrudInputDiv>
+      <S.CrudInputDiv>
         <label htmlFor="company_size">Quantidade de funcionários</label>
         <S.BaseInputFormStyle
           {...register("company_size")}
@@ -174,13 +176,14 @@ const CompanyForm: React.FC<Props> = ({
             {errors.company_size.message}
           </S.BaseSmallFormStyle>
         )}
-      </S.CompanyInputDiv>
+      </S.CrudInputDiv>
       <S.CrudButtonsDiv>
-        {disabled ? (
+        {(disabled && company) && (
           <CrudButton onClick={handleDisableInput} action="edit">
             Editar
           </CrudButton>
-        ) : (
+        )}
+        {(!disabled && company) && (
           <CrudButton onClick={handleDisableInput} action="cancel">
             Cancelar
           </CrudButton>
@@ -192,7 +195,7 @@ const CompanyForm: React.FC<Props> = ({
         )}
         {!disabled && <FormButton type="submit">Salvar</FormButton>}
       </S.CrudButtonsDiv>
-    </S.CompanyFormStyle>
+    </S.CrudFormStyle>
   );
 };
 

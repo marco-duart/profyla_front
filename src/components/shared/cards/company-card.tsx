@@ -20,19 +20,19 @@ interface CardProps {
 const CompanyCard: React.FC<CardProps> = ({ company, onDetail, onJob }) => {
   
   return (
-    <S.CompanyCardStyle>
-      <S.CompanyCardTitleDivStyle>
-        <S.CompanyCardTitleStyle>{company.company_name}</S.CompanyCardTitleStyle>
-      </S.CompanyCardTitleDivStyle>
-      <S.CompanyCardContentStyle>
+    <S.BaseCardStyle>
+      <S.BaseCardTitleDivStyle>
+        <S.BaseCardTitleStyle>{company.company_name}</S.BaseCardTitleStyle>
+      </S.BaseCardTitleDivStyle>
+      <S.BaseCardContentStyle>
         <div><span>CNPJ: </span> {company.cnpj}</div>
         <div><span>Cidade: </span> {company.company_location}</div>
-      </S.CompanyCardContentStyle>
-      <S.CompanyCardFooterStyle>
+      </S.BaseCardContentStyle>
+      <S.BaseCardFooterStyle>
         <button onClick={() => onDetail(company)}>Detalhes</button>
         <button onClick={() => onJob(company, "job")}>Vagas</button>
-      </S.CompanyCardFooterStyle>
-    </S.CompanyCardStyle>
+      </S.BaseCardFooterStyle>
+    </S.BaseCardStyle>
   );
 };
 

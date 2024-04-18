@@ -8,10 +8,10 @@ export type JobPosting = {
   modality: string;
   salary: string;
   work_schedule: string;
-  start_date: Date;
-  end_date: Date;
-  created_at: Date;
-  updated_at: Date;
+  start_date: string;
+  end_date: string;
+  created_at: string;
+  updated_at: string;
   company_id: number;
 };
 
@@ -48,8 +48,8 @@ export namespace CreateJobPostingDTO {
     modality: string;
     salary: string;
     work_schedule: string;
-    start_date: Date;
-    end_date: Date;
+    start_date?: string;
+    end_date?: string;
     token: string;
   }
   export interface IResponse {
@@ -68,8 +68,8 @@ export namespace UpdateJobPostingDTO {
     modality?: string;
     salary?: string;
     work_schedule?: string;
-    start_date?: Date;
-    end_date?: Date;
+    start_date?: string;
+    end_date?: string;
     id: number;
     token: string;
   }

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const ModalOverlay = styled.div<{ isOpen: boolean }>`
+export const ModalOverlayStyle = styled.div<{ isOpen: boolean }>`
   display: ${({ isOpen }) => (isOpen ? "block" : "none")};
   position: fixed;
   top: 0;
@@ -10,7 +10,7 @@ export const ModalOverlay = styled.div<{ isOpen: boolean }>`
   background-color: rgba(0, 0, 0, 0.5);
 `;
 
-export const ModalContainer = styled.div`
+export const ModalContainerStyle = styled.div`
   position: fixed;
   width: ${(props) => props.theme.widths.forms.md};
   height: ${(props) => props.theme.heights.forms.md};
@@ -23,7 +23,7 @@ export const ModalContainer = styled.div`
   flex-direction: column;
 `;
 
-export const ModalHeader = styled.div`
+export const ModalHeaderStyle = styled.div`
   width: 100%;
   height: 70px;
   padding: 0 30px;
@@ -35,13 +35,13 @@ export const ModalHeader = styled.div`
   border-radius: ${(props) => props.theme.radius.header2};
 `;
 
-export const ModalTitle = styled.h2`
+export const ModalTitleStyle = styled.h2`
   font-family: ${(props) => props.theme.fontFamily.OpenSans};
   font-size: ${(props) => props.theme.fontSizes.lg};
-  color: ${props => props.theme.colors.white100};
+  color: ${(props) => props.theme.colors.white100};
 `;
 
-export const ModalBody = styled.div`
+export const ModalBodyStyle = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -49,9 +49,10 @@ export const ModalBody = styled.div`
   font-family: ${(props) => props.theme.fontFamily.OpenSans};
   font-size: ${(props) => props.theme.fontSizes.sm};
   padding: 30px 30px 0 30px;
+  overflow-y: auto;
 `;
 
-export const ModalActions = styled.div`
+export const ModalActionsStyle = styled.div`
   display: flex;
   justify-content: space-around;
   gap: 15px;
