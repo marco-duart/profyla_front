@@ -1,55 +1,68 @@
 import styled from "styled-components";
 
 export const LoginCardStyle = styled.div`
-  width: ${props => props.theme.widths.cards.xxl};
-  height: ${props => props.theme.heights.cards.xxl};
+  width: ${(props) => props.theme.widths.cards.xxl};
+  height: ${(props) => props.theme.heights.cards.xxl};
   position: relative;
-  background-color: ${props => props.theme.colors.white};
-  border-radius: ${props => props.theme.radius.md};
+  background-color: ${(props) => props.theme.colors.white};
+  border-radius: ${(props) => props.theme.radius.md};
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  box-shadow: ${props => props.theme.glows.glow100};
+  box-shadow: ${(props) => props.theme.glows.glow100};
   padding: 20px 0;
-`
+`;
 
 export const RegisterCardStyle = styled.div`
-  width: ${props => props.theme.widths.cards.xxl};
-  height: ${props => props.theme.heights.cards.xxxl};
+  width: ${(props) => props.theme.widths.cards.xxl};
+  height: ${(props) => props.theme.heights.cards.xxxl};
   position: relative;
-  background-color: ${props => props.theme.colors.white};
-  border-radius: ${props => props.theme.radius.md};
+  background-color: ${(props) => props.theme.colors.white};
+  border-radius: ${(props) => props.theme.radius.md};
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  box-shadow: ${props => props.theme.glows.glow100};
+  box-shadow: ${(props) => props.theme.glows.glow100};
   padding: 20px 0;
-`
+`;
 export const ForgotPasswordCardStyle = styled.div`
-  width: ${props => props.theme.widths.cards.xxl};
-  height: ${props => props.theme.heights.cards.xl};
+  width: ${(props) => props.theme.widths.cards.xxl};
+  height: ${(props) => props.theme.heights.cards.xl};
   position: relative;
-  background-color: ${props => props.theme.colors.white};
-  border-radius: ${props => props.theme.radius.md};
+  background-color: ${(props) => props.theme.colors.white};
+  border-radius: ${(props) => props.theme.radius.md};
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  box-shadow: ${props => props.theme.glows.glow100};
+  box-shadow: ${(props) => props.theme.glows.glow100};
   padding: 20px 0;
-`
+`;
 export const ConfirmAccountCardStyle = styled.div`
-  width: ${props => props.theme.widths.cards.xxxl};
-  height: ${props => props.theme.heights.cards.lg};
+  width: ${(props) => props.theme.widths.cards.xxxl};
+  height: ${(props) => props.theme.heights.cards.lg};
   position: relative;
-  background-color: ${props => props.theme.colors.white};
-  border-radius: ${props => props.theme.radius.md};
+  background-color: ${(props) => props.theme.colors.white};
+  border-radius: ${(props) => props.theme.radius.md};
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  box-shadow: ${props => props.theme.glows.glow100};
+  box-shadow: ${(props) => props.theme.glows.glow100};
   padding: 20px 0;
-`
+`;
+export const SupportCardStyle = styled.div`
+  width: 1400px;
+  height: 500px;
+  position: absolute;
+  top: 15px;
+  background-color: ${(props) => props.theme.colors.white};
+  border-radius: ${(props) => props.theme.radius.md};
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  box-shadow: 5px 10px 15px 5px rgba(0.2, 0.2, 0.2, 0.2);
+  padding: 20px 20px;
+`;

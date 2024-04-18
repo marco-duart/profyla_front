@@ -56,6 +56,18 @@ export const ForgotPasswordFormStyle = styled.form`
   }
 `;
 
+export const SupportFormStyle = styled.form`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  input {
+    width: 32%;
+  }
+`;
+
 export const BaseTitleFormStyle = styled.h1`
   width: 100%;
   margin-bottom: 15px;
@@ -78,6 +90,39 @@ export const BaseInputFormStyle = styled("input")<{ error: boolean }>`
   &:focus {
     outline: none;
     border: ${(props) => !props.error && "1px outset white"};
+  }
+`;
+
+export const SelectFormStyle = styled.select`
+  width: 100%;
+  height: ${(props) => props.theme.heights.imputs.sm};
+  background-color: ${(props) => props.theme.colors.lightGrey200};
+  border: none;
+  border-radius: ${(props) => props.theme.radius.xl};
+  padding: 0 20px;
+  font-family: ${(props) => props.theme.fontFamily.Poppins};
+  font-size: ${(props) => props.theme.fontSizes.md};
+
+  &:focus {
+    outline: none;
+    border: 1px outset white;
+  }
+`;
+
+export const TextareaFormStyle = styled.textarea`
+  width: 100%;
+  height: 160px;
+  resize: none;
+  background-color: ${(props) => props.theme.colors.lightGrey200};
+  border: none;
+  border-radius: ${(props) => props.theme.radius.xl};
+  padding: 5px 20px;
+  font-family: ${(props) => props.theme.fontFamily.Poppins};
+  font-size: ${(props) => props.theme.fontSizes.md};
+
+  &:focus {
+    outline: none;
+    border: 1px outset white;
   }
 `;
 
