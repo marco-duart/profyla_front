@@ -56,7 +56,7 @@ export const ConfirmAccountCardStyle = styled.div`
 `;
 
 //BASE CARD
-export const BaseCardStyle = styled.div`
+export const BaseCardStyle = styled("div")<{ pointer: boolean}>`
   width: ${(props) => props.theme.widths.cards.lg};
   height: ${(props) => props.theme.heights.cards.lg};
   background-color: ${(props) => props.theme.colors.white};
@@ -66,10 +66,9 @@ export const BaseCardStyle = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  //gap: 35px;
   box-shadow: ${(props) => props.theme.shadows.shadow};
-  padding: 20px 0;
-
+  padding: 30px 0 0 0;
+  cursor: ${props => props.pointer ? "pointer" : "default" };
   :hover {
     box-shadow: ${(props) => props.theme.glows.glow};
     transition: all 0.3s;
@@ -107,10 +106,13 @@ export const BaseCardContentStyle = styled.div`
 `;
 
 export const BaseCardFooterStyle = styled.div`
+  display: flex;
+  gap: 10px;
+  position: absolute;
+  bottom: 20px;
   button {
     width: ${(props) => props.theme.widths.buttons.sm};
     height: ${(props) => props.theme.heights.buttons.xsm};
-
     border: none;
     border-radius: ${(props) => props.theme.radius.xl};
     color: ${(props) => props.theme.colors.white};

@@ -29,9 +29,7 @@ export const FormButtonStyle = styled.button`
   cursor: pointer;
 `;
 
-export const CrudButtonStyle = styled("button")<{
-  action: "close" | "edit" | "delete" | "cancel" | "new";
-}>`
+export const CrudButtonStyle = styled("button")<{ action: "close" | "edit" | "delete" | "cancel" | "new"; }>`
   width: ${(props) =>
     props.action === "close"
       ? props.theme.widths.buttons.close
@@ -56,6 +54,20 @@ export const CrudButtonStyle = styled("button")<{
     }
   }};
 
+  border: none;
+  border-radius: ${(props) => props.theme.radius.xl};
+  color: ${(props) => props.theme.colors.white};
+  font-family: ${(props) => props.theme.fontFamily.Sora};
+  font-size: ${(props) => props.theme.fontSizes.xsm};
+  cursor: pointer;
+`;
+
+
+export const CardButtonStyle = styled("button")<{ detail: boolean }>`
+  width: ${(props) => props.theme.widths.buttons.sm};
+  height: ${(props) => props.theme.heights.buttons.xsm};
+
+  background-color: ${(props) => props.detail ? props.theme.colors.lightGrey300 : props.theme.colors.lightBlue100};
   border: none;
   border-radius: ${(props) => props.theme.radius.xl};
   color: ${(props) => props.theme.colors.white};

@@ -19,7 +19,7 @@ interface CardProps {
 
 const JobCard: React.FC<CardProps> = ({ job, onDetail, onJob }) => {
   return (
-    <S.BaseCardStyle onClick={() => onDetail(job)}>
+    <S.BaseCardStyle pointer={true} onClick={() => onDetail(job)}>
       <S.BaseCardTitleDivStyle>
         <S.BaseCardTitleStyle>{job.title}</S.BaseCardTitleStyle>
       </S.BaseCardTitleDivStyle>

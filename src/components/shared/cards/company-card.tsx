@@ -5,6 +5,7 @@ import React from "react";
 
 //COMPONENTS
 import { Company } from "../../../services/company/DTO"
+import CardButton from "../buttons/card-button";
 
 //STYLES
 import * as S from "./styles";
@@ -20,7 +21,7 @@ interface CardProps {
 const CompanyCard: React.FC<CardProps> = ({ company, onDetail, onJob }) => {
   
   return (
-    <S.BaseCardStyle>
+    <S.BaseCardStyle pointer={false}>
       <S.BaseCardTitleDivStyle>
         <S.BaseCardTitleStyle>{company.company_name}</S.BaseCardTitleStyle>
       </S.BaseCardTitleDivStyle>
@@ -29,8 +30,8 @@ const CompanyCard: React.FC<CardProps> = ({ company, onDetail, onJob }) => {
         <div><span>Cidade: </span> {company.company_location}</div>
       </S.BaseCardContentStyle>
       <S.BaseCardFooterStyle>
-        <button onClick={() => onDetail(company)}>Detalhes</button>
-        <button onClick={() => onJob(company, "job")}>Vagas</button>
+        <CardButton detail={true} onClick={() => onDetail(company)}>Detalhes</CardButton>
+        <CardButton detail={false} onClick={() => onJob(company, "job")}>Vagas</CardButton>
       </S.BaseCardFooterStyle>
     </S.BaseCardStyle>
   );
