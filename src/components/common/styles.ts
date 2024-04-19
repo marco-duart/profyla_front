@@ -10,6 +10,7 @@ export const HeaderStyle = styled.header`
   width: 100%;
   height: 100px;
   background-color: transparent;
+  z-index: 1;
 `;
 
 export const HeaderContentStyle = styled.div`
