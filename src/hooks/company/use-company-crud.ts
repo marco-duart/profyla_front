@@ -21,6 +21,7 @@ const INITIAL_STATE = {
 
 export type CreateCompanyData = {
   company_name: string;
+  business_name: string;
   cnpj: string;
   sector: string;
   company_size: number;
@@ -29,8 +30,7 @@ export type CreateCompanyData = {
 
 export type UpdateCompanyData = {
   id: number;
-  company_name: string;
-  cnpj: string;
+  business_name: string;
   sector: string;
   company_size: number;
   company_location: string;

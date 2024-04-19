@@ -22,7 +22,8 @@ import {
 
 const companyFormSchema = z.object({
   id: z.coerce.number().nullable(),
-  company_name: z.string().min(6, FORM_MESSAGE.NAME),
+  company_name: z.string().min(3, FORM_MESSAGE.COMPANY_NAME),
+  business_name: z.string().min(3, FORM_MESSAGE.BUSINESS_NAME),
   cnpj: z.string().min(14, FORM_MESSAGE.CNPJ_SIZE),
   sector: z.string().min(3, FORM_MESSAGE.COMPANY_SECTOR),
   company_location: z.string().min(3, FORM_MESSAGE.COMPANY_LOCATION),
@@ -89,6 +90,7 @@ const CompanyForm: React.FC<Props> = ({
       setDisabled(true);
       setValue("id", company.id);
       setValue("company_name", company.company_name);
+      setValue("business_name", company.business_name);
       setValue("cnpj", company.cnpj);
       setValue("sector", company.sector);
       setValue("company_location", company.company_location);
@@ -97,6 +99,7 @@ const CompanyForm: React.FC<Props> = ({
       setDisabled(false);
       setValue("id", null);
       setValue("company_name", "");
+      setValue("business_name", "");
       setValue("cnpj", "");
       setValue("sector", "");
       setValue("company_location", "");
@@ -107,12 +110,12 @@ const CompanyForm: React.FC<Props> = ({
   return (
     <S.CrudFormStyle onSubmit={handleSubmit(handleSubmitForm)}>
       <S.CrudInputDiv>
-        <label htmlFor="company_name">Nome da Empresa</label>
+        <label htmlFor="company_name">Razão social</label>
         <S.BaseInputFormStyle
           {...register("company_name")}
           type="text"
-          placeholder="Nome da empresa/CNPJ"
-          disabled={disabled}
+          placeholder="Razão social"
+          disabled={disabled || !!company?.id}
           error={errors.company_name ? true : false}
         />
         {errors.company_name && (
@@ -122,12 +125,27 @@ const CompanyForm: React.FC<Props> = ({
         )}
       </S.CrudInputDiv>
       <S.CrudInputDiv>
+        <label htmlFor="business_name">Nome fantasia</label>
+        <S.BaseInputFormStyle
+          {...register("business_name")}
+          type="text"
+          placeholder="Nome fantasia"
+          disabled={disabled}
+          error={errors.business_name ? true : false}
+        />
+        {errors.business_name && (
+          <S.BaseSmallFormStyle>
+            {errors.business_name.message}
+          </S.BaseSmallFormStyle>
+        )}
+      </S.CrudInputDiv>
+      <S.CrudInputDiv>
         <label htmlFor="cnpj">CNPJ</label>
         <S.BaseInputFormStyle
           {...register("cnpj")}
           type="text"
           placeholder="CNPJ"
-          disabled={disabled}
+          disabled={disabled || !!company?.id}
           error={errors.cnpj ? true : false}
         />
         {errors.cnpj && (
