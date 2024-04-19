@@ -14,10 +14,9 @@ import * as S from "./styles";
 interface CardProps {
   job: JobPosting;
   onDetail: (job: JobPosting) => void;
-  onJob?: (job: JobPosting, page: "company" | "job") => void;
 }
 
-const JobCard: React.FC<CardProps> = ({ job, onDetail, onJob }) => {
+const JobCard: React.FC<CardProps> = ({ job, onDetail }) => {
   return (
     <S.BaseCardStyle pointer={true} onClick={() => onDetail(job)}>
       <S.BaseCardTitleDivStyle>
