@@ -10,9 +10,9 @@ import {
 
 export const GetHiringProcess = async (params: GetHiringProcessDTO.IParams) => {
   try {
-    const { id, token } = params;
+    const { prefix, id, token } = params;
     const response = await api.get<GetHiringProcessDTO.IResponse>(
-      `/admins/hiring/${id}`,
+      `/${prefix}/hiring/${id}`,
       { headers: { Authorization: token } }
     );
 
@@ -41,12 +41,13 @@ export const GetHiringProcesses = async (
   params: GetHiringProcessesDTO.IParams
 ) => {
   try {
-    const { token } = params;
+    const { prefix,token } = params;
+    console.log(token, prefix)
     const response = await api.get<GetHiringProcessesDTO.IResponse>(
-      "/admins/hirings",
-      { params, headers: { Authorization: token } }
+      `/${prefix}/hirings`,
+      { headers: { Authorization: token } }
     );
-
+    console.log(response);
     return {
       success: true,
       message: "MESSAGE",

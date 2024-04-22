@@ -24,8 +24,17 @@ export const TalentflowLogoStyle = styled.div`
   top: -50px;
 `
 export const SliderStyle = styled(Slider)`
-width: 95%;
-height: 120%;
-padding: 10px;
-margin: 10px;
+padding-top: 20px;
+padding-bottom: 40px;
+.slick-list {
+  overflow: visible;
+}
+.slick-slide .drop-shadow {
+  box-shadow: none; //no shadow for a hidden slide
+  transition: box-shadow 0.1s ease-in-out; //little effect to fade the shadow
+}
+
+.slick-slide.slick-active .drop-shadow {
+  box-shadow: 0px 0px 43px 0px rgba(0, 0, 0, 0.35); 
+}
 `

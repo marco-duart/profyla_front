@@ -185,10 +185,9 @@ export const JobsCardStyle = styled.div`
   align-items: center;
 `
 export const CardContentStyle = styled.div`
-width: 100%;
-height: 100%;
-position: relative;
-padding: 10px 20px;
+    width: calc(100% + 30px); //we need more width for the shadows on the edges
+    padding: 10px 40px; //space for the shadows
+    overflow: hidden; //hide the overflow
 `
 export const WelcomeHomeCardStyle2 = styled.div`
   max-width: 1115px;
@@ -220,7 +219,7 @@ export const WelcomeHomeCardStyle3 = styled.div`
   border-radius: ${props => props.theme.radius.md};
   display: flex;
   box-shadow: 10px 10px 10px 10px rgba(0.2,0.2,0.2,0.2);
-  padding: 90px 0;
+  padding: 80px 0;
 `
 
 export const HeaderCardStyle = styled.div`

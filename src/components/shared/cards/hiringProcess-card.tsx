@@ -1,28 +1,29 @@
 import React from "react";
 
-// import { HiringProcessDetail } from "../../../services/hiringProcess/DTO";
+import { HiringProcessShow } from "../../../services/hiringProcess/DTO";
 
 import * as S from "./styles";
 
-// interface CardProps {
-//   hiringProcess: HiringProcessDetail;
-// }
+interface CardProps {
+  hiringProcess: HiringProcessShow;
+}
 
-const HiringProcessCard = () => {
+const HiringProcessCard: React.FC<CardProps> = ({ hiringProcess }) => {
+
   return (
     <S.BaseCardStyle pointer={true}>
       <S.BaseCardTitleDivStyle>
-        <S.BaseCardTitleStyle>Vaga 1</S.BaseCardTitleStyle>
+        <S.BaseCardTitleStyle>{hiringProcess.title}</S.BaseCardTitleStyle>
       </S.BaseCardTitleDivStyle>
       <S.BaseCardContentStyle>
         <div>
-          <span>Empresa </span> X
+          <span>Empresa </span> {hiringProcess.business_name}
         </div>{" "}
         <div>
-          <span>Salário</span> Y
+          <span>Salário</span> {hiringProcess.salary}
         </div>{" "}
         <div>
-          <span>Status: </span> OK
+          <span>Status: </span> {hiringProcess.status}
         </div>
         <div>
             <button >Detalhes</button>

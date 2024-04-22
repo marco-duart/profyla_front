@@ -4,17 +4,19 @@ import React from "react";
 //LIBRARIES
 import Slider from "react-slick";
 //COMPONENTS
+import HiringProcessCard from "../../components/shared/cards/hiringProcess-card";
 import TalentflowLogo from "../../components/shared/talentflow-logo";
+import { useHiringProcessCrud } from "../../hooks/hiring/use-hiringProcess-context";
 //STYLES
 import * as S1 from "./styles";
-import { Carousel } from "../../components/carousel/carousel";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import HiringProcessCard from "../../components/shared/cards/hiringProcess-card";
+
 import * as S from "../../components/shared/cards/styles";
 //UTILS
 
 const Home = () => {
+  const { hiringProcesses } = useHiringProcessCrud("candidates");
   const settings = {
     dots: true,
     infinite: true,
@@ -41,14 +43,13 @@ const Home = () => {
         </S.HeaderCardStyle>
         <S.CardContentStyle>
           <S1.SliderStyle {...settings}>
-            <HiringProcessCard></HiringProcessCard>
-            <HiringProcessCard></HiringProcessCard>
-            <HiringProcessCard></HiringProcessCard>
-            <HiringProcessCard></HiringProcessCard>
-            <HiringProcessCard></HiringProcessCard>
-            <HiringProcessCard></HiringProcessCard>
-            <HiringProcessCard></HiringProcessCard>
-            <HiringProcessCard></HiringProcessCard>
+          {hiringProcesses?.map((hiringProcess, index) => (
+            <HiringProcessCard 
+            key={index}
+            hiringProcess={hiringProcess}
+            />
+          ))}
+
           </S1.SliderStyle>
         </S.CardContentStyle>
       </S.WelcomeHomeCardStyle3>
