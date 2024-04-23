@@ -56,6 +56,37 @@ export const ForgotPasswordFormStyle = styled.form`
   }
 `;
 
+//COMPANY
+export const CrudFormStyle = styled.form`
+  width: ${(props) => props.theme.widths.forms.xsm};
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 20px;
+  gap: 20px;
+  margin-bottom: 10px;
+`;
+
+export const CrudInputDiv = styled.div`
+  position: relative;
+
+  label {
+    border-radius: ${(props) => props.theme.radius.xm};
+    padding: 0 5px;
+    position: absolute;
+    top: -17px;
+    left: -10px;
+    font-size: ${(props) => props.theme.fontSizes.xsm};
+    color: ${(props) => props.theme.colors.black100};
+    font-weight: bold;
+  }
+`;
+
+export const CrudButtonsDiv = styled.div`
+  display: flex;
+  gap: 50px;
+`;
+
 export const BaseTitleFormStyle = styled.h1`
   width: 100%;
   margin-bottom: 15px;
@@ -81,6 +112,23 @@ export const BaseInputFormStyle = styled("input")<{ error: boolean }>`
   }
 `;
 
+export const BaseTextAreaFormStyle = styled("textarea")<{ error: boolean }>`
+  width: 100%;
+  min-height: ${(props) => props.theme.heights.imputs.md};
+  background-color: ${(props) => props.theme.colors.lightGrey200};
+  border: ${(props) =>
+    props.error ? `1px solid ${props.theme.colors.lightRed100}` : "none"};
+  border-radius: ${(props) => props.theme.radius.xl};
+  padding: 0 20px;
+  font-family: ${(props) => props.theme.fontFamily.Poppins};
+  font-size: ${(props) => props.theme.fontSizes.md};
+
+  &:focus {
+    outline: none;
+    border: ${(props) => !props.error && "1px outset white"};
+  }
+`;
+
 export const HandlePasswordDivStyle = styled.div`
   cursor: pointer;
 `;
@@ -92,7 +140,7 @@ export const BaseCheckboxFormStyle = styled.input`
   border: 1px solid ${(props) => props.theme.colors.white200};
   width: 18px;
   height: 18px;
-  border-radius: 5px;
+  border-radius: ${(props) => props.theme.radius.sm};
 
   &:checked {
     background-color: ${(props) => props.theme.colors.lightBlue100};

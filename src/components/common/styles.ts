@@ -35,10 +35,8 @@ export const HeaderContentStyle = styled.div`
 
 // FOOTER
 export const FooterStyle = styled.footer`
-  position: absolute;
-  bottom: 0;
   width: 100%;
-  height: 300px;
+  height: 400px;
 `
 
 export const FooterContentDivStyle = styled.div`

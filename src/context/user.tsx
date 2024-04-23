@@ -18,10 +18,12 @@ type User = {
 
 type State = {
   user: User | null;
+  token: string | null
 };
 
 type UserContext = {
   user: User | null;
+  token: string | null
   updateUser: (user: User, token: string) => void;
   logout: () => void;
   isAdmin: () => boolean
@@ -33,6 +35,7 @@ type Props = {
 
 export const UserContext = createContext<UserContext>({
   user: null,
+  token: null,
   updateUser: () => {},
   logout: () => {},
   isAdmin: () => false
@@ -41,6 +44,7 @@ export const UserContext = createContext<UserContext>({
 export const UserContextProvider: React.FC<Props> = ({ children }) => {
   const [state, setState] = useState<State>({
     user: null,
+    token: null
   });
 
   const autoLogin = async () => {
@@ -61,6 +65,7 @@ export const UserContextProvider: React.FC<Props> = ({ children }) => {
     localStorage.setItem("ibc-tf-token", token);
     setState({
       user,
+      token
     });
   };
 
@@ -69,6 +74,7 @@ export const UserContextProvider: React.FC<Props> = ({ children }) => {
 
     setState({
       user: null,
+      token: null
     });
   };
 
@@ -90,6 +96,7 @@ export const UserContextProvider: React.FC<Props> = ({ children }) => {
     <UserContext.Provider
       value={{
         user: state.user,
+        token: state.token,
         updateUser,
         logout: cleanUser,
         isAdmin

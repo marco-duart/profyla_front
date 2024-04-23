@@ -1,6 +1,7 @@
-type Company = {
+export type Company = {
   id: number;
   company_name: string;
+  business_name: string;
   cnpj: string;
   sector: string;
   company_size: number;
@@ -11,7 +12,7 @@ type Company = {
 
 export namespace GetCompanyDTO {
   export interface IParams {
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {
@@ -24,8 +25,7 @@ export namespace GetCompaniesDTO {
   export interface IParams {
     token: string;
   }
-  export interface IResponse {
-    message: string;
+  export interface IResponse <>{
     companies: Company[];
   }
 }
@@ -33,6 +33,7 @@ export namespace GetCompaniesDTO {
 export namespace CreateCompanyDTO {
   export interface IParams {
     company_name: string;
+    business_name: string;
     cnpj: string;
     sector: string;
     company_size: number;
@@ -47,12 +48,10 @@ export namespace CreateCompanyDTO {
 
 export namespace UpdateCompanyDTO {
   export interface IParams {
-    company_name?: string;
-    cnpj?: string;
     sector?: string;
     company_size?: number;
     company_location?: string;
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {
@@ -63,7 +62,7 @@ export namespace UpdateCompanyDTO {
 
 export namespace DeleteCompanyDTO {
   export interface IParams {
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {

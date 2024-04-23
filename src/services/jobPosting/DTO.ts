@@ -1,4 +1,4 @@
-type JobPosting = {
+export type JobPosting = {
   id: number;
   title: string;
   description: string;
@@ -8,16 +8,16 @@ type JobPosting = {
   modality: string;
   salary: string;
   work_schedule: string;
-  start_date: Date;
-  end_date: Date;
-  created_at: Date;
-  updated_at: Date;
+  start_date: string;
+  end_date: string;
+  created_at: string;
+  updated_at: string;
   company_id: number;
 };
 
 export namespace GetJobPostingDTO {
   export interface IParams {
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {
@@ -28,6 +28,7 @@ export namespace GetJobPostingDTO {
 
 export namespace GetJobPostingsDTO {
   export interface IParams {
+    company_id: number; 
     token: string;
   }
   export interface IResponse {
@@ -47,8 +48,8 @@ export namespace CreateJobPostingDTO {
     modality: string;
     salary: string;
     work_schedule: string;
-    start_date: Date;
-    end_date: Date;
+    start_date?: string;
+    end_date?: string;
     token: string;
   }
   export interface IResponse {
@@ -67,9 +68,9 @@ export namespace UpdateJobPostingDTO {
     modality?: string;
     salary?: string;
     work_schedule?: string;
-    start_date?: Date;
-    end_date?: Date;
-    id: string;
+    start_date?: string;
+    end_date?: string;
+    id: number;
     token: string;
   }
   export interface IResponse {
@@ -80,7 +81,7 @@ export namespace UpdateJobPostingDTO {
 
 export namespace DeleteJobPostingDTO {
   export interface IParams {
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {

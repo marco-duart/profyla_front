@@ -12,8 +12,12 @@ const light = {
     darkBlue100: "#17224E",
     darkBlue200: "#0F152C",
     lightRed100: "#F24547",
+    lightRed200: "#FF777A",
     black100: "#0D1117",
     black200: "#021128",
+  },
+  gradients: {
+    ibcBlue: "linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(41,117,195,1) 35%, rgba(0,212,255,1) 100%)"
   },
   weights: {
     normal: "400",
@@ -36,15 +40,20 @@ const light = {
     sm: "8px",
     md: "16px",
     xl: "24px",
+    header1: "8px 8px 0 0",
+    header2: "16px 16px 0 0",
   },
   shadows: {
+    shadow: "0px 10px 15px -3px rgba(0,0,0,0.1)",
     shadow100: "20px 20px 60px #bebebe, -20px -20px 60px #ffffff",
   },
   glows: {
+    glow: "1px 1px 20px 10px #bebebe",
     glow100: "1px 1px 60px 20px #0C194D",
   },
   widths: {
     buttons: {
+      close: "25px",
       xsm: "50px",
       sm: "100px",
       md: "150px",
@@ -80,6 +89,7 @@ const light = {
   },
   heights: {
     buttons: {
+      close: "25px",
       xsm: "30px",
       sm: "40px",
       md: "50px",
