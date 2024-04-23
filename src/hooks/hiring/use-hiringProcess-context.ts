@@ -50,7 +50,7 @@ export const useHiringProcessCrud = (prefix: string) => {
             return;
         }
         const { hiringProcesses } = await GetHiringProcesses({ prefix, token });
-        console.log(hiringProcesses);
+        console.log(hiringProcesses)
         setState({ hiringProcesses });
     };
 

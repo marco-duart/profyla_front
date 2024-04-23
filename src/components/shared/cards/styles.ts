@@ -189,8 +189,8 @@ export const CardContentStyle = styled.div`
     padding: 10px 40px; //space for the shadows
     overflow: hidden; //hide the overflow
 `
-export const WelcomeHomeCardStyle2 = styled.div`
-  max-width: 1115px;
+export const HiringProcessCardStyle = styled.div`
+  max-width: 800px;
   min-width: 59%;
   height: ${props => props.theme.heights.cards.xl};
   position: absolute;
@@ -207,7 +207,7 @@ export const WelcomeHomeCardStyle2 = styled.div`
   padding: 20px 0;
 `
 
-export const WelcomeHomeCardStyle3 = styled.div`
+export const ApplicationCardStyle = styled.div`
   max-width: 1760px;
   min-width: 80%;
   height: ${props => props.theme.heights.cards.xxl};

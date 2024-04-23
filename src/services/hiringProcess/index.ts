@@ -42,18 +42,18 @@ export const GetHiringProcesses = async (
 ) => {
   try {
     const { prefix,token } = params;
-    console.log(token, prefix)
     const response = await api.get<GetHiringProcessesDTO.IResponse>(
       `/${prefix}/hirings`,
-      { headers: { Authorization: token } }
+      { params, headers: { Authorization: token } }
     );
-    console.log(response);
+    console.log(response)
     return {
       success: true,
       message: "MESSAGE",
-      hiringProcesses: response.data.hirings,
+      hiringProcesses: response.data.hiring_processes,
     };
   } catch (error) {
+    console.log(error);
     if (isAxiosError(error)) {
       return {
         success: false,

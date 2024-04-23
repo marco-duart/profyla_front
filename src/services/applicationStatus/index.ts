@@ -15,7 +15,6 @@ export const GetApplication = async (params: GetApplicationDTO.IParams) => {
       `/${prefix}/application/${id}`,
       { headers: { Authorization: token } }
     );
-
     return {
       success: true,
       message: "MESSAGE",
@@ -44,7 +43,7 @@ export const GetApplications = async (params: GetApplicationsDTO.IParams) => {
       `/${prefix}/applications`,
       { params, headers: { Authorization: token } }
     );
-
+    console.log(response);
     return {
       success: true,
       message: "MESSAGE",
@@ -102,9 +101,9 @@ export const UpdateApplication = async (
   params: UpdateApplicationDTO.IParams
 ) => {
   try {
-    const { token } = params;
+    const { prefix ,token } = params;
     const response = await api.patch<UpdateApplicationDTO.IResponse>(
-      "/admins/application",
+      `/${prefix}/application`,
       { params, headers: { Authorization: token } }
     );
 

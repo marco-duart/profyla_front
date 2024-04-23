@@ -54,12 +54,12 @@ export namespace GetHiringProcessDTO {
 
 export namespace GetHiringProcessesDTO {
   export interface IParams {
-    token: string;
     prefix: string;
+    token: string;
   }
   export interface IResponse {
     message: string;
-    hirings: HiringProcessShow[];
+    hiring_processes: HiringProcessShow[];
   }
 }
 
