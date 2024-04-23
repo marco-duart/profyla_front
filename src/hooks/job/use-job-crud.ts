@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { useUserContext } from "../use-user-context";
 import { CreateJobPosting, DeleteJobPosting, GetJobPosting, GetJobPostings, UpdateJobPosting } from "../../services/jobPosting/index";
@@ -13,10 +13,6 @@ const INITIAL_STATE = {
   jobPostings: undefined,
 };
 
-// export type GetJobsData = {
-//   company_id: number;
-// }
-
 export type CreateJobData = {
   company_id: number;
   title: string;
@@ -27,8 +23,8 @@ export type CreateJobData = {
   modality: string;
   salary: string;
   work_schedule: string;
-  start_date: Date;
-  end_date: Date;
+  start_date?: string;
+  end_date?: string;
 };
 
 export type UpdateJobData = {
@@ -42,22 +38,24 @@ export type UpdateJobData = {
   modality: string;
   salary: string;
   work_schedule: string;
-  start_date: Date;
-  end_date: Date;
+  start_date?: string;
+  end_date?: string;
 };
 
 export type DeleteJobData = {
   id: number;
 };
 
-export const useJobPostingCrud = (company_id?: number) => {
+export const useJobPostingCrud = () => {
   const [state, setState] = useState<State>(INITIAL_STATE);
+  const [companyId, setCompanyId] = useState<number>(8);
   const { token } = useUserContext();
 
-  const fetchCompanies = async () => {
+  const fetchJobPostings = async (company_id: number) => {
     if (!token || !company_id) {
       return;
     }
+    setCompanyId(company_id)
 
     const params = { company_id, token}
     const { jobPostings } = await GetJobPostings(params);
@@ -65,41 +63,38 @@ export const useJobPostingCrud = (company_id?: number) => {
   };
 
   const createJobPosting = async (data: CreateJobData) => {
-    if (!token) {
+    if (!token || !companyId) {
       return;
     }
 
     const params = { ...data, token };
     await CreateJobPosting(params);
-    fetchCompanies();
+    fetchJobPostings(companyId);
   };
 
   const deleteJobPosting = async (data: DeleteJobData) => {
-    if (!token) {
+    if (!token || !companyId) {
       return;
     }
 
     const params = { ...data, token };
     await DeleteJobPosting(params);
-    fetchCompanies();
+    fetchJobPostings(companyId);
   };
 
   const updateJobPosting = async (data: UpdateJobData) => {
-    if (!token) {
+    if (!token || !companyId) {
       return;
     }
 
     const params = { ...data, token };
     await UpdateJobPosting(params);
-    fetchCompanies();
+    fetchJobPostings(companyId);
   };
-
-  useEffect(() => {
-    fetchCompanies();
-  }, []);
 
   return {
     jobPostings: state.jobPostings,
+    fetchJobPostings,
     createJobPosting,
     deleteJobPosting,
     updateJobPosting,

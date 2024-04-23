@@ -51,6 +51,7 @@ declare module "styled-components" {
       shadow100: string;
     };
     glows: {
+      glow: string;
       glow100: string;
     };
     widths: {

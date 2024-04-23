@@ -1,6 +1,7 @@
 export type Company = {
   id: number;
   company_name: string;
+  business_name: string;
   cnpj: string;
   sector: string;
   company_size: number;
@@ -32,6 +33,7 @@ export namespace GetCompaniesDTO {
 export namespace CreateCompanyDTO {
   export interface IParams {
     company_name: string;
+    business_name: string;
     cnpj: string;
     sector: string;
     company_size: number;
@@ -46,8 +48,6 @@ export namespace CreateCompanyDTO {
 
 export namespace UpdateCompanyDTO {
   export interface IParams {
-    company_name?: string;
-    cnpj?: string;
     sector?: string;
     company_size?: number;
     company_location?: string;

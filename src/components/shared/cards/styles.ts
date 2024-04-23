@@ -58,8 +58,8 @@ export const ConfirmAccountCardStyle = styled.div`
 
 //BASE CARD
 export const BaseCardStyle = styled("div")<{ pointer: boolean}>`
-  width: ${(props) => props.theme.widths.cards.xl};
-  height: ${(props) => props.theme.heights.cards.md};
+  width: ${(props) => props.theme.widths.cards.lg};
+  height: ${(props) => props.theme.heights.cards.lg};
   background-color: ${(props) => props.theme.colors.white};
   border-radius: ${(props) => props.theme.radius.md};
   position: relative;
@@ -238,7 +238,3 @@ export const BaseTitleStyle = styled.h1`
   font-family: ${(props) => props.theme.fontFamily.Sora};
   color: ${(props) => props.theme.colors.white};
 `;
-// background-color: ${(props) =>
-// props.action === "detail"
-// ? props.theme.colors.lightGrey300
-// : props.theme.colors.lightBlue100};

@@ -13,7 +13,13 @@ export enum FORM_MESSAGE {
   PASSWORD_SIZE = "A senha deve ter no mínimo 8 dígitos!",
   PASSWORD_RULE = "A senha não atingiu os requisitos mínimos!",
   IMAGE_FORMAT = "A imagem deve estar nos formatos: PNG, JPG, JPEG",
+  COMPANY_NAME = "O campo razão social deve ser preenchido!",
+  BUSINESS_NAME = "O campo nome fantasia deve ser preenchido!",
   COMPANY_SIZE = "A quantidade média de funcionários deve ser informada!",
-  COMPANY_SECTOR = "Setor da empresa deve ser informado!",
-  COMPANY_LOCATION = "A cidade/estado deve ser informado!"
+  COMPANY_SECTOR = "Setor da empresa deve ser preenchido!",
+  COMPANY_LOCATION = "A cidade/estado deve ser preenchido!",
+  JOB_TITLE = "O título da vaga deve ser preenchido",
+  JOB_REGIME = "O regime da vaga deve ser preenchido!",
+  JOB_MODALITY = "A modalidade da vaga deve ser preenchida!",
+  JOB_SALARY = "O salário da vaga deve ser preenchido!",
 }

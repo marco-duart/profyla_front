@@ -48,6 +48,7 @@ const light = {
     shadow100: "20px 20px 60px #bebebe, -20px -20px 60px #ffffff",
   },
   glows: {
+    glow: "1px 1px 20px 10px #bebebe",
     glow100: "1px 1px 60px 20px #0C194D",
   },
   widths: {

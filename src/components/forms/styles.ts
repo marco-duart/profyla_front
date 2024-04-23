@@ -57,7 +57,7 @@ export const ForgotPasswordFormStyle = styled.form`
 `;
 
 //COMPANY
-export const CompanyFormStyle = styled.form`
+export const CrudFormStyle = styled.form`
   width: ${(props) => props.theme.widths.forms.xsm};
   display: flex;
   flex-direction: column;
@@ -67,7 +67,7 @@ export const CompanyFormStyle = styled.form`
   margin-bottom: 10px;
 `;
 
-export const CompanyInputDiv = styled.div`
+export const CrudInputDiv = styled.div`
   position: relative;
 
   label {
@@ -98,6 +98,23 @@ export const BaseTitleFormStyle = styled.h1`
 export const BaseInputFormStyle = styled("input")<{ error: boolean }>`
   width: 100%;
   height: ${(props) => props.theme.heights.imputs.sm};
+  background-color: ${(props) => props.theme.colors.lightGrey200};
+  border: ${(props) =>
+    props.error ? `1px solid ${props.theme.colors.lightRed100}` : "none"};
+  border-radius: ${(props) => props.theme.radius.xl};
+  padding: 0 20px;
+  font-family: ${(props) => props.theme.fontFamily.Poppins};
+  font-size: ${(props) => props.theme.fontSizes.md};
+
+  &:focus {
+    outline: none;
+    border: ${(props) => !props.error && "1px outset white"};
+  }
+`;
+
+export const BaseTextAreaFormStyle = styled("textarea")<{ error: boolean }>`
+  width: 100%;
+  min-height: ${(props) => props.theme.heights.imputs.md};
   background-color: ${(props) => props.theme.colors.lightGrey200};
   border: ${(props) =>
     props.error ? `1px solid ${props.theme.colors.lightRed100}` : "none"};
