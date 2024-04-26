@@ -22,19 +22,42 @@ export const TalentflowLogoStyle = styled.div`
   left: 50%;
   margin-left: -275px;
   top: -50px;
-`
+`;
 export const SliderStyle = styled(Slider)`
-padding-top: 20px;
-padding-bottom: 40px;
-.slick-list {
-  overflow: visible;
-}
-.slick-slide .drop-shadow {
-  box-shadow: none; //no shadow for a hidden slide
-  transition: box-shadow 0.1s ease-in-out; //little effect to fade the shadow
-}
+  padding-top: 20px;
+  padding-bottom: 40px;
+  .slick-list {
+    overflow: visible;
+  }
+  .slick-slide .drop-shadow {
+    box-shadow: none; //no shadow for a hidden slide
+    transition: box-shadow 0.1s ease-in-out; //little effect to fade the shadow
+  }
 
-.slick-slide.slick-active .drop-shadow {
-  box-shadow: 0px 0px 43px 0px rgba(0, 0, 0, 0.35); 
-}
-`
+  .slick-slide.slick-active .drop-shadow {
+    box-shadow: 0px 0px 43px 0px rgba(0, 0, 0, 0.35);
+  }
+`;
+export const CustomPrevArrow = styled.div`
+  position: absolute;
+  top: 50%;
+  left: -30px;
+  z-index: 1;
+  cursor: pointer;
+`;
+
+export const CustomNextArrow = styled.div`
+  position: absolute;
+  top: 50%;
+  right: -30px;
+  z-index: 1;
+  cursor: pointer;
+`;
+
+// Arrow icons can be added as SVGs or any other suitable format
+export const ArrowIcon = styled.div`
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 5px;
+`;

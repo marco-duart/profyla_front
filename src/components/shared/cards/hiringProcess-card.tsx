@@ -1,17 +1,27 @@
+//NATIVE
 import React from "react";
+import { useNavigate } from "react-router-dom";
+//LIBRARIES
 
-import { HiringProcessShow } from "../../../services/hiringProcess/DTO";
+//COMPONENTS
 
+//STYLES
 import * as S from "./styles";
+//UTILS
+import { HiringProcessShow } from "../../../services/hiringProcess/DTO";
 
 interface CardProps {
   hiringProcess: HiringProcessShow;
 }
 
 const HiringProcessCard: React.FC<CardProps> = ({ hiringProcess }) => {
+  const navigate = useNavigate();
+  const handleNavigate = () => {
+    navigate(`/user/jobs/${hiringProcess.id}`);
+  };
 
   return (
-    <S.BaseCardStyle pointer={true}>
+    <S.InnerSliderCardStyle pointer={true} onClick={() => handleNavigate()}>
       <S.BaseCardTitleDivStyle>
         <S.BaseCardTitleStyle>{hiringProcess.title}</S.BaseCardTitleStyle>
       </S.BaseCardTitleDivStyle>
@@ -25,11 +35,8 @@ const HiringProcessCard: React.FC<CardProps> = ({ hiringProcess }) => {
         <div>
           <span>Status: </span> {hiringProcess.status}
         </div>
-        <div>
-            <button >Detalhes</button>
-        </div>
       </S.BaseCardContentStyle>
-    </S.BaseCardStyle>
+    </S.InnerSliderCardStyle>
   );
 };
 

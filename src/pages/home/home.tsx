@@ -1,8 +1,7 @@
 //NATIVE
-import React from "react";
 
 //LIBRARIES
-import Slider from "react-slick";
+
 //COMPONENTS
 import HiringProcessCard from "../../components/shared/cards/hiringProcess-card";
 import TalentflowLogo from "../../components/shared/talentflow-logo";
@@ -17,6 +16,23 @@ import * as S from "../../components/shared/cards/styles";
 import UserHiringProcessCard from "../../components/shared/cards/userHiringProcess-card";
 //UTILS
 
+const PrevArrow = (props: any) => {
+  const { onClick } = props;
+  return (
+    <S1.CustomPrevArrow onClick={onClick}>
+      <S1.ArrowIcon style={{ transform: "rotate(135deg)" }} />
+    </S1.CustomPrevArrow>
+  );
+};
+
+const NextArrow = (props: any) => {
+  const { onClick } = props;
+  return (
+    <S1.CustomNextArrow onClick={onClick}>
+      <S1.ArrowIcon style={{ transform: "rotate(-45deg)" }} />
+    </S1.CustomNextArrow>
+  );
+};
 const Home = () => {
   const { hiringProcesses } = useHiringProcessCrud("candidates");
   const { applications } = useApplicationCrud("candidates");
@@ -24,15 +40,19 @@ const Home = () => {
     dots: true,
     infinite: false,
     speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 1
-  }; 
-   const settings2 = {
+    slidesToShow: 5,
+    slidesToScroll: 1,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
+  };
+  const settings2 = {
     dots: true,
     infinite: false,
     speed: 500,
-    slidesToShow: 2,
-    slidesToScroll: 1
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
   };
   return (
     <S1.HomePageStyle>
@@ -47,15 +67,11 @@ const Home = () => {
           <S.BaseTitleStyle>Vagas Disponíveis</S.BaseTitleStyle>
         </S.HeaderCardStyle>
         <S.CardContentStyle>
-        <S1.SliderStyle {...settings2}>
-        {hiringProcesses?.map((hiringProcess, index) => (
-            <HiringProcessCard 
-            key={index}
-            hiringProcess={hiringProcess}
-            />
-          ))}
-
-        </S1.SliderStyle>
+          <S1.SliderStyle {...settings2}>
+            {hiringProcesses?.map((hiringProcess, index) => (
+              <HiringProcessCard key={index} hiringProcess={hiringProcess} />
+            ))}
+          </S1.SliderStyle>
         </S.CardContentStyle>
       </S.HiringProcessCardStyle>
       <S.ApplicationCardStyle>
@@ -64,12 +80,9 @@ const Home = () => {
         </S.HeaderCardStyle>
         <S.CardContentStyle>
           <S1.SliderStyle {...settings}>
-          {applications?.map((applications, index) => (
-          <UserHiringProcessCard
-          key={index}
-          applications={applications} />
-        ))}
-
+            {applications?.map((applications, index) => (
+              <UserHiringProcessCard key={index} applications={applications} />
+            ))}
           </S1.SliderStyle>
         </S.CardContentStyle>
       </S.ApplicationCardStyle>
