@@ -12,6 +12,9 @@ import * as CONSTANTS from "../utils/constants/constants"
 type User = {
   id: number;
   name: string;
+  cpf: string;
+  email: string;
+  newsletter: boolean;
   role: "ti" | "admin" | "user";
   photo_url: string;
 };
@@ -24,6 +27,7 @@ type State = {
 type UserContext = {
   user: User | null;
   token: string | null
+  autoLogin: () => void,
   updateUser: (user: User, token: string) => void;
   logout: () => void;
   isAdmin: () => boolean
@@ -36,6 +40,7 @@ type Props = {
 export const UserContext = createContext<UserContext>({
   user: null,
   token: null,
+  autoLogin: () => {},
   updateUser: () => {},
   logout: () => {},
   isAdmin: () => false
@@ -97,6 +102,7 @@ export const UserContextProvider: React.FC<Props> = ({ children }) => {
       value={{
         user: state.user,
         token: state.token,
+        autoLogin,
         updateUser,
         logout: cleanUser,
         isAdmin

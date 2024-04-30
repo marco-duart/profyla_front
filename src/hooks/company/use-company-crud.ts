@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { useUserContext } from "../use-user-context";
+import { useUserContext } from "../user/use-user-context";
 import {
   DeleteCompany,
   GetCompanies,

@@ -19,6 +19,9 @@ export namespace LoginAPIDTO {
   export interface IResponse {
     id: number;
     name: string;
+    cpf: string;
+    email: string;
+    newsletter: boolean;
     role: "ti" | "admin" | "user";
     photo_url: string;
     token: string;
@@ -32,6 +35,9 @@ export namespace LoggedUserDTO {
   export interface IResponse {
     id: number;
     name: string;
+    cpf: string;
+    email: string;
+    newsletter: boolean;
     role: "ti" | "admin" | "user";
     photo_url: string;
   }

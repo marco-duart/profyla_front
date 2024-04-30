@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { useUserContext } from "../use-user-context";
+import { useUserContext } from "../user/use-user-context";
 import { CreateJobPosting, DeleteJobPosting, GetJobPosting, GetJobPostings, UpdateJobPosting } from "../../services/jobPosting/index";
 
 import { JobPosting } from "../../services/jobPosting/DTO";

@@ -44,7 +44,6 @@ export const GetApplications = async (params: GetApplicationsDTO.IParams) => {
       `/${prefix}/applications`,
       { params, headers: { Authorization: token } }
     );
-
     return {
       success: true,
       message: "MESSAGE",

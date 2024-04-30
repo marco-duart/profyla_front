@@ -75,7 +75,6 @@ const JobForm: React.FC<Props> = ({
   };
 
   const handleSubmitForm = async (data: JobFormData) => {
-    console.log("Oi")
     if (job && data.id) {
       const { id, ...rest } = data;
       if (!id) {

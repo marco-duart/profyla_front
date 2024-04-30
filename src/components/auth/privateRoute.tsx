@@ -3,7 +3,7 @@
 import { Navigate } from "react-router-dom";
 
 //COMPONENTS
-import { useUserContext } from "../../hooks/use-user-context";
+import { useUserContext } from "../../hooks/user/use-user-context";
 
 //STYLES
 //UTILS

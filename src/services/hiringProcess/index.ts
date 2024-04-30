@@ -46,7 +46,6 @@ export const GetHiringProcesses = async (
       "/admins/hirings",
       { params, headers: { Authorization: token } }
     );
-
     return {
       success: true,
       message: "MESSAGE",
