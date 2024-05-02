@@ -9,6 +9,16 @@ type HiringProcess = {
   recruiter_id: number;
 };
 
+export type HiringProcessShow = {
+  id: number;
+  start_date: Date;
+  end_date: Date;
+  status: string;
+  salary: number;
+  business_name: string;
+  title: string;
+}
+
 type HiringProcessDetail = {
   id: number;
   start_date: Date;
@@ -32,8 +42,9 @@ type HiringProcessDetail = {
 
 export namespace GetHiringProcessDTO {
   export interface IParams {
-    id: string;
+    id: number;
     token: string;
+    prefix: string;
   }
   export interface IResponse {
     message: string;
@@ -43,11 +54,12 @@ export namespace GetHiringProcessDTO {
 
 export namespace GetHiringProcessesDTO {
   export interface IParams {
+    prefix: string;
     token: string;
   }
   export interface IResponse {
     message: string;
-    hirings: HiringProcess[];
+    hiring_processes: HiringProcessShow[];
   }
 }
 
@@ -67,11 +79,10 @@ export namespace CreateHiringProcessDTO {
 
 export namespace UpdateHiringProcessDTO {
   export interface IParams {
-    job_id?: number;
     start_date?: Date;
     end_date?: Date;
     status?: string;
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {
@@ -82,7 +93,7 @@ export namespace UpdateHiringProcessDTO {
 
 export namespace DeleteHiringProcessDTO {
   export interface IParams {
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {

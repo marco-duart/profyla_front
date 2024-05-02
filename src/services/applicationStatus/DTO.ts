@@ -6,7 +6,18 @@ type Application = {
   hiring_process_stage_id: number;
 };
 
-type ApplicationDetail = {
+export type ApplicationShow = {
+  id: number;
+  start_date: Date;
+  end_date: Date;
+  status: string;
+  salary: number;
+  business_name: string;
+  title: string;
+  stage: string;
+}
+
+export type ApplicationDetail = {
   job_name: string;
   stage: string;
   application: Application;
@@ -31,7 +42,7 @@ export namespace GetApplicationsDTO {
   }
   export interface IResponse {
     message: string;
-    applications: Application[];
+    applications: ApplicationShow[];
     pageable: {
       offset: number;
       page: number;
@@ -59,6 +70,7 @@ export namespace UpdateApplicationDTO {
     application_id: number;
     hiring_process_stage_id: number;
     token: string;
+    prefix: string;
   }
   export interface IResponse {
     message: string;
