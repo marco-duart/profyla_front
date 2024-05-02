@@ -70,10 +70,10 @@ export const CreateDynamicExam = async (
   params: CreateDynamicExamDTO.IParams
 ) => {
   try {
-    const { token, ...restParams } = params;
+    const { token, ...rest } = params;
     const response = await api.post<CreateDynamicExamDTO.IResponse>(
       "/admins/exam",
-      { params: restParams, headers: { Authorization: token } }
+      { params: rest, headers: { Authorization: token } }
     );
 
     return {
@@ -101,10 +101,10 @@ export const UpdateDynamicExam = async (
   params: UpdateDynamicExamDTO.IParams
 ) => {
   try {
-    const { id, token, ...restParams } = params;
+    const { id, token, ...rest } = params;
     const response = await api.patch<UpdateDynamicExamDTO.IResponse>(
       `/admins/exam/${id}`,
-      { params: restParams, headers: { Authorization: token } }
+      { params: rest, headers: { Authorization: token } }
     );
 
     return {

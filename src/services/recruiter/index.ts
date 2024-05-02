@@ -33,10 +33,10 @@ export const GetRecruiter = async (params: GetRecruiterDTO.IParams) => {
 
 export const CreateRecruiter = async (params: CreateRecruiterDTO.IParams) => {
   try {
-    const { token, ...restParams } = params;
+    const { token, ...rest } = params;
     const response = await api.post<CreateRecruiterDTO.IResponse>(
       "/admins/recruiter",
-      { params: restParams, headers: { Authorization: token } }
+      { params: rest, headers: { Authorization: token } }
     );
 
     return {

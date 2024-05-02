@@ -39,10 +39,10 @@ export const GetProfiles = async (params: GetProfilesDTO.IParams) => {
 
 export const CreateProfile = async (params: CreateProfileDTO.IParams) => {
   try {
-    const { token, ...restParams } = params;
+    const { token, ...rest } = params;
     const response = await api.post<CreateProfileDTO.IResponse>(
       "/admins/profile",
-      { params: restParams, headers: { Authorization: token } }
+      { params: rest, headers: { Authorization: token } }
     );
 
     return {
@@ -97,10 +97,10 @@ export const DeleteProfile = async (params: DeleteProfileDTO.IParams) => {
 
 export const AssignProfile = async (params: AssignProfileDTO.IParams) => {
   try {
-    const { token, ...restParams } = params;
+    const { token, ...rest } = params;
     const response = await api.post<AssignProfileDTO.IResponse>(
       "/admins/candidate-profile",
-      { params: restParams, headers: { Authorization: token } }
+      { params: rest, headers: { Authorization: token } }
     );
 
     return {
@@ -126,10 +126,10 @@ export const AssignProfile = async (params: AssignProfileDTO.IParams) => {
 
 export const RemoveProfile = async (params: RemoveProfileDTO.IParams) => {
   try {
-    const { token, ...restParams } = params;
+    const { token, ...rest } = params;
     const response = await api.delete<AssignProfileDTO.IResponse>(
       "/admins/candidate-profile",
-      { params: restParams, headers: { Authorization: token } }
+      { params: rest, headers: { Authorization: token } }
     );
 
     return {

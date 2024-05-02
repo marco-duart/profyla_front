@@ -70,10 +70,10 @@ export const CreateDynamicForm = async (
   params: CreateDynamicFormDTO.IParams
 ) => {
   try {
-    const { token, ...restParams } = params;
+    const { token, ...rest } = params;
     const response = await api.post<CreateDynamicFormDTO.IResponse>(
       "/admins/form",
-      { params: restParams, headers: { Authorization: token } }
+      { params: rest, headers: { Authorization: token } }
     );
 
     return {
@@ -101,10 +101,10 @@ export const UpdateDynamicForm = async (
   params: UpdateDynamicFormDTO.IParams
 ) => {
   try {
-    const { id, token, ...restParams } = params;
+    const { id, token, ...rest } = params;
     const response = await api.patch<UpdateDynamicFormDTO.IResponse>(
       `/admins/form/${id}`,
-      { params: restParams, headers: { Authorization: token } }
+      { params: rest, headers: { Authorization: token } }
     );
 
     return {

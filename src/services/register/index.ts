@@ -5,7 +5,7 @@ import {
   LoginAPIDTO,
   LoggedUserDTO,
   ForgetPasswordDTO,
-  ChangePasswordDTO,
+  ResetPasswordDTO,
   GetTokenDTO,
   ConfirmAccountDTO,
   EmailAvailabilityDTO,
@@ -15,7 +15,7 @@ import {
 export const Register = async (params: RegisterDTO.IParams) => {
   try {
     const response = await api.post<RegisterDTO.IResponse>("/users", params, {
-      headers: { "Content-Type": "multipart/form-data" },
+      headers: { ContentType: "multipart/form-data" },
     });
 
     return {
@@ -122,9 +122,9 @@ export const ForgotPassword = async (params: ForgetPasswordDTO.IParams) => {
   }
 };
 
-export const ChangePassword = async (params: ChangePasswordDTO.IParams) => {
+export const ResetPassword = async (params: ResetPasswordDTO.IParams) => {
   try {
-    const response = await api.post<ChangePasswordDTO.IResponse>(
+    const response = await api.post<ResetPasswordDTO.IResponse>(
       "/users/reset-password",
       params
     );
@@ -178,8 +178,8 @@ export const GetToken = async (params: GetTokenDTO.IParams) => {
 
 export const ConfirmAccount = async (params: ConfirmAccountDTO.IParams) => {
   try {
-    const { id, ...restParams } = params
-    const response = await api.post<ConfirmAccountDTO.IResponse>(`/users/confirm/${id}`, restParams )
+    const { id, ...rest } = params
+    const response = await api.post<ConfirmAccountDTO.IResponse>(`/users/confirm/${id}`, rest )
 
     return {
       success: true,

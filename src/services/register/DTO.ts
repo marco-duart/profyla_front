@@ -53,7 +53,7 @@ export namespace ForgetPasswordDTO {
   }
 }
 
-export namespace ChangePasswordDTO {
+export namespace ResetPasswordDTO {
   export interface IParams {
     id: string;
     action_key: string;

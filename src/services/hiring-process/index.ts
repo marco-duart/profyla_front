@@ -41,7 +41,7 @@ export const GetHiringProcesses = async (
   params: GetHiringProcessesDTO.IParams
 ) => {
   try {
-    const { prefix,token } = params;
+    const { prefix, token } = params;
     const response = await api.get<GetHiringProcessesDTO.IResponse>(
       `/${prefix}/hirings`,
       { params, headers: { Authorization: token } }
@@ -72,10 +72,10 @@ export const CreateHiringProcess = async (
   params: CreateHiringProcessDTO.IParams
 ) => {
   try {
-    const { token, ...restParams } = params;
+    const { token, ...rest } = params;
     const response = await api.post<CreateHiringProcessDTO.IResponse>(
       "/admins/hiring",
-      { params: restParams, headers: { Authorization: token } }
+      { params: rest, headers: { Authorization: token } }
     );
 
     return {
@@ -103,10 +103,10 @@ export const UpdateHiringProcess = async (
   params: UpdateHiringProcessDTO.IParams
 ) => {
   try {
-    const { id, token, ...restParams } = params;
+    const { id, token, ...rest } = params;
     const response = await api.patch<UpdateHiringProcessDTO.IResponse>(
       `/admins/hiring/${id}`,
-      { params: restParams, headers: { Authorization: token } }
+      { params: rest, headers: { Authorization: token } }
     );
 
     return {

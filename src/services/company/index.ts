@@ -68,10 +68,10 @@ export const GetCompanies = async (params: GetCompaniesDTO.IParams) => {
 
 export const CreateCompany = async (params: CreateCompanyDTO.IParams) => {
   try {
-    const { token, ...restParams } = params;
+    const { token, ...rest } = params;
     const response = await api.post<CreateCompanyDTO.IResponse>(
       "/admins/company", 
-      restParams,
+      rest,
       { headers: { Authorization: token } }
     );
 
@@ -98,9 +98,9 @@ export const CreateCompany = async (params: CreateCompanyDTO.IParams) => {
 
 export const UpdateCompany = async (params: UpdateCompanyDTO.IParams) => {
   try {
-    const { id, token, ...restParams } = params;
+    const { id, token, ...rest } = params;
     const response = await api.patch<UpdateCompanyDTO.IResponse>(
-      `/admins/company/${id}`, restParams,
+      `/admins/company/${id}`, rest,
       { headers: { Authorization: token } }
     );
 

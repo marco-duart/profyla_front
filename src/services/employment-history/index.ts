@@ -74,10 +74,10 @@ export const CreateEmploymentHistory = async (
   params: CreateEmploymentHistoryDTO.IParams
 ) => {
   try {
-    const { token, ...restParams } = params;
+    const { token, ...rest } = params;
     const response = await api.post<CreateEmploymentHistoryDTO.IResponse>(
       "/candidates/employment",
-      { params: restParams, headers: { Authorization: token } }
+      { params: rest, headers: { Authorization: token } }
     );
 
     return {
@@ -105,10 +105,10 @@ export const UpdateEmploymentHistory = async (
   params: UpdateEmploymentHistoryDTO.IParams
 ) => {
   try {
-    const { id, token, ...restParams } = params;
+    const { id, token, ...rest } = params;
     const response = await api.patch<UpdateEmploymentHistoryDTO.IResponse>(
       `/candidates/employment/${id}`,
-      { params: restParams, headers: { Authorization: token } }
+      { params: rest, headers: { Authorization: token } }
     );
 
     return {

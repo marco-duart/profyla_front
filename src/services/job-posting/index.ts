@@ -68,10 +68,10 @@ export const GetJobPostings = async (params: GetJobPostingsDTO.IParams) => {
 
 export const CreateJobPosting = async (params: CreateJobPostingDTO.IParams) => {
   try {
-    const { token, ...restParams } = params;
+    const { token, ...rest } = params;
     const response = await api.post<CreateJobPostingDTO.IResponse>(
       "/admins/job",
-      restParams,
+      rest,
       { headers: { Authorization: token } }
     );
 
@@ -98,10 +98,10 @@ export const CreateJobPosting = async (params: CreateJobPostingDTO.IParams) => {
 
 export const UpdateJobPosting = async (params: UpdateJobPostingDTO.IParams) => {
   try {
-    const { id, token, ...restParams } = params;
+    const { id, token, ...rest } = params;
     const response = await api.patch<UpdateJobPostingDTO.IResponse>(
       `/admins/job/${id}`,
-      restParams,
+      rest,
       { headers: { Authorization: token } }
     );
 

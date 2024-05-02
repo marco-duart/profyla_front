@@ -9,7 +9,7 @@ import Login from "../pages/login/login";
 import Register from "../pages/register/register";
 import ForgotPassword from "../pages/forgot-password/forgot-password";
 import Confirm from "../pages/confirm/confirm";
-import ChangePassword from "../pages/reset-password/reset-password";
+import ResetPassword from "../pages/reset-password/reset-password";
 
 import Dashboard from "../pages/dashboard/dashboard";
 import Home from "../pages/home/home";
@@ -39,7 +39,7 @@ export default function Router() {
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/confirm/:id/:action_key" element={<Confirm />} />
-        <Route path="/change-password/:id/:action_key" element={<ChangePassword />} />
+        <Route path="/reset-password/:id/:action_key" element={<ResetPassword />} />
         <Route path="/admin" element={<PrivateRoute requiredRoles={CONSTANTS.ADMIN_ONLY} redirectTo="/"><BaseLayout /></PrivateRoute>}>
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/admin/cnpj" element={<Cnpj />} />

@@ -68,10 +68,10 @@ export const GetSocialLinks = async (params: GetSocialLinksDTO.IParams) => {
 
 export const CreateSocialLink = async (params: CreateSocialLinkDTO.IParams) => {
   try {
-    const { token, ...restParams } = params;
+    const { token, ...rest } = params;
     const response = await api.post<CreateSocialLinkDTO.IResponse>(
       "/candidates/social",
-      { params: restParams, headers: { Authorization: token } }
+      { params: rest, headers: { Authorization: token } }
     );
 
     return {
@@ -97,10 +97,10 @@ export const CreateSocialLink = async (params: CreateSocialLinkDTO.IParams) => {
 
 export const UpdateSocialLink = async (params: UpdateSocialLinkDTO.IParams) => {
   try {
-    const { id, token, ...restParams } = params;
+    const { id, token, ...rest } = params;
     const response = await api.patch<UpdateSocialLinkDTO.IResponse>(
       `/candidates/social/${id}`,
-      { params: restParams, headers: { Authorization: token } }
+      { params: rest, headers: { Authorization: token } }
     );
 
     return {

@@ -74,10 +74,10 @@ export const CreateProfessionalLink = async (
   params: CreateProfessionalLinkDTO.IParams
 ) => {
   try {
-    const { token, ...restParams } = params;
+    const { token, ...rest } = params;
     const response = await api.post<CreateProfessionalLinkDTO.IResponse>(
       "/candidates/professional",
-      { params: restParams, headers: { Authorization: token } }
+      { params: rest, headers: { Authorization: token } }
     );
 
     return {
@@ -105,10 +105,10 @@ export const UpdateProfessionalLink = async (
   params: UpdateProfessionalLinkDTO.IParams
 ) => {
   try {
-    const { id, token, ...restParams } = params;
+    const { id, token, ...rest } = params;
     const response = await api.patch<UpdateProfessionalLinkDTO.IResponse>(
       `/candidates/professional/${id}`,
-      { params: restParams, headers: { Authorization: token } }
+      { params: rest, headers: { Authorization: token } }
     );
 
     return {

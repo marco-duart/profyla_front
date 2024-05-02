@@ -39,9 +39,9 @@ export const GetSkills = async (params: GetSkillsDTO.IParams) => {
 
 export const CreateSkill = async (params: CreateSkillDTO.IParams) => {
   try {
-    const { token, ...restParams } = params;
+    const { token, ...rest } = params;
     const response = await api.post<CreateSkillDTO.IResponse>("/admins/skill", {
-      params: restParams,
+      params: rest,
       headers: { Authorization: token },
     });
 
@@ -97,10 +97,10 @@ export const DeleteSkill = async (params: DeleteSkillDTO.IParams) => {
 
 export const AssignSkill = async (params: AssignSkillDTO.IParams) => {
   try {
-    const { token, ...restParams } = params;
+    const { token, ...rest } = params;
     const response = await api.post<AssignSkillDTO.IResponse>(
       "/candidates/skill",
-      { params: restParams, headers: { Authorization: token } }
+      { params: rest, headers: { Authorization: token } }
     );
 
     return {

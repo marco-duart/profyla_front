@@ -69,10 +69,10 @@ export const CreateApplication = async (
   params: CreateApplicationDTO.IParams
 ) => {
   try {
-    const { token, ...restParams } = params;
+    const { token, ...rest } = params;
     const response = await api.post<CreateApplicationDTO.IResponse>(
       "/candidates/application",
-      { params: restParams, headers: { Authorization: token } }
+      { params: rest, headers: { Authorization: token } }
     );
 
     return {

@@ -48,7 +48,7 @@ export type DeleteJobData = {
 
 export const useJobPostingCrud = () => {
   const [state, setState] = useState<State>(INITIAL_STATE);
-  const [companyId, setCompanyId] = useState<number>(8);
+  const [companyId, setCompanyId] = useState<number>(0);
   const { token } = useUserContext();
 
   const fetchJobPostings = async (company_id: number) => {

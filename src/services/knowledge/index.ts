@@ -39,10 +39,10 @@ export const GetKnowledges = async (params: GetKnowledgesDTO.IParams) => {
 
 export const CreateKnowledge = async (params: CreateKnowledgeDTO.IParams) => {
   try {
-    const { token, ...restParams } = params;
+    const { token, ...rest } = params;
     const response = await api.post<CreateKnowledgeDTO.IResponse>(
       "/admins/knowledge",
-      { params: restParams, headers: { Authorization: token } }
+      { params: rest, headers: { Authorization: token } }
     );
 
     return {
@@ -97,10 +97,10 @@ export const DeleteKnowledge = async (params: DeleteKnowledgeDTO.IParams) => {
 
 export const AssignKnowledge = async (params: AssignKnowledgeDTO.IParams) => {
   try {
-    const { token, ...restParams } = params;
+    const { token, ...rest } = params;
     const response = await api.post<AssignKnowledgeDTO.IResponse>(
       "/candidates/knowledge",
-      { params: restParams, headers: { Authorization: token } }
+      { params: rest, headers: { Authorization: token } }
     );
 
     return {
