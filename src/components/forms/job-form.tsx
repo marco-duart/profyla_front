@@ -12,7 +12,7 @@ import CrudButton from "../shared/buttons/crud-button";
 import * as S from "./styles";
 //UTILS
 import { FORM_MESSAGE } from "../../utils/enums/form-message";
-import { JobPosting } from "../../services/jobPosting/DTO";
+import { JobPosting } from "../../services/job-posting/DTO";
 import { Company } from "../../services/company/DTO";
 
 import {

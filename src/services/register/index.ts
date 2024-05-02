@@ -95,10 +95,10 @@ export const LoggedUser = async (params: LoggedUserDTO.IParams) => {
   }
 };
 
-export const ForgetPassword = async (params: ForgetPasswordDTO.IParams) => {
+export const ForgotPassword = async (params: ForgetPasswordDTO.IParams) => {
   try {
     const response = await api.post<ForgetPasswordDTO.IResponse>(
-      "/users/forget-password",
+      "/users/forgot-password",
       params
     );
 

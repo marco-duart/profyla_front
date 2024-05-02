@@ -1,9 +1,9 @@
 import { useState } from "react";
 
 import { useUserContext } from "../user/use-user-context";
-import { CreateJobPosting, DeleteJobPosting, GetJobPosting, GetJobPostings, UpdateJobPosting } from "../../services/jobPosting/index";
+import { CreateJobPosting, DeleteJobPosting, GetJobPosting, GetJobPostings, UpdateJobPosting } from "../../services/job-posting/index";
 
-import { JobPosting } from "../../services/jobPosting/DTO";
+import { JobPosting } from "../../services/job-posting/DTO";
 
 type State = {
   jobPostings: undefined | JobPosting[];

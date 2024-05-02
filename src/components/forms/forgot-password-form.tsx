@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { cpf } from "cpf-cnpj-validator";
 //COMPONENTS
 import BaseButton from "../shared/buttons/base-button";
-import { ForgetPassword } from "../../services/register";
+import { ForgotPassword } from "../../services/register";
 //STYLES
 import * as S from "./styles";
 //UTILS
@@ -40,7 +40,7 @@ const ForgotPasswordForm = () => {
   });
 
   const handleForget = async (data: ForgotpasswordFormData) => {
-    const result = await ForgetPassword(data);
+    const result = await ForgotPassword(data);
     if (result.success) {
       navigate("/");
       console.log("Deu certo!", result);

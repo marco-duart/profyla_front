@@ -15,7 +15,7 @@ import { useJobPostingCrud } from "../../hooks/job/use-job-crud";
 import * as S from "./styles";
 //UTILS
 import { Company } from "../../services/company/DTO";
-import { JobPosting } from "../../services/jobPosting/DTO";
+import { JobPosting } from "../../services/job-posting/DTO";
 
 const Cnpj = () => {
   const { companies, createCompany, updateCompany, deleteCompany } =

@@ -1,5 +1,5 @@
 import ForgotPasswordCard from "../../components/shared/cards/forgotpassword-card";
-import ForgotPasswordForm from "../../components/forms/forgotpassword-form";
+import ForgotPasswordForm from "../../components/forms/forgot-password-form";
 import TalentflowLogo from "../../components/shared/talentflow-logo";
 import * as S from "./styles";
 

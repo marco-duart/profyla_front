@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 //COMPONENTS
 import BaseButton from "../shared/buttons/base-button";
-import { ChangePassword } from "../../services/register";
+import { ResetPassword } from "../../services/register";
 
 //STYLES
 import * as S from "./styles";
@@ -20,7 +20,7 @@ import * as CONSTANTS from "../../utils/constants/constants"
 import { EXCEPTION_MESSAGE } from "../../utils/enums/exception-message";
 import { SUCCESSFUL_MESSAGE } from "../../utils/enums/successful-message";
 
-const changePasswordFormSchema = z
+const resetPasswordFormSchema = z
   .object({
     password: z
       .string()
@@ -33,7 +33,7 @@ const changePasswordFormSchema = z
     path: ["confirm"],
   });
 
-type ChangePasswordFormData = z.infer<typeof changePasswordFormSchema>;
+type ResetPasswordFormData = z.infer<typeof resetPasswordFormSchema>;
 
 type Props = {
   id?: string
@@ -41,7 +41,7 @@ type Props = {
   handleMessage: (message: string) => void
 }
 
-const ChangePasswordForm: React.FC<Props> = ({id, action_key, handleMessage}) => {
+const ResetPasswordForm: React.FC<Props> = ({id, action_key, handleMessage}) => {
   const [passwordIsOpen, setPasswordIsOpen] = useState(false);
   const [confirmIsOpen, setConfirmIsOpen] = useState(false);
 
@@ -49,11 +49,11 @@ const ChangePasswordForm: React.FC<Props> = ({id, action_key, handleMessage}) =>
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ChangePasswordFormData>({
-    resolver: zodResolver(changePasswordFormSchema),
+  } = useForm<ResetPasswordFormData>({
+    resolver: zodResolver(resetPasswordFormSchema),
   });
 
-  const handleRegister = async (data: ChangePasswordFormData) => {
+  const handleRegister = async (data: ResetPasswordFormData) => {
     const { confirm, ...rest } = data;
 
     if(!id || !action_key) {
@@ -62,7 +62,7 @@ const ChangePasswordForm: React.FC<Props> = ({id, action_key, handleMessage}) =>
     }
 
     const fetchData = { ...rest, id, action_key}
-    const result = await ChangePassword(fetchData);
+    const result = await ResetPassword(fetchData);
 
     if (result.success) {
       handleMessage(SUCCESSFUL_MESSAGE.PASSWORD_CHANGED);
@@ -122,4 +122,4 @@ const ChangePasswordForm: React.FC<Props> = ({id, action_key, handleMessage}) =>
   );
 };
 
-export default ChangePasswordForm;
+export default ResetPasswordForm;

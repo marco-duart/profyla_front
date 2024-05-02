@@ -7,9 +7,9 @@ import {
   UpdateHiringProcess,
   GetHiringProcess,
   GetHiringProcesses,
-} from "../../services/hiringProcess";
+} from "../../services/hiring-process";
 
-import { HiringProcessShow } from "../../services/hiringProcess/DTO";
+import { HiringProcessShow } from "../../services/hiring-process/DTO";
 
 type State = {
     hiringProcesses: undefined | HiringProcessShow[];

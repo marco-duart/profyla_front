@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import backgroundImage from "../../assets/image/BG.jpg";
 
-export const ChangePasswordPageStyle = styled.div`
+export const ResetPasswordPageStyle = styled.div`
   width: 100vw;
   height: 100vh;
   position: relative;

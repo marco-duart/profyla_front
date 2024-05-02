@@ -4,7 +4,7 @@ import React from "react";
 //LIBRARIES
 
 //COMPONENTS
-import { JobPosting } from "../../../services/jobPosting/DTO";
+import { JobPosting } from "../../../services/job-posting/DTO";
 
 //STYLES
 import * as S from "./styles";

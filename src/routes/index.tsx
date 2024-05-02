@@ -3,13 +3,13 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 //COMPONENTS
-import BaseLayout from "../components/baseLayout";
-import { PrivateRoute } from "../components/auth/privateRoute";
+import BaseLayout from "../components/base-layout";
+import { PrivateRoute } from "../components/auth/private-route";
 import Login from "../pages/login/login";
 import Register from "../pages/register/register";
-import ForgotPassword from "../pages/forgot_password/forgot-password";
+import ForgotPassword from "../pages/forgot-password/forgot-password";
 import Confirm from "../pages/confirm/confirm";
-import ChangePassword from "../pages/change_password/change-password";
+import ChangePassword from "../pages/reset-password/reset-password";
 
 import Dashboard from "../pages/dashboard/dashboard";
 import Home from "../pages/home/home";
