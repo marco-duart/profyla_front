@@ -70,7 +70,7 @@ export const BaseCardStyle = styled("div")<{ pointer: boolean }>`
   padding: 30px 0 0 0;
   cursor: ${(props) => (props.pointer ? "pointer" : "default")};
   :hover {
-    box-shadow: ${(props) => props.theme.glows.glow100};
+    box-shadow: ${(props) => props.theme.glows.glow};
     transition: all 0.3s;
   }
 `;
@@ -88,7 +88,7 @@ export const InnerSliderCardStyle = styled("div")<{ pointer: boolean }>`
   padding: 40px 0 0 0;
   cursor: ${(props) => (props.pointer ? "pointer" : "default")};
   :hover {
-    box-shadow: ${(props) => props.theme.glows.glow100};
+    box-shadow: ${(props) => props.theme.glows.glow};
     transition: all 0.3s;
   }
 `;

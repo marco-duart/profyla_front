@@ -29,7 +29,7 @@ export namespace CreateKnowledgeDTO {
 
 export namespace DeleteKnowledgeDTO {
   export interface IParams {
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {
@@ -51,7 +51,7 @@ export namespace AssignKnowledgeDTO {
 
 export namespace RemoveKnowledgeDTO {
   export interface IParams {
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {

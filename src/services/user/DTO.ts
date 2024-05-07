@@ -21,8 +21,8 @@ export namespace ChangePasswordDTO {
 
 export namespace ChangeNewsletterDTO {
   export interface IParams {
-    id: string;
-    newsletter: string;
+    id: number;
+    newsletter: boolean;
   }
   export interface IResponse {
     message: string;

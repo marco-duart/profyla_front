@@ -18,6 +18,10 @@ export const ChangeEmail = async (params: ChangeEmailDTO.IParams) => {
         headers: { Authorization: token },
       }
     );
+    return {
+      success: true,
+      message: "MESSAGE",
+    };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
@@ -44,6 +48,10 @@ export const ChangePassword = async (params: ChangePasswordDTO.IParams) => {
         headers: { Authorization: token },
       }
     );
+    return {
+      success: true,
+      message: "MESSAGE",
+    };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
@@ -67,6 +75,10 @@ export const ChangeNewsletter = async (params: ChangeNewsletterDTO.IParams) => {
       `/users/change-newsletter/${id}`,
       rest
     );
+    return {
+      success: true,
+      message: "MESSAGE",
+    };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
@@ -96,6 +108,10 @@ export const ChangePhoto = async (params: ChangePhotoDTO.IParams) => {
         },
       }
     );
+    return {
+      success: true,
+      message: "MESSAGE",
+    };
   } catch (error) {
     if (isAxiosError(error)) {
       return {

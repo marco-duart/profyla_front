@@ -52,17 +52,23 @@ export const UserContextProvider: React.FC<Props> = ({ children }) => {
     token: null
   });
 
+  const recoveryToken = () => {
+    const localToken = localStorage.getItem("ibc-tf-token");
+    if(localToken) {
+      setState({...state, token: localToken})
+    }
+  }
+
   const autoLogin = async () => {
-    const token = localStorage.getItem("ibc-tf-token");
 
-    if (!token) return cleanUser();
+    if (!state.token) return cleanUser();
 
-    const { success, user } = await LoggedUser({ token });
-
+    const { success, user } = await LoggedUser({ token: state.token });
+    
     if (!success) return cleanUser();
 
     if (success && user) {
-      updateUser(user, token);
+      updateUser(user, state.token);
     }
   };
 
@@ -92,7 +98,8 @@ export const UserContextProvider: React.FC<Props> = ({ children }) => {
   }
 
   useEffect(() => {
-    if (!state.user) {
+    recoveryToken()
+    if (state.token) {
       autoLogin();
     }
   }, []);

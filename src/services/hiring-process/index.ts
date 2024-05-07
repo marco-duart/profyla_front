@@ -52,7 +52,6 @@ export const GetHiringProcesses = async (
       hiringProcesses: response.data.hiring_processes,
     };
   } catch (error) {
-    console.log(error);
     if (isAxiosError(error)) {
       return {
         success: false,

@@ -1,47 +1,44 @@
-//NATIVE
-
-//LIBRARIES
-
-//COMPONENTS
-
-//STYLES
-import { useUserContext } from "../../hooks/user/use-user-context";
+import { useState } from "react";
+import { useUserConfiguration } from "../../hooks/user/use-user-configuration";
 import * as S from "./styles";
 
-//UTILS
-
 const Configurations = () => {
-  const { user, autoLogin } = useUserContext();
+  const { user, changeEmail, changeNewsletter, changePassword } = useUserConfiguration();
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+
   return (
     <S.ContainerDivStyle>
       <div>Configurações da Conta</div>
-      <div style={{width: "100px", height: "100px", borderRadius: "50%", border: "2px solid #0351ca"}}>
-        <img style={{width: "95px", height: "95px", borderRadius: "50%"}} src={user?.photo_url} alt="" />
+      <div>
+        <img src={user?.photo_url} alt="" style={{width: "100px", height: "100px", objectFit: "cover"}}/>
       </div>
-      <div>Nome: {user?.name}</div>
-      <div>CPF: {user?.cpf}</div>
+      <input type="file" name="photo" id="photo"/>
       <div>Email: {user?.email}</div>
       <div>
         <label htmlFor="">Receber e-mails com vagas? </label>
         <input
           type="checkbox"
-          name=""
-          id=""
-          checked={user?.newsletter ? true : false}
+          checked={user?.newsletter}
+          onChange={() => changeNewsletter(!user?.newsletter)}
         />
       </div>
       <div>
         <div>
           <label htmlFor="">Senha atual</label>
-          <input type="text" />
+          <input type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} />
         </div>
         <div>
           <label htmlFor="">Nova Senha</label>
-          <input type="text" />
+          <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
         </div>
-      </div>
-      <div>
-        <button>Salvar</button>
+        <div>
+          <label htmlFor="">Confirme a Nova Senha</label>
+          <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+        </div>
+        <button onClick={() => {}}>Alterar Senha</button>
       </div>
     </S.ContainerDivStyle>
   );

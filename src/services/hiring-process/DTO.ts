@@ -28,7 +28,7 @@ type HiringProcessDetail = {
   updated_at: Date;
   job_posting_id: number;
   job_name: string;
-  recruiter_id: string;
+  recruiter_id: number;
   stages: {
     id: number;
     title: string;

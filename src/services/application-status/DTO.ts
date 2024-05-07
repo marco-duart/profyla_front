@@ -26,7 +26,7 @@ export type ApplicationDetail = {
 export namespace GetApplicationDTO {
   export interface IParams {
     prefix: string;
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {
@@ -80,7 +80,7 @@ export namespace UpdateApplicationDTO {
 
 export namespace DeleteApplicationDTO {
   export interface IParams {
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {

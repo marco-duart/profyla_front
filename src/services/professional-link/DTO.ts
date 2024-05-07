@@ -9,7 +9,7 @@ type ProfessionalLink = {
 
 export namespace GetProfessionalLinkDTO {
   export interface IParams {
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {
@@ -44,7 +44,7 @@ export namespace UpdateProfessionalLinkDTO {
   export interface IParams {
     title: string;
     link: string;
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {
@@ -55,7 +55,7 @@ export namespace UpdateProfessionalLinkDTO {
 
 export namespace DeleteProfessionalLinkDTO {
   export interface IParams {
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {

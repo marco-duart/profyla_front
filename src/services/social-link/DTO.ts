@@ -9,7 +9,7 @@ type SocialLink = {
 
 export namespace GetSocialLinkDTO {
   export interface IParams {
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {
@@ -44,7 +44,7 @@ export namespace UpdateSocialLinkDTO {
   export interface IParams {
     title: string;
     link: string;
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {
@@ -55,7 +55,7 @@ export namespace UpdateSocialLinkDTO {
 
 export namespace DeleteSocialLinkDTO {
   export interface IParams {
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {

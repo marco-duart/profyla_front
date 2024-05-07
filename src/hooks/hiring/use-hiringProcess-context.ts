@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { useUserContext } from "../use-user-context";
+import { useUserContext } from "../user/use-user-context";
 import {
   DeleteHiringProcess,
   CreateHiringProcess,
@@ -50,7 +50,6 @@ export const useHiringProcessCrud = (prefix: string) => {
             return;
         }
         const { hiringProcesses } = await GetHiringProcesses({ prefix, token });
-        console.log(hiringProcesses)
         setState({ hiringProcesses });
     };
 

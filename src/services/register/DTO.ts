@@ -55,7 +55,7 @@ export namespace ForgetPasswordDTO {
 
 export namespace ResetPasswordDTO {
   export interface IParams {
-    id: string;
+    id: number;
     action_key: string;
     password: string;
   }
@@ -76,7 +76,7 @@ export namespace GetTokenDTO {
 
 export namespace ConfirmAccountDTO {
   export interface IParams {
-    id: string;
+    id: number;
     action_key: string;
   }
   export interface IResponse {

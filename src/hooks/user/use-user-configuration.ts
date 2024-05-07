@@ -1,34 +1,40 @@
 import { useUserContext } from "./use-user-context"
 import { ChangeEmail, ChangeNewsletter, ChangePassword, ChangePhoto } from "../../services/user"
+import { useState } from "react";
 
 
 export const useUserConfiguration = () => {
-  const { token, autoLogin } = useUserContext()
+  const { token, autoLogin, user } = useUserContext();
+  const [passwordChangeResult, setPasswordChangeResult] = useState<boolean | null>(null);
 
-  const changeEmail = async (email: string) => {
+  const changeEmail = async (newEmail: string) => {
     if (!token) {
-      return
+      return;
     }
 
-    const params = { email, token }
-    await ChangeEmail(params)
-    autoLogin()
-  }
+    const params = { email: newEmail, token };
+    await ChangeEmail(params);
+    autoLogin();
+  };
 
-  const changePassword = async (current_password: string, new_password: string) => {
-    if (!token) {
+  const changeNewsletter = async (newNewsletter: boolean) => {
+    if (!user?.id) {
       return
     }
+    const params = { id: user.id, newsletter: newNewsletter };
+    await ChangeNewsletter(params);
+    autoLogin();
+  };
 
-    const params = { current_password, new_password, token }
-    await ChangePassword(params)
-  }
+  const changePassword = async (currentPassword: string, newPassword: string) => {
+    if (!token) {
+      return;
+    }
 
-  const changeNewsletter = async (id: string, newsletter: string) => {
-    const params = { id, newsletter }
-    await ChangeNewsletter(params)
-    autoLogin()
-  }
+    const params = { current_password: currentPassword, new_password: newPassword, token };
+    const { success } = await ChangePassword(params);
+    setPasswordChangeResult(success);
+  };
 
   const changePhoto = async (photo: File) => {
     if (!token) {
@@ -41,6 +47,7 @@ export const useUserConfiguration = () => {
   }
 
   return {
+    user,
     changeEmail,
     changePassword,
     changeNewsletter,

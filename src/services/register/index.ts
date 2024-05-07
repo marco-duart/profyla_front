@@ -70,7 +70,7 @@ export const LoginAPI = async (params: LoginAPIDTO.IParams) => {
 export const LoggedUser = async (params: LoggedUserDTO.IParams) => {
   try {
     const { token } = params;
-    const response = await api.post<LoggedUserDTO.IResponse>("/users/me", {
+    const response = await api.post<LoggedUserDTO.IResponse>("/users/me", null, {
       headers: { Authorization: token },
     });
 

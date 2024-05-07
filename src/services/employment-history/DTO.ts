@@ -12,7 +12,7 @@ type EmploymentHistory = {
 
 export namespace GetEmploymentHistoryDTO {
   export interface IParams {
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {
@@ -53,7 +53,7 @@ export namespace UpdateEmploymentHistoryDTO {
     start_date?: Date;
     end_date?: Date;
     achievements?: String;
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {
@@ -64,7 +64,7 @@ export namespace UpdateEmploymentHistoryDTO {
 
 export namespace DeleteEmploymentHistoryDTO {
   export interface IParams {
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {

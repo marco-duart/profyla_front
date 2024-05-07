@@ -29,7 +29,7 @@ export namespace CreateSkillDTO {
 
 export namespace DeleteSkillDTO {
   export interface IParams {
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {
@@ -51,7 +51,7 @@ export namespace AssignSkillDTO {
 
 export namespace RemoveSkillDTO {
   export interface IParams {
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {

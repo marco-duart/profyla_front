@@ -12,7 +12,7 @@ type AcademicHistory = {
 
 export namespace GetAcademicHistoryDTO {
   export interface IParams {
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {
@@ -53,7 +53,7 @@ export namespace UpdateAcademicHistoryDTO {
     degree?: string;
     start_date?: Date;
     end_date?: Date;
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {
@@ -64,7 +64,7 @@ export namespace UpdateAcademicHistoryDTO {
 
 export namespace DeleteAcademicHistoryDTO {
   export interface IParams {
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {
