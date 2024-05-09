@@ -15,7 +15,7 @@ import {
 export const Register = async (params: RegisterDTO.IParams) => {
   try {
     const response = await api.post<RegisterDTO.IResponse>("/users", params, {
-      headers: { ContentType: "multipart/form-data" },
+      headers: { "Content-Type": "multipart/form-data" },
     });
 
     return {
@@ -70,9 +70,13 @@ export const LoginAPI = async (params: LoginAPIDTO.IParams) => {
 export const LoggedUser = async (params: LoggedUserDTO.IParams) => {
   try {
     const { token } = params;
-    const response = await api.post<LoggedUserDTO.IResponse>("/users/me", null, {
-      headers: { Authorization: token },
-    });
+    const response = await api.post<LoggedUserDTO.IResponse>(
+      "/users/me",
+      null,
+      {
+        headers: { Authorization: token },
+      }
+    );
 
     return {
       success: true,
@@ -178,8 +182,11 @@ export const GetToken = async (params: GetTokenDTO.IParams) => {
 
 export const ConfirmAccount = async (params: ConfirmAccountDTO.IParams) => {
   try {
-    const { id, ...rest } = params
-    const response = await api.post<ConfirmAccountDTO.IResponse>(`/users/confirm/${id}`, rest )
+    const { id, ...rest } = params;
+    const response = await api.post<ConfirmAccountDTO.IResponse>(
+      `/users/confirm/${id}`,
+      rest
+    );
 
     return {
       success: true,

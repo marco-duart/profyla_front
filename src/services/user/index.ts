@@ -103,7 +103,7 @@ export const ChangePhoto = async (params: ChangePhotoDTO.IParams) => {
       rest,
       {
         headers: {
-          ContentType: "multipart/form-data",
+          "Content-Type": "multipart/form-data",
           Authorization: token,
         },
       }
@@ -113,6 +113,7 @@ export const ChangePhoto = async (params: ChangePhotoDTO.IParams) => {
       message: "MESSAGE",
     };
   } catch (error) {
+    console.log(error);
     if (isAxiosError(error)) {
       return {
         success: false,

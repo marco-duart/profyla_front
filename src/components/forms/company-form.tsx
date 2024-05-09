@@ -116,6 +116,7 @@ const CompanyForm: React.FC<Props> = ({
           type="text"
           placeholder="Razão social"
           disabled={disabled || !!company?.id}
+          active={!company?.id}
           error={errors.company_name ? true : false}
         />
         {errors.company_name && (
@@ -131,6 +132,7 @@ const CompanyForm: React.FC<Props> = ({
           type="text"
           placeholder="Nome fantasia"
           disabled={disabled}
+          active={!disabled}
           error={errors.business_name ? true : false}
         />
         {errors.business_name && (
@@ -146,6 +148,7 @@ const CompanyForm: React.FC<Props> = ({
           type="text"
           placeholder="CNPJ"
           disabled={disabled || !!company?.id}
+          active={!company?.id}
           error={errors.cnpj ? true : false}
         />
         {errors.cnpj && (
@@ -159,6 +162,7 @@ const CompanyForm: React.FC<Props> = ({
           type="text"
           placeholder="Setor ou categoria da empresa/cnpj"
           disabled={disabled}
+          active={!disabled}
           error={errors.sector ? true : false}
         />
         {errors.sector && (
@@ -172,6 +176,7 @@ const CompanyForm: React.FC<Props> = ({
           type="text"
           placeholder="Localização da empresa. Cidade/Estado"
           disabled={disabled}
+          active={!disabled}
           error={errors.company_location ? true : false}
         />
         {errors.company_location && (
@@ -187,6 +192,7 @@ const CompanyForm: React.FC<Props> = ({
           type="number"
           placeholder="Quantidade de funcionários"
           disabled={disabled}
+          active={!disabled}
           error={errors.company_size ? true : false}
         />
         {errors.company_size && (

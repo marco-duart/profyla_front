@@ -96,7 +96,6 @@ const JobForm: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    const date = new Date()
     if (job) {
       setDisabled(true);
       setValue("id", job.id);
@@ -137,6 +136,7 @@ const JobForm: React.FC<Props> = ({
           type="text"
           placeholder="Nome da vaga"
           disabled={disabled}
+          active={!disabled}
           error={errors.title ? true : false}
         />
         {errors.title && (
@@ -151,6 +151,7 @@ const JobForm: React.FC<Props> = ({
           {...register("description")}
           placeholder="Descrição da vaga"
           disabled={disabled}
+          active={!disabled}
           error={errors.description ? true : false}
         />
         {errors.description && (
@@ -165,6 +166,7 @@ const JobForm: React.FC<Props> = ({
           {...register("requirements")}
           placeholder="Requisitos da vaga"
           disabled={disabled}
+          active={!disabled}
           error={errors.requirements ? true : false}
         />
         {errors.requirements && (
@@ -180,6 +182,7 @@ const JobForm: React.FC<Props> = ({
           type="text"
           placeholder="Cidade/Estado da vaga"
           disabled={disabled}
+          active={!disabled}
           error={errors.job_location ? true : false}
         />
         {errors.job_location && (
@@ -195,6 +198,7 @@ const JobForm: React.FC<Props> = ({
           type="text"
           placeholder="Regine de contratação"
           disabled={disabled}
+          active={!disabled}
           error={errors.regime ? true : false}
         />
         {errors.regime && (
@@ -210,6 +214,7 @@ const JobForm: React.FC<Props> = ({
           type="text"
           placeholder="Modalidade de trabalho"
           disabled={disabled}
+          active={!disabled}
           error={errors.modality ? true : false}
         />
         {errors.modality && (
@@ -225,6 +230,7 @@ const JobForm: React.FC<Props> = ({
           type="text"
           placeholder="Salário"
           disabled={disabled}
+          active={!disabled}
           error={errors.salary ? true : false}
         />
         {errors.salary && (
@@ -240,6 +246,7 @@ const JobForm: React.FC<Props> = ({
           type="text"
           placeholder="Horário de trabalho"
           disabled={disabled}
+          active={!disabled}
           error={errors.work_schedule ? true : false}
         />
         {errors.work_schedule && (
@@ -255,6 +262,7 @@ const JobForm: React.FC<Props> = ({
           type="date"
           placeholder="Início do contrato"
           disabled={disabled}
+          active={!disabled}
           error={errors.start_date ? true : false}
         />
         {errors.start_date && (
@@ -270,6 +278,7 @@ const JobForm: React.FC<Props> = ({
           type="date"
           placeholder="Fim do contrato"
           disabled={disabled}
+          active={!disabled}
           error={errors.end_date ? true : false}
         />
         {errors.end_date && (
