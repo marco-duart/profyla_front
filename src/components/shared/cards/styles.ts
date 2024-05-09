@@ -250,3 +250,42 @@ export const BaseTitleStyle = styled.h1`
   font-family: ${(props) => props.theme.fontFamily.Sora};
   color: ${(props) => props.theme.colors.white};
 `;
+//NOTIFICATION
+export const NotificationCardStyle = styled("div")<{ expanded: boolean, viewed:boolean}>`
+  width: 100%;
+  min-width: 80%;
+  height: ${(props) => (props.expanded ? props.theme.heights.cards.md : "70px")};
+  background-color: ${(props) => (props.viewed ? props.theme.colors.lightGrey200 : props.theme.colors.lightBlue100)};
+  border-radius: ${(props) => props.theme.radius.md};
+  border: ${(props) =>`1px solid ${props.theme.colors.darkBlue100}`};
+  position: relative;
+  display: flex;
+  align-content: center;
+  flex-direction: column;
+  padding-left: 10px;
+  padding-right: 10px;
+  cursor: pointer;
+  :hover { 
+    border: none;
+    box-shadow: ${(props) => props.theme.glows.glow};
+    transition: all 0.3s;
+  }
+`;
+
+export const NotificationContentStyle = styled.div`
+width: 100%;
+height: 100%;
+`;
+
+export const NotificationHeaderStyle = styled.div`
+width: 100%;
+height: 100%;
+display: flex; 
+align-content: center;
+justify-content: space-between;
+
+`;
+
+export const NotificationTitleStyle = styled.h1`
+  font-family: ${(props) => props.theme.fontFamily.Sora};
+`;
