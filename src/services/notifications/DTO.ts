@@ -62,7 +62,7 @@ export namespace UpdateNotificationsDTO {
 
 export namespace DeleteNotificationsDTO {
   export interface IParams {
-    id: number;
+    user_notification_id: number;
     token: string;
   }
   export interface IResponse {

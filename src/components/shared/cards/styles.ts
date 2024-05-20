@@ -302,6 +302,6 @@ export const IconStyle = styled.div`
   border-radius: 20px;
   color: ${(props) => props.theme.colors.black100};
   :hover {
-    background-color: ${(props) => props.theme.colors.lightGrey400};
+    background-color: ${(props) => props.theme.colors.lightGrey100};
   }
 `;

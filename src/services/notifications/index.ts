@@ -134,9 +134,9 @@ export const DeleteNotifications = async (
   params: DeleteNotificationsDTO.IParams
 ) => {
   try {
-    const { id, token } = params;
+    const { user_notification_id, token } = params;
     const response = await api.delete<DeleteNotificationsDTO.IResponse>(
-      `/users/notification/${id}`,
+      `/users/notification/${user_notification_id}`,
       { params, headers: { Authorization: token } }
     );
 
