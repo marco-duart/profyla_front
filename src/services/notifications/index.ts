@@ -16,7 +16,6 @@ export const GetNotification = async (params: GetNotificationDTO.IParams) => {
       { headers: { Authorization: token } }
     );
 
-    console.log(response)
     return {
       success: true,
       message: "MESSAGE",
@@ -46,7 +45,6 @@ export const GetNotifications = async (params: GetNotificationsDTO.IParams) => {
       { params, headers: { Authorization: token } }
     );
 
-    console.log(response)
     return {
       success: true,
       message: "MESSAGE",
@@ -68,7 +66,9 @@ export const GetNotifications = async (params: GetNotificationsDTO.IParams) => {
   }
 };
 
-export const CreateNotifications = async (params: CreateNotificationsDTO.IParams) => {
+export const CreateNotifications = async (
+  params: CreateNotificationsDTO.IParams
+) => {
   try {
     const { token, ...restParams } = params;
     const response = await api.post<CreateNotificationsDTO.IResponse>(
@@ -98,11 +98,13 @@ export const CreateNotifications = async (params: CreateNotificationsDTO.IParams
   }
 };
 
-export const UpdateNotifications = async (params: UpdateNotificationsDTO.IParams) => {
+export const UpdateNotifications = async (
+  params: UpdateNotificationsDTO.IParams
+) => {
   try {
-    const { id, token, ...restParams } = params;
+    const { user_notification_id, token, ...restParams } = params;
     const response = await api.patch<UpdateNotificationsDTO.IResponse>(
-      `/users/notification/${id}`,
+      `/users/notification/${user_notification_id}`,
       restParams,
       { headers: { Authorization: token } }
     );
@@ -128,11 +130,13 @@ export const UpdateNotifications = async (params: UpdateNotificationsDTO.IParams
   }
 };
 
-export const DeleteNotifications = async (params: DeleteNotificationsDTO.IParams) => {
+export const DeleteNotifications = async (
+  params: DeleteNotificationsDTO.IParams
+) => {
   try {
     const { id, token } = params;
     const response = await api.delete<DeleteNotificationsDTO.IResponse>(
-      `/user/notifications/${id}`,
+      `/users/notification/${id}`,
       { params, headers: { Authorization: token } }
     );
 

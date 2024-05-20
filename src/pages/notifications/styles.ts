@@ -10,5 +10,9 @@ export const NotificationStyles = styled.div`
   place-items: start;
   padding-left: 20px;
   padding-right: 20px;
- 
-`
+`;
+
+export const NotificationTitle = styled.h1`
+  font-family: ${(props) => props.theme.fontFamily.Poppins};
+  margin-left: 80px;
+`;

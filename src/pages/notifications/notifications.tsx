@@ -11,10 +11,9 @@ import * as S from "./styles";
 
 const Notifications = () => {
   const { notifications } = useNotificationsCrud();
-  console.log(notifications)
   return (
     <S.NotificationStyles>
-      <h1>Suas Notificações</h1>
+      <S.NotificationTitle>Suas Notificações</S.NotificationTitle>
       {notifications?.map((notifications, index) => (
         <NotificationCard key={index} notifications={notifications} />
       ))}

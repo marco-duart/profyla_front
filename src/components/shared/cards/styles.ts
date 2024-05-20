@@ -251,41 +251,57 @@ export const BaseTitleStyle = styled.h1`
   color: ${(props) => props.theme.colors.white};
 `;
 //NOTIFICATION
-export const NotificationCardStyle = styled("div")<{ expanded: boolean, viewed:boolean}>`
-  width: 100%;
+export const NotificationCardStyle = styled("div")<{
+  viewed: boolean;
+}>`
+  width: 90%;
   min-width: 80%;
-  height: ${(props) => (props.expanded ? props.theme.heights.cards.md : "70px")};
-  background-color: ${(props) => (props.viewed ? props.theme.colors.lightGrey200 : props.theme.colors.lightBlue100)};
-  border-radius: ${(props) => props.theme.radius.md};
-  border: ${(props) =>`1px solid ${props.theme.colors.darkBlue100}`};
+  height: 90px;
+  max-height: ${(props) => props.theme.heights.cards.xsm};
+  background-color: ${(props) =>
+    props.viewed ? props.theme.colors.lightGrey400 : props.theme.colors.white};
+  font-weight: ${(props) =>
+    props.viewed ? props.theme.weights.normal : props.theme.weights.semiBold};
+  border-radius: ${(props) => props.theme.radius.sm};
+  border: ${(props) => `1px solid ${props.theme.colors.lightGrey200}`};
   position: relative;
   display: flex;
-  align-content: center;
-  flex-direction: column;
-  padding-left: 10px;
-  padding-right: 10px;
-  cursor: pointer;
-  :hover { 
-    border: none;
+  margin-left: 80px;
+  padding: 10px;
+  font-family: ${(props) => props.theme.fontFamily.Sora};
+  :hover {
     box-shadow: ${(props) => props.theme.glows.glow};
     transition: all 0.3s;
   }
 `;
 
 export const NotificationContentStyle = styled.div`
-width: 100%;
-height: 100%;
+  display: flex;
+  align-items: center;
 `;
 
 export const NotificationHeaderStyle = styled.div`
-width: 100%;
-height: 100%;
-display: flex; 
-align-content: center;
-justify-content: space-between;
-
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 `;
 
-export const NotificationTitleStyle = styled.h1`
-  font-family: ${(props) => props.theme.fontFamily.Sora};
+export const NotificationTitleStyle = styled.span`
+  font-size: ${(props) => props.theme.fontSizes.lg};
+`;
+export const NotificationTimeStyle = styled.span`
+  color: ${(props) => props.theme.colors.lightGrey300};
+`;
+
+export const IconStyle = styled.div`
+  padding: 5px 5px 5px 5px;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  color: ${(props) => props.theme.colors.black100};
+  :hover {
+    background-color: ${(props) => props.theme.colors.lightGrey400};
+  }
 `;

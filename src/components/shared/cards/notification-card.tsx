@@ -1,48 +1,64 @@
 //NATIVE
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 //LIBRARIES
-import { formatDistance, formatDistanceToNow } from "date-fns";
-import {  } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { Delete } from "styled-icons/fluentui-system-regular";
 //COMPONENTS
 import { Notifications } from "../../../services/notifications/DTO";
 //STYLES
 import * as S from "./styles";
-import { DeleteNotificationData, UpdateNotificationData, useNotificationsCrud } from "../../../hooks/notification/use-notification-crud";
+import { useNotificationsCrud } from "../../../hooks/notification/use-notification-crud";
 //UTILS
-
 
 interface CardProps {
   notifications: Notifications;
-  // onViewed: (params: UpdateNotificationData) => void;
-  // onDelete: (params: DeleteNotificationData) => void;
 }
 
 const NotificationCard: React.FC<CardProps> = ({ notifications }) => {
-  const { updateNotifications } = useNotificationsCrud();
-const [expanded, setExpanded] = useState(false);
-// if (expanded == true){
-//   notifications.viewed = true
-// }
-const handleViewed = () => {
+  const { updateNotifications, deleteNotifications } = useNotificationsCrud();
+  const [expanded, setExpanded] = useState(false);
+  const handleViewed = () => {
+    if (notifications.viewed != true) {
+      const updatedNotification = { ...notifications };
+      updateNotifications(updatedNotification);
+    }
+    setExpanded(!expanded);
+  };
 
-  if (notifications.viewed == false) {
-  const updatedNotification = { ...notifications};
-  updateNotifications(updatedNotification);
-}
-  setExpanded(!expanded);
-}
+  const handleDelete = () => {
+    const deleteNotification = { ...notifications };
+    deleteNotifications(deleteNotification);
+  };
 
   return (
-    <S.NotificationCardStyle expanded={expanded} viewed={notifications.viewed} onClick={handleViewed}>
+    <S.NotificationCardStyle
+      viewed={notifications.viewed}
+      onClick={handleViewed}
+    >
       <S.NotificationHeaderStyle>
-        <S.NotificationTitleStyle>{notifications.title}</S.NotificationTitleStyle>
-        <p>{formatDistanceToNow(notifications.created_at,   { addSuffix: true } )}</p>
-        </S.NotificationHeaderStyle>
-        {expanded &&    
-        <S.NotificationContentStyle>     
-        <h2>{notifications.message}</h2>
-        </S.NotificationContentStyle>}
+        <div>
+          <S.NotificationTitleStyle>
+            {notifications.title}
+          </S.NotificationTitleStyle>
+          &emsp;
+          <S.NotificationTimeStyle>
+            {formatDistanceToNow(notifications.created_at, {
+              locale: ptBR,
+              addSuffix: true,
+            })}
+          </S.NotificationTimeStyle>
+        </div>
+        <div>
+          <p>{notifications.message}</p>
+        </div>
+      </S.NotificationHeaderStyle>
+
+      <S.NotificationContentStyle>
+        <S.IconStyle onClick={handleDelete}>
+          <Delete />
+        </S.IconStyle>
+      </S.NotificationContentStyle>
     </S.NotificationCardStyle>
   );
 };

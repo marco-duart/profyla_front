@@ -51,7 +51,7 @@ export namespace UpdateNotificationsDTO {
   export interface IParams {
     viewed: boolean;
     viewed_at: Date;
-    id: number;
+    user_notification_id: number;
     token: string;
   }
   export interface IResponse {
