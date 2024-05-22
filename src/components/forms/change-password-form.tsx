@@ -12,6 +12,7 @@ import * as S from "./styles";
 import { EyeFill, EyeSlashFill } from "styled-icons/bootstrap";
 //UTILS
 import { FORM_MESSAGE } from "../../utils/enums/form-message";
+import { SUCCESSFUL_MESSAGE } from "../../utils/enums/successful-message";
 import * as CONSTANTS from "../../utils/constants/constants";
 
 const changePasswordFormSchema = z.object({
@@ -25,7 +26,11 @@ const changePasswordFormSchema = z.object({
 
 type ChangePasswordFormData = z.infer<typeof changePasswordFormSchema>;
 
-const ChangePasswordForm = () => {
+type Props = {
+  handleModal: (message?: string) => void;
+};
+
+const ChangePasswordForm: React.FC<Props> = ({ handleModal }) => {
   const { changePassword } = useUserConfiguration();
   const [currentPasswordIsOpen, setCurrentPasswordIsOpen] = useState(false);
   const [newPasswordIsOpen, setNewPasswordIsOpen] = useState(false);
@@ -64,8 +69,8 @@ const ChangePasswordForm = () => {
   const handleSubmitForm = async (data: ChangePasswordFormData) => {
     const { currentPassword, newPassword } = data;
     changePassword(currentPassword, newPassword);
-    //modal de erro ou sucesso?
     cleanFields();
+    handleModal(SUCCESSFUL_MESSAGE.CHANGE_PASSWORD_REQUEST);
   };
 
   return (

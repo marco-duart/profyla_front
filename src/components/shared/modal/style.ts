@@ -10,10 +10,23 @@ export const ModalOverlayStyle = styled.div<{ isOpen: boolean }>`
   background-color: rgba(0, 0, 0, 0.5);
 `;
 
-export const ModalContainerStyle = styled.div`
+export const BaseModalContainerStyle = styled.div`
   position: fixed;
   width: ${(props) => props.theme.widths.forms.md};
   height: ${(props) => props.theme.heights.forms.md};
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: ${(props) => props.theme.colors.white};
+  border-radius: ${(props) => props.theme.radius.md};
+  display: flex;
+  flex-direction: column;
+`;
+
+export const NotificationModalContainerStyle = styled.div`
+  position: fixed;
+  width: ${(props) => props.theme.widths.forms.md};
+  height: ${(props) => props.theme.heights.forms.xsm};
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);

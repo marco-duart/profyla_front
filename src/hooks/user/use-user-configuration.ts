@@ -1,11 +1,13 @@
-import { useUserContext } from "./use-user-context"
-import { ChangeEmail, ChangeNewsletter, ChangePassword, ChangePhoto } from "../../services/user"
-import { useState } from "react";
-
+import { useUserContext } from "./use-user-context";
+import {
+  ChangeEmail,
+  ChangeNewsletter,
+  ChangePassword,
+  ChangePhoto,
+} from "../../services/user";
 
 export const useUserConfiguration = () => {
   const { token, autoLogin, user } = useUserContext();
-  const [passwordChangeResult, setPasswordChangeResult] = useState<boolean | null>(null);
 
   const changeEmail = async (newEmail: string) => {
     if (!token) {
@@ -14,43 +16,49 @@ export const useUserConfiguration = () => {
 
     const params = { email: newEmail, token };
     await ChangeEmail(params);
-    autoLogin();
+    await autoLogin();
   };
 
   const changeNewsletter = async (newNewsletter: boolean) => {
     if (!user?.id) {
-      return
+      return;
     }
     const params = { id: user.id, newsletter: newNewsletter };
     await ChangeNewsletter(params);
-    autoLogin();
+    await autoLogin();
   };
 
-  const changePassword = async (currentPassword: string, newPassword: string) => {
+  const changePassword = async (
+    currentPassword: string,
+    newPassword: string
+  ) => {
     if (!token) {
       return;
     }
 
-    const params = { current_password: currentPassword, new_password: newPassword, token };
-    const { success } = await ChangePassword(params);
-    setPasswordChangeResult(success);
+    const params = {
+      current_password: currentPassword,
+      new_password: newPassword,
+      token,
+    };
+    await ChangePassword(params);
   };
 
   const changePhoto = async (photo: File) => {
     if (!token) {
-      return
+      return;
     }
 
-    const params = { photo, token}
-    await ChangePhoto(params)
-    autoLogin()
-  }
+    const params = { photo, token };
+    await ChangePhoto(params);
+    await autoLogin();
+  };
 
   return {
     user,
     changeEmail,
     changePassword,
     changeNewsletter,
-    changePhoto
-  }
-}
+    changePhoto,
+  };
+};
