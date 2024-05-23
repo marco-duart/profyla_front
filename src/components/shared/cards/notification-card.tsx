@@ -5,57 +5,47 @@ import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Delete } from "styled-icons/fluentui-system-regular";
 //COMPONENTS
-import { Notifications } from "../../../services/notifications/DTO";
+import { Notification } from "../../../services/notifications/DTO";
 //STYLES
 import * as S from "./styles";
-import { useNotificationsCrud } from "../../../hooks/notification/use-notification-crud";
 //UTILS
 
 interface CardProps {
-  notifications: Notifications;
+  notification: Notification;
+  handleViewed: (notification: Notification) => void;
+  handleDelete: (notification: Notification) => void;
 }
 
-const NotificationCard: React.FC<CardProps> = ({ notifications }) => {
-  const { updateNotifications, deleteNotifications } = useNotificationsCrud();
-  const [expanded, setExpanded] = useState(false);
-  const handleViewed = () => {
-    if (notifications.viewed != true) {
-      const updatedNotification = { ...notifications };
-      updateNotifications(updatedNotification);
-    }
-    setExpanded(!expanded);
-  };
-
-  const handleDelete = () => {
-    const deleteNotification = { ...notifications };
-    deleteNotifications(deleteNotification);
-  };
-
+const NotificationCard: React.FC<CardProps> = ({
+  notification,
+  handleViewed,
+  handleDelete,
+}) => {
   return (
     <S.NotificationCardStyle
-      viewed={notifications.viewed}
-      onClick={handleViewed}
+      viewed={notification.viewed}
+      onClick={() => handleViewed(notification)}
     >
       <S.NotificationHeaderStyle>
         <div>
           <S.NotificationTitleStyle>
-            {notifications.title}
+            {notification.title}
           </S.NotificationTitleStyle>
           &emsp;
           <S.NotificationTimeStyle>
-            {formatDistanceToNow(notifications.created_at, {
+            {formatDistanceToNow(notification.created_at, {
               locale: ptBR,
               addSuffix: true,
             })}
           </S.NotificationTimeStyle>
         </div>
         <div>
-          <p>{notifications.message}</p>
+          <p>{notification.message}</p>
         </div>
       </S.NotificationHeaderStyle>
 
       <S.NotificationContentStyle>
-        <S.IconStyle onClick={handleDelete}>
+        <S.IconStyle onClick={() => handleDelete(notification)}>
           <Delete />
         </S.IconStyle>
       </S.NotificationContentStyle>

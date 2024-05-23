@@ -80,7 +80,7 @@ export const CreateNotifications = async (
     return {
       success: true,
       message: "MESSAGE",
-      notifications: response.data.notification,
+      notification: response.data.notification,
     };
   } catch (error) {
     if (isAxiosError(error)) {
@@ -112,7 +112,7 @@ export const UpdateNotifications = async (
     return {
       success: true,
       message: "MESSAGE",
-      notifications: response.data.notification,
+      notification: response.data.notification,
     };
   } catch (error) {
     if (isAxiosError(error)) {
@@ -143,7 +143,7 @@ export const DeleteNotifications = async (
     return {
       success: true,
       message: "MESSAGE",
-      notifications: response.data.notification,
+      notification: response.data.notification,
     };
   } catch (error) {
     if (isAxiosError(error)) {

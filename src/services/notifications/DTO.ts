@@ -1,4 +1,4 @@
-export type Notifications = {
+export type Notification = {
   user_notification_id: number;
   viewed: boolean;
   viewed_at: Date;
@@ -17,7 +17,7 @@ export namespace GetNotificationDTO {
   }
   export interface IResponse {
     message: string;
-    notification: Notifications;
+    notification: Notification;
   }
 }
 
@@ -27,7 +27,7 @@ export namespace GetNotificationsDTO {
   }
   export interface IResponse {
     message: string;
-    notifications: Notifications[];
+    notifications: Notification[];
   }
 }
 
@@ -43,20 +43,18 @@ export namespace CreateNotificationsDTO {
   }
   export interface IResponse {
     message: string;
-    notification: Notifications;
+    notification: Notification;
   }
 }
 
 export namespace UpdateNotificationsDTO {
   export interface IParams {
-    viewed: boolean;
-    viewed_at: Date;
     user_notification_id: number;
     token: string;
   }
   export interface IResponse {
     message: string;
-    notification: Notifications;
+    notification: Notification;
   }
 }
 
@@ -67,6 +65,6 @@ export namespace DeleteNotificationsDTO {
   }
   export interface IResponse {
     message: string;
-    notification: Notifications;
+    notification: Notification;
   }
 }

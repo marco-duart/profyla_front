@@ -251,9 +251,7 @@ export const BaseTitleStyle = styled.h1`
   color: ${(props) => props.theme.colors.white};
 `;
 //NOTIFICATION
-export const NotificationCardStyle = styled("div")<{
-  viewed: boolean;
-}>`
+export const NotificationCardStyle = styled("div")<{ viewed: boolean }>`
   width: 90%;
   min-width: 80%;
   height: 90px;
@@ -269,6 +267,7 @@ export const NotificationCardStyle = styled("div")<{
   margin-left: 80px;
   padding: 10px;
   font-family: ${(props) => props.theme.fontFamily.Sora};
+  cursor: ${(props) => (props.viewed ? "default" : "pointer")};
   :hover {
     box-shadow: ${(props) => props.theme.glows.glow};
     transition: all 0.3s;

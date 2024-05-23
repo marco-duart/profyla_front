@@ -1,12 +1,18 @@
 import { useEffect, useState } from "react";
 
 import { useUserContext } from "../use-user-context";
-import { CreateNotifications, DeleteNotifications, GetNotifications, GetNotification, UpdateNotifications } from "../../services/notifications/index";
+import {
+  CreateNotifications,
+  DeleteNotifications,
+  GetNotifications,
+  GetNotification,
+  UpdateNotifications,
+} from "../../services/notifications/index";
 
-import { Notifications } from "../../services/notifications/DTO";
+import { Notification } from "../../services/notifications/DTO";
 
 type State = {
-  notifications: undefined | Notifications[];
+  notifications: undefined | Notification[];
 };
 
 const INITIAL_STATE = {
@@ -25,16 +31,10 @@ export type CreateNotificationData = {
 
 export type UpdateNotificationData = {
   user_notification_id: number;
-  viewed: boolean;
-  viewed_at: Date;
-  id: number;
-  title: string;
-  notification_type: string;
-  message: string;
 };
 
 export type DeleteNotificationData = {
-  id: number;
+  user_notification_id: number;
 };
 
 export const useNotificationsCrud = () => {
@@ -42,17 +42,17 @@ export const useNotificationsCrud = () => {
   const { token } = useUserContext();
 
   const fetchNotifications = async () => {
-    if (!token ) {
+    if (!token) {
       return;
     }
 
-    const params = {token}
+    const params = { token };
     const { notifications } = await GetNotifications(params);
     setState({ notifications });
   };
 
   const createNotifications = async (data: CreateNotificationData) => {
-    if (!token ) {
+    if (!token) {
       return;
     }
 
@@ -62,7 +62,7 @@ export const useNotificationsCrud = () => {
   };
 
   const deleteNotifications = async (data: DeleteNotificationData) => {
-    if (!token ) {
+    if (!token) {
       return;
     }
 
@@ -72,7 +72,7 @@ export const useNotificationsCrud = () => {
   };
 
   const updateNotifications = async (data: UpdateNotificationData) => {
-    if (!token ) {
+    if (!token) {
       return;
     }
 
