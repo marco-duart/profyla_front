@@ -13,16 +13,24 @@ import * as S from "./styles";
 import { useUserConfiguration } from "../../hooks/user/use-user-configuration";
 
 const Configurations = () => {
-  const { user, changeNewsletter } = useUserConfiguration();
+  const { user, message, changeNewsletter, changeEmail, changePassword } =
+    useUserConfiguration();
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>("");
 
-  const handleModal = (message?: string) => {
-    if (message) {
-      setMessage(message);
-    }
-    console.log(isOpen)
+  const handleModal = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handleChangeEmail = async (newEmail: string) => {
+    changeEmail(newEmail);
+    handleModal();
+  };
+
+  const handleChangePassword = async (
+    currentPassword: string,
+    newPassword: string
+  ) => {
+    changePassword(currentPassword, newPassword);
   };
 
   return (
@@ -34,6 +42,7 @@ const Configurations = () => {
           <UserInfoForm name={user?.name || ""} cpf={user?.cpf || ""} />
           <ChangeEmailForm
             handleModal={handleModal}
+            handleChangeEmail={handleChangeEmail}
             email={user?.email || ""}
           />
           <S.CheckboxDivStyle>
@@ -49,7 +58,10 @@ const Configurations = () => {
           </S.CheckboxDivStyle>
         </S.SectionSideStyle>
         <S.SectionSideStyle>
-          <ChangePasswordForm handleModal={handleModal} />
+          <ChangePasswordForm
+            handleModal={handleModal}
+            handleChangePassword={handleChangePassword}
+          />
         </S.SectionSideStyle>
       </S.SectionDivStyle>
       <NotificationModal

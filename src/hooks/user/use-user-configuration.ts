@@ -5,9 +5,15 @@ import {
   ChangePassword,
   ChangePhoto,
 } from "../../services/user";
+import { useState } from "react";
 
 export const useUserConfiguration = () => {
   const { token, autoLogin, user } = useUserContext();
+  const [message, setMessage] = useState<string>("");
+
+  const handleMessage = (message: string) => {
+    setMessage(message);
+  };
 
   const changeEmail = async (newEmail: string) => {
     if (!token) {
@@ -15,8 +21,9 @@ export const useUserConfiguration = () => {
     }
 
     const params = { email: newEmail, token };
-    await ChangeEmail(params);
-    await autoLogin();
+    const { message } = await ChangeEmail(params);
+    handleMessage(message);
+    autoLogin();
   };
 
   const changeNewsletter = async (newNewsletter: boolean) => {
@@ -25,7 +32,7 @@ export const useUserConfiguration = () => {
     }
     const params = { id: user.id, newsletter: newNewsletter };
     await ChangeNewsletter(params);
-    await autoLogin();
+    autoLogin();
   };
 
   const changePassword = async (
@@ -41,7 +48,8 @@ export const useUserConfiguration = () => {
       new_password: newPassword,
       token,
     };
-    await ChangePassword(params);
+    const { message } = await ChangePassword(params);
+    handleMessage(message);
   };
 
   const changePhoto = async (photo: File) => {
@@ -51,11 +59,12 @@ export const useUserConfiguration = () => {
 
     const params = { photo, token };
     await ChangePhoto(params);
-    await autoLogin();
+    autoLogin();
   };
 
   return {
     user,
+    message,
     changeEmail,
     changePassword,
     changeNewsletter,

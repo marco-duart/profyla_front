@@ -18,7 +18,7 @@ import { EyeFill, EyeSlashFill } from "@styled-icons/bootstrap";
 
 //UTILS
 import { FORM_MESSAGE } from "../../utils/enums/form-message";
-import * as CONSTANTS from "../../utils/constants/constants"
+import * as CONSTANTS from "../../utils/constants/constants";
 
 const registerFormSchema = z
   .object({
@@ -96,7 +96,6 @@ const RegisterForm = () => {
           <S.BaseSmallFormStyle>{errors.name.message}</S.BaseSmallFormStyle>
         )}
       </div>
-
       <div className="first-section">
         <label htmlFor="cpf" hidden>
           CPF
@@ -111,7 +110,6 @@ const RegisterForm = () => {
           <S.BaseSmallFormStyle>{errors.cpf.message}</S.BaseSmallFormStyle>
         )}
       </div>
-
       <div className="first-section">
         <label htmlFor="email" hidden>
           E-mail
@@ -126,7 +124,6 @@ const RegisterForm = () => {
           <S.BaseSmallFormStyle>{errors.email.message}</S.BaseSmallFormStyle>
         )}
       </div>
-
       <S.PasswordSectionFormStyle>
         <label htmlFor="password" hidden>
           Senha
@@ -144,7 +141,6 @@ const RegisterForm = () => {
           <S.BaseSmallFormStyle>{errors.password.message}</S.BaseSmallFormStyle>
         )}
       </S.PasswordSectionFormStyle>
-
       <S.PasswordSectionFormStyle className="first-section">
         <label htmlFor="confirm" hidden>
           Confirmar Senha
@@ -162,23 +158,6 @@ const RegisterForm = () => {
           <S.BaseSmallFormStyle>{errors.confirm.message}</S.BaseSmallFormStyle>
         )}
       </S.PasswordSectionFormStyle>
-
-      <div className="first-section">
-        <label htmlFor="photo" hidden>
-          Foto
-        </label>
-        <input
-          {...register("photo")}
-          type="file"
-          accept="image/png, image/jpg, image/jpeg"
-        />
-        {errors.photo && (
-          <S.BaseSmallFormStyle>
-            {errors.photo.message as string}
-          </S.BaseSmallFormStyle>
-        )}
-      </div>
-
       <BaseButton type="submit">CADASTRAR-ME</BaseButton>
     </S.RegisterFormStyle>
   );

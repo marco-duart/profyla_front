@@ -13,7 +13,7 @@ export const SectionDivStyle = styled.div`
 
   .v1 {
     border-right: 3px solid ${props => props.theme.colors.lightGrey200};
-    margin-right: 20px;
+    margin-right: 40px;
   }
 `
 

@@ -10,8 +10,6 @@ import CrudButton from "../shared/buttons/crud-button";
 import * as S from "./styles";
 //UTILS
 import { FORM_MESSAGE } from "../../utils/enums/form-message";
-import { useUserConfiguration } from "../../hooks/user/use-user-configuration";
-import { SUCCESSFUL_MESSAGE } from "../../utils/enums/successful-message";
 
 const changeEmailFormSchema = z.object({
   email: z
@@ -25,11 +23,11 @@ type ChangeEmailFormData = z.infer<typeof changeEmailFormSchema>;
 
 type Props = {
   handleModal: (message?: string) => void;
+  handleChangeEmail: (email: string) => void;
   email: string;
 };
 
-const ChangeEmailForm: React.FC<Props> = ({ handleModal, email }) => {
-  const { changeEmail } = useUserConfiguration()
+const ChangeEmailForm: React.FC<Props> = ({ handleChangeEmail, email }) => {
   const [disabled, setDisabled] = useState<boolean>(true);
   const {
     register,
@@ -45,9 +43,8 @@ const ChangeEmailForm: React.FC<Props> = ({ handleModal, email }) => {
   };
 
   const handleSubmitForm = async (data: ChangeEmailFormData) => {
-    await changeEmail(data.email)
-    handleDisableInput()
-    handleModal(SUCCESSFUL_MESSAGE.CHANGE_EMAIL_REQUEST)
+    handleDisableInput();
+    handleChangeEmail(data.email);
   };
 
   useEffect(() => {

@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 //COMPONENTS
 import CrudButton from "../shared/buttons/crud-button";
-import { useUserConfiguration } from "../../hooks/user/use-user-configuration";
 //STYLES
 import * as S from "./styles";
 import { EyeFill, EyeSlashFill } from "styled-icons/bootstrap";
@@ -28,10 +27,13 @@ type ChangePasswordFormData = z.infer<typeof changePasswordFormSchema>;
 
 type Props = {
   handleModal: (message?: string) => void;
+  handleChangePassword: (currentPassword: string, newPassword: string) => void;
 };
 
-const ChangePasswordForm: React.FC<Props> = ({ handleModal }) => {
-  const { changePassword } = useUserConfiguration();
+const ChangePasswordForm: React.FC<Props> = ({
+  handleModal,
+  handleChangePassword,
+}) => {
   const [currentPasswordIsOpen, setCurrentPasswordIsOpen] = useState(false);
   const [newPasswordIsOpen, setNewPasswordIsOpen] = useState(false);
   const [confirmIsOpen, setConfirmIsOpen] = useState(false);
@@ -68,7 +70,7 @@ const ChangePasswordForm: React.FC<Props> = ({ handleModal }) => {
 
   const handleSubmitForm = async (data: ChangePasswordFormData) => {
     const { currentPassword, newPassword } = data;
-    changePassword(currentPassword, newPassword);
+    handleChangePassword(currentPassword, newPassword);
     cleanFields();
     handleModal(SUCCESSFUL_MESSAGE.CHANGE_PASSWORD_REQUEST);
   };
