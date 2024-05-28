@@ -16,6 +16,7 @@ export const GetCompany = async (params: GetCompanyDTO.IParams) => {
       { headers: { Authorization: token } }
     );
 
+    
     return {
       success: true,
       message: "MESSAGE",

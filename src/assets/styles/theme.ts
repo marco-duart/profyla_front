@@ -8,6 +8,7 @@ const light = {
     lightGrey100: "#B4B4B4",
     lightGrey200: "#E7E7E7",
     lightGrey300: "#727272",
+    lightGrey400: "#E4E4E4",
     lightBlue100: "#41C7FF",
     darkBlue100: "#17224E",
     darkBlue200: "#0F152C",
