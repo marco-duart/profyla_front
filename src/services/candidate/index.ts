@@ -4,10 +4,10 @@ import { CreateCandidateDTO, GetCandidatesDTO, GetCandidateDTO } from "./DTO";
 
 export const GetCandidate = async (params: GetCandidateDTO.IParams) => {
   try {
-    const { prefix, id, token } = params;
+    const { id, token } = params;
     // prefix: 'candidates' | 'admins/candidate'
     const response = await api.get<GetCandidateDTO.IResponse>(
-      `/${prefix}/${id}`,
+      `/admins/candidates/${id}`,
       { headers: { Authorization: token } }
     );
 
@@ -39,12 +39,13 @@ export const GetAllCandidates = async (params: GetCandidatesDTO.IParams) => {
       "/admins/candidates",
       { params, headers: { Authorization: token } }
     );
+    console.log(response);
 
     return {
       success: true,
       message: "MESSAGE",
       candidates: response.data.candidates,
-      pageable: response.data.pageable,
+      // pageable: response.data.pageable,
     };
   } catch (error) {
     if (isAxiosError(error)) {

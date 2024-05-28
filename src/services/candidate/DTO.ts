@@ -1,4 +1,4 @@
-type Candidate = {
+export type Candidate = {
   id: number;
   name: string;
   email: string;
@@ -35,7 +35,6 @@ type Candidate = {
 
 export namespace GetCandidateDTO {
   export interface IParams {
-    prefix: string;
     id: number;
     token: string;
   }
@@ -47,21 +46,21 @@ export namespace GetCandidateDTO {
 
 export namespace GetCandidatesDTO {
   export interface IParams {
-    page: number;
-    page_size: number;
+    // page: number;
+    // page_size: number;
     token: string;
   }
   export interface IResponse {
     message: string;
     candidates: Candidate[];
-    pageable: {
-      offset: number;
-      page: number;
-      page_size: number;
-      total_page: number;
-      total_item: number;
-      paged: number;
-    };
+    // pageable: {
+    //   offset: number;
+    //   page: number;
+    //   page_size: number;
+    //   total_page: number;
+    //   total_item: number;
+    //   paged: number;
+    // };
   }
 }
 
