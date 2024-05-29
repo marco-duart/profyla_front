@@ -43,7 +43,7 @@ export const GetAllCandidates = async (params: GetCandidatesDTO.IParams) => {
 
     return {
       success: true,
-      message: "MESSAGE",
+      message: response.data.message,
       candidates: response.data.candidates,
       // pageable: response.data.pageable,
     };
