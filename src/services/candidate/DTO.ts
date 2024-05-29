@@ -33,6 +33,8 @@ type Candidate = {
   user_id: number;
 };
 
+export type CandidateDetail = Candidate & { curriculum_url: string, photo_url: string }
+
 export namespace GetCandidateDTO {
   export interface IParams {
     prefix: string;
@@ -41,19 +43,27 @@ export namespace GetCandidateDTO {
   }
   export interface IResponse {
     message: string;
-    candidate: Candidate;
+    candidate: CandidateDetail;
   }
 }
 
 export namespace GetCandidatesDTO {
   export interface IParams {
-    page: number;
-    page_size: number;
+    filters: {
+      profile_ids?: number[]
+      skill_ids?: number[]
+      knowledge_ids?: number[]
+      name?: string
+      gender?: string
+      address_city?: string
+    }
+    page?: number;
+    page_size?: number;
     token: string;
   }
   export interface IResponse {
     message: string;
-    candidates: Candidate[];
+    candidates: CandidateDetail[];
     pageable: {
       offset: number;
       page: number;
@@ -93,7 +103,7 @@ export namespace CreateCandidateDTO {
     third_question: string;
     fourth_question: string;
     fifth_question: string;
-    curriculum: any;
+    curriculum: File;
     token: string;
   }
   export interface IResponse {
