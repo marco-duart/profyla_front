@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 //STYLES
 import * as S from "./styles";
 //UTILS
-import { HiringProcessShow } from "../../../services/hiringProcess/DTO";
+import { HiringProcessShow } from "../../../services/hiring-process/DTO";
 
 interface CardProps {
   hiringProcess: HiringProcessShow;

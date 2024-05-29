@@ -68,10 +68,10 @@ export const GetDocuments = async (params: GetDocumentsDTO.IParams) => {
 
 export const CreateDocument = async (params: CreateDocumentDTO.IParams) => {
   try {
-    const { token, ...restParams } = params;
+    const { token, ...rest } = params;
     const response = await api.post<CreateDocumentDTO.IResponse>(
       "/candidates/document",
-      { params: restParams, headers: { Authorization: token } }
+      { params: rest, headers: { Authorization: token } }
     );
 
     return {
@@ -97,10 +97,10 @@ export const CreateDocument = async (params: CreateDocumentDTO.IParams) => {
 
 export const UpdateDocument = async (params: UpdateDocumentDTO.IParams) => {
   try {
-    const { id, token, ...restParams } = params;
+    const { id, token, ...rest } = params;
     const response = await api.patch<UpdateDocumentDTO.IResponse>(
       `/candidates/document/${id}`,
-      { params: restParams, headers: { Authorization: token } }
+      { params: rest, headers: { Authorization: token } }
     );
 
     return {

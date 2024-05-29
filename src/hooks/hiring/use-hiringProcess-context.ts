@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 
-import { useUserContext } from "../use-user-context";
+import { useUserContext } from "../user/use-user-context";
 import {
   DeleteHiringProcess,
   CreateHiringProcess,
   UpdateHiringProcess,
   GetHiringProcess,
   GetHiringProcesses,
-} from "../../services/hiringProcess";
+} from "../../services/hiring-process";
 
-import { HiringProcessShow } from "../../services/hiringProcess/DTO";
+import { HiringProcessShow } from "../../services/hiring-process/DTO";
 
 type State = {
     hiringProcesses: undefined | HiringProcessShow[];
@@ -50,7 +50,6 @@ export const useHiringProcessCrud = (prefix: string) => {
             return;
         }
         const { hiringProcesses } = await GetHiringProcesses({ prefix, token });
-        console.log(hiringProcesses)
         setState({ hiringProcesses });
     };
 

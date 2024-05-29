@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 //STYLES
 import * as S from "./styles";
 //UTILS
-import { ApplicationShow } from "../../../services/applicationStatus/DTO";
+import { ApplicationShow } from "../../../services/application-status/DTO";
 
 interface CardProps {
   applications: ApplicationShow;

@@ -12,12 +12,13 @@ import { CrudButtonStyle } from './styles';
 interface ButtonProps {
   onClick?: () => void;
   children: ReactNode;
-  action: "close" | "edit" | "delete" | "cancel" | "new"
+  action: "close" | "edit" | "delete" | "cancel" | "new" | "save";
+  type?: "submit" | "reset"
 }
 
-const CrudButton: React.FC<ButtonProps> = ({ onClick, children, action }) => {
+const CrudButton: React.FC<ButtonProps> = ({ onClick, children, action, type }) => {
   return (
-    <CrudButtonStyle type="button" action={action} onClick={onClick? onClick : () => {}}>
+    <CrudButtonStyle type={type || "button"} action={action} onClick={onClick? onClick : () => {}}>
       {children}
     </CrudButtonStyle>
   );

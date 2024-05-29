@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 
-import { useUserContext } from "../use-user-context";
+import { useUserContext } from "../user/use-user-context";
 import {
   GetApplication,
   GetApplications,
-} from "../../services/applicationStatus";
+} from "../../services/application-status";
 
-import { ApplicationShow } from "../../services/applicationStatus/DTO";
+import { ApplicationShow } from "../../services/application-status/DTO";
 
 type State = {
   applications: undefined | ApplicationShow[];
@@ -25,7 +25,6 @@ export const useApplicationCrud = (prefix: string) => {
       return;
     }
     const { applications } = await GetApplications({ prefix, token });
-    console.log(applications);
     setState({ applications });
   };
 

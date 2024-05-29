@@ -17,7 +17,7 @@ import { PeopleTeam, GridKanban, FormNew} from "styled-icons/fluentui-system-fil
 import { ChartPerson } from "styled-icons/fluentui-system-regular";
 //COMPONENTS
 import SideBarIcons from "../shared/icons/sidebar-icons";
-import { useUserContext } from "../../hooks/use-user-context";
+import { useUserContext } from "../../hooks/user/use-user-context";
 //STYLES
 import * as S from "./styles";
 //UTILS

@@ -89,18 +89,26 @@ export const CrudButtonsDiv = styled.div`
 
 export const BaseTitleFormStyle = styled.h1`
   width: 100%;
-  margin-bottom: 15px;
   text-align: center;
   font-family: ${(props) => props.theme.fontFamily.Sora};
   margin-bottom: 20px;
 `;
 
-export const BaseInputFormStyle = styled("input")<{ error: boolean }>`
+export const BaseSubtitleFormStyle = styled.h4`
+  font-family: ${(props) => props.theme.fontFamily.Sora};
+`;
+
+export const BaseInputFormStyle = styled("input")<{ error: boolean, active?: boolean }>`
   width: 100%;
   height: ${(props) => props.theme.heights.imputs.sm};
-  background-color: ${(props) => props.theme.colors.lightGrey200};
-  border: ${(props) =>
-    props.error ? `1px solid ${props.theme.colors.lightRed100}` : "none"};
+  background-color: ${(props) => props.active ? props.theme.colors.white : props.theme.colors.lightGrey200 };
+  border: ${(props) => {
+    if(props.error) {
+      return `1px solid ${props.theme.colors.lightRed100}`
+    } else {
+      return props.active ? `1px solid ${props.theme.colors.lightGrey200}` : "none"
+    }
+  }};
   border-radius: ${(props) => props.theme.radius.xl};
   padding: 0 20px;
   font-family: ${(props) => props.theme.fontFamily.Poppins};
@@ -108,16 +116,21 @@ export const BaseInputFormStyle = styled("input")<{ error: boolean }>`
 
   &:focus {
     outline: none;
-    border: ${(props) => !props.error && "1px outset white"};
+    border: ${(props) => !props.error && `2px solid ${props.theme.colors.lightGrey300}`};
   }
 `;
 
-export const BaseTextAreaFormStyle = styled("textarea")<{ error: boolean }>`
+export const BaseTextAreaFormStyle = styled("textarea")<{ error: boolean, active?: boolean }>`
   width: 100%;
   min-height: ${(props) => props.theme.heights.imputs.md};
-  background-color: ${(props) => props.theme.colors.lightGrey200};
-  border: ${(props) =>
-    props.error ? `1px solid ${props.theme.colors.lightRed100}` : "none"};
+  background-color: ${(props) => props.active ? props.theme.colors.white : props.theme.colors.lightGrey200 };
+  border: ${(props) => {
+    if(props.error) {
+      return `1px solid ${props.theme.colors.lightRed100}`
+    } else {
+      return props.active ? `1px solid ${props.theme.colors.lightGrey200}` : "none"
+    }
+  }};
   border-radius: ${(props) => props.theme.radius.xl};
   padding: 0 20px;
   font-family: ${(props) => props.theme.fontFamily.Poppins};
@@ -125,7 +138,7 @@ export const BaseTextAreaFormStyle = styled("textarea")<{ error: boolean }>`
 
   &:focus {
     outline: none;
-    border: ${(props) => !props.error && "1px outset white"};
+    border: ${(props) => !props.error && `2px solid ${props.theme.colors.lightGrey300}`};
   }
 `;
 

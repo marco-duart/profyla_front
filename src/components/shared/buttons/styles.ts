@@ -29,7 +29,7 @@ export const FormButtonStyle = styled.button`
   cursor: pointer;
 `;
 
-export const CrudButtonStyle = styled("button")<{ action: "close" | "edit" | "delete" | "cancel" | "new"; }>`
+export const CrudButtonStyle = styled("button")<{ action: "close" | "edit" | "delete" | "cancel" | "new" | "save"; }>`
   width: ${(props) =>
     props.action === "close"
       ? props.theme.widths.buttons.close
@@ -50,6 +50,8 @@ export const CrudButtonStyle = styled("button")<{ action: "close" | "edit" | "de
       case "cancel":
         return props.theme.colors.lightGrey300;
       case "new":
+        return props.theme.colors.lightBlue100;
+      case "save":
         return props.theme.colors.lightBlue100;
     }
   }};

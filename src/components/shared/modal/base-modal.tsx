@@ -14,7 +14,7 @@ interface Props {
 const BaseModal: React.FC<Props> = ({ isOpen, onClose, children}) => {
   return (
     <S.ModalOverlayStyle isOpen={isOpen} onClick={onClose}>
-      <S.ModalContainerStyle onClick={(e) => e.stopPropagation()}>
+      <S.BaseModalContainerStyle onClick={(e) => e.stopPropagation()}>
         <S.ModalHeaderStyle>
           <S.ModalTitleStyle>Detalhes</S.ModalTitleStyle>
           <CrudButton onClick={onClose} action="close">X</CrudButton>
@@ -22,7 +22,7 @@ const BaseModal: React.FC<Props> = ({ isOpen, onClose, children}) => {
         <S.ModalBodyStyle>
           {children}
         </S.ModalBodyStyle>
-      </S.ModalContainerStyle>
+      </S.BaseModalContainerStyle>
     </S.ModalOverlayStyle>
   );
 };

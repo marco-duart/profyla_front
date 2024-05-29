@@ -1,9 +1,9 @@
 import { useState } from "react";
 
-import { useUserContext } from "../use-user-context";
-import { CreateJobPosting, DeleteJobPosting, GetJobPosting, GetJobPostings, UpdateJobPosting } from "../../services/jobPosting/index";
+import { useUserContext } from "../user/use-user-context";
+import { CreateJobPosting, DeleteJobPosting, GetJobPosting, GetJobPostings, UpdateJobPosting } from "../../services/job-posting/index";
 
-import { JobPosting } from "../../services/jobPosting/DTO";
+import { JobPosting } from "../../services/job-posting/DTO";
 
 type State = {
   jobPostings: undefined | JobPosting[];
@@ -48,7 +48,7 @@ export type DeleteJobData = {
 
 export const useJobPostingCrud = () => {
   const [state, setState] = useState<State>(INITIAL_STATE);
-  const [companyId, setCompanyId] = useState<number>(8);
+  const [companyId, setCompanyId] = useState<number>(0);
   const { token } = useUserContext();
 
   const fetchJobPostings = async (company_id: number) => {

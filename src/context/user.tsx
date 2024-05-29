@@ -12,6 +12,9 @@ import * as CONSTANTS from "../utils/constants/constants"
 type User = {
   id: number;
   name: string;
+  cpf: string;
+  email: string;
+  newsletter: boolean;
   role: "ti" | "admin" | "user";
   photo_url: string;
 };
@@ -24,6 +27,7 @@ type State = {
 type UserContext = {
   user: User | null;
   token: string | null
+  autoLogin: () => void,
   updateUser: (user: User, token: string) => void;
   logout: () => void;
   isAdmin: () => boolean
@@ -36,6 +40,7 @@ type Props = {
 export const UserContext = createContext<UserContext>({
   user: null,
   token: null,
+  autoLogin: () => {},
   updateUser: () => {},
   logout: () => {},
   isAdmin: () => false
@@ -47,17 +52,23 @@ export const UserContextProvider: React.FC<Props> = ({ children }) => {
     token: null
   });
 
+  const recoveryToken = () => {
+    const localToken = localStorage.getItem("ibc-tf-token");
+    if(localToken) {
+      setState({...state, token: localToken})
+    }
+  }
+
   const autoLogin = async () => {
-    const token = localStorage.getItem("ibc-tf-token");
 
-    if (!token) return cleanUser();
+    if (!state.token) return cleanUser();
 
-    const { success, user } = await LoggedUser({ token });
-
+    const { success, user } = await LoggedUser({ token: state.token });
+    
     if (!success) return cleanUser();
 
     if (success && user) {
-      updateUser(user, token);
+      updateUser(user, state.token);
     }
   };
 
@@ -87,7 +98,8 @@ export const UserContextProvider: React.FC<Props> = ({ children }) => {
   }
 
   useEffect(() => {
-    if (!state.user) {
+    recoveryToken()
+    if (state.token) {
       autoLogin();
     }
   }, []);
@@ -97,6 +109,7 @@ export const UserContextProvider: React.FC<Props> = ({ children }) => {
       value={{
         user: state.user,
         token: state.token,
+        autoLogin,
         updateUser,
         logout: cleanUser,
         isAdmin

@@ -36,7 +36,7 @@ export namespace CreateProfileDTO {
 
 export namespace DeleteProfileDTO {
   export interface IParams {
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {

@@ -1,5 +1,5 @@
 //NATIVE
-import { useUserContext } from "../../hooks/use-user-context";
+import { useUserContext } from "../../hooks/user/use-user-context";
 import TalentflowLogo from "../shared/talentflow-logo";
 //LIBRARIES
 

@@ -5,7 +5,7 @@ import {
   LoginAPIDTO,
   LoggedUserDTO,
   ForgetPasswordDTO,
-  ChangePasswordDTO,
+  ResetPasswordDTO,
   GetTokenDTO,
   ConfirmAccountDTO,
   EmailAvailabilityDTO,
@@ -70,9 +70,13 @@ export const LoginAPI = async (params: LoginAPIDTO.IParams) => {
 export const LoggedUser = async (params: LoggedUserDTO.IParams) => {
   try {
     const { token } = params;
-    const response = await api.post<LoggedUserDTO.IResponse>("/users/me", {
-      headers: { Authorization: token },
-    });
+    const response = await api.post<LoggedUserDTO.IResponse>(
+      "/users/me",
+      null,
+      {
+        headers: { Authorization: token },
+      }
+    );
 
     return {
       success: true,
@@ -95,10 +99,10 @@ export const LoggedUser = async (params: LoggedUserDTO.IParams) => {
   }
 };
 
-export const ForgetPassword = async (params: ForgetPasswordDTO.IParams) => {
+export const ForgotPassword = async (params: ForgetPasswordDTO.IParams) => {
   try {
     const response = await api.post<ForgetPasswordDTO.IResponse>(
-      "/users/forget-password",
+      "/users/forgot-password",
       params
     );
 
@@ -122,9 +126,9 @@ export const ForgetPassword = async (params: ForgetPasswordDTO.IParams) => {
   }
 };
 
-export const ChangePassword = async (params: ChangePasswordDTO.IParams) => {
+export const ResetPassword = async (params: ResetPasswordDTO.IParams) => {
   try {
-    const response = await api.post<ChangePasswordDTO.IResponse>(
+    const response = await api.post<ResetPasswordDTO.IResponse>(
       "/users/reset-password",
       params
     );
@@ -178,8 +182,11 @@ export const GetToken = async (params: GetTokenDTO.IParams) => {
 
 export const ConfirmAccount = async (params: ConfirmAccountDTO.IParams) => {
   try {
-    const { id, ...restParams } = params
-    const response = await api.post<ConfirmAccountDTO.IResponse>(`/users/confirm/${id}`, restParams )
+    const { id, ...rest } = params;
+    const response = await api.post<ConfirmAccountDTO.IResponse>(
+      `/users/confirm/${id}`,
+      rest
+    );
 
     return {
       success: true,

@@ -13,7 +13,7 @@ import * as S from "./styles";
 import { EyeFill, EyeSlashFill } from "@styled-icons/bootstrap";
 //UTILS
 import { FORM_MESSAGE } from "../../utils/enums/form-message";
-import { useUserContext } from "../../hooks/use-user-context";
+import { useUserContext } from "../../hooks/user/use-user-context";
 
 const loginFormSchema = z.object({
   email: z

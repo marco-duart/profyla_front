@@ -19,6 +19,9 @@ export namespace LoginAPIDTO {
   export interface IResponse {
     id: number;
     name: string;
+    cpf: string;
+    email: string;
+    newsletter: boolean;
     role: "ti" | "admin" | "user";
     photo_url: string;
     token: string;
@@ -32,6 +35,9 @@ export namespace LoggedUserDTO {
   export interface IResponse {
     id: number;
     name: string;
+    cpf: string;
+    email: string;
+    newsletter: boolean;
     role: "ti" | "admin" | "user";
     photo_url: string;
   }
@@ -47,9 +53,9 @@ export namespace ForgetPasswordDTO {
   }
 }
 
-export namespace ChangePasswordDTO {
+export namespace ResetPasswordDTO {
   export interface IParams {
-    id: string;
+    id: number;
     action_key: string;
     password: string;
   }
@@ -70,7 +76,7 @@ export namespace GetTokenDTO {
 
 export namespace ConfirmAccountDTO {
   export interface IParams {
-    id: string;
+    id: number;
     action_key: string;
   }
   export interface IResponse {

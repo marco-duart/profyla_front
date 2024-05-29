@@ -1,112 +1,136 @@
 //NATIVE
-import React, { useState } from "react";
-
+import { useState } from "react";
 //LIBRARIES
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 //COMPONENTS
-import BaseButton from "../shared/buttons/base-button";
-import { ChangePassword } from "../../services/register";
-
+import CrudButton from "../shared/buttons/crud-button";
 //STYLES
 import * as S from "./styles";
-import { EyeFill, EyeSlashFill } from "@styled-icons/bootstrap";
-
+import { EyeFill, EyeSlashFill } from "styled-icons/bootstrap";
 //UTILS
 import { FORM_MESSAGE } from "../../utils/enums/form-message";
-import * as CONSTANTS from "../../utils/constants/constants"
-import { EXCEPTION_MESSAGE } from "../../utils/enums/exception-message";
 import { SUCCESSFUL_MESSAGE } from "../../utils/enums/successful-message";
+import * as CONSTANTS from "../../utils/constants/constants";
 
-const changePasswordFormSchema = z
-  .object({
-    password: z
-      .string()
-      .min(8, FORM_MESSAGE.PASSWORD_SIZE)
-      .regex(CONSTANTS.PASSWORD_REGEX, FORM_MESSAGE.PASSWORD_RULE),
-    confirm: z.string().min(8, FORM_MESSAGE.CONFIRM_PASSWORD),
-  })
-  .refine((data) => data.password === data.confirm, {
-    message: FORM_MESSAGE.PASSWORD_CONFIRM_MATCH,
-    path: ["confirm"],
-  });
+const changePasswordFormSchema = z.object({
+  currentPassword: z.string().min(8, FORM_MESSAGE.PASSWORD_SIZE),
+  newPassword: z
+    .string()
+    .min(8, FORM_MESSAGE.PASSWORD_SIZE)
+    .regex(CONSTANTS.PASSWORD_REGEX, FORM_MESSAGE.PASSWORD_RULE),
+  confirm: z.string().min(8, FORM_MESSAGE.CONFIRM_PASSWORD),
+});
 
 type ChangePasswordFormData = z.infer<typeof changePasswordFormSchema>;
 
 type Props = {
-  id?: string
-  action_key?: string
-  handleMessage: (message: string) => void
-}
+  handleModal: (message?: string) => void;
+  handleChangePassword: (currentPassword: string, newPassword: string) => void;
+};
 
-const ChangePasswordForm: React.FC<Props> = ({id, action_key, handleMessage}) => {
-  const [passwordIsOpen, setPasswordIsOpen] = useState(false);
+const ChangePasswordForm: React.FC<Props> = ({
+  handleModal,
+  handleChangePassword,
+}) => {
+  const [currentPasswordIsOpen, setCurrentPasswordIsOpen] = useState(false);
+  const [newPasswordIsOpen, setNewPasswordIsOpen] = useState(false);
   const [confirmIsOpen, setConfirmIsOpen] = useState(false);
-
   const {
     register,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm<ChangePasswordFormData>({
     resolver: zodResolver(changePasswordFormSchema),
   });
 
-  const handleRegister = async (data: ChangePasswordFormData) => {
-    const { confirm, ...rest } = data;
-
-    if(!id || !action_key) {
-      handleMessage(EXCEPTION_MESSAGE.INVALID_PARAMS_FETCH)
-      return
-    }
-
-    const fetchData = { ...rest, id, action_key}
-    const result = await ChangePassword(fetchData);
-
-    if (result.success) {
-      handleMessage(SUCCESSFUL_MESSAGE.PASSWORD_CHANGED);
-    } else {
-      handleMessage(EXCEPTION_MESSAGE.CHANGE_PASSWORD_FAILED);
+  const handlePassword = (
+    name: "currentPassword" | "newPassword" | "confirm"
+  ) => {
+    switch (name) {
+      case "currentPassword":
+        setCurrentPasswordIsOpen(!currentPasswordIsOpen);
+        break;
+      case "newPassword":
+        setNewPasswordIsOpen(!newPasswordIsOpen);
+        break;
+      case "confirm":
+        setConfirmIsOpen(!confirmIsOpen);
+        break;
     }
   };
 
-  const handlePassword = (name: "password" | "confirm") => {
-    name === "password"
-      ? setPasswordIsOpen(!passwordIsOpen)
-      : setConfirmIsOpen(!confirmIsOpen);
+  const cleanFields = () => {
+    setValue("currentPassword", "");
+    setValue("newPassword", "");
+    setValue("confirm", "");
+  };
+
+  const handleSubmitForm = async (data: ChangePasswordFormData) => {
+    const { currentPassword, newPassword } = data;
+    handleChangePassword(currentPassword, newPassword);
+    cleanFields();
+    handleModal(SUCCESSFUL_MESSAGE.CHANGE_PASSWORD_REQUEST);
   };
 
   return (
-    <S.RegisterFormStyle onSubmit={handleSubmit(handleRegister)}>
-      <S.BaseTitleFormStyle>Nova senha</S.BaseTitleFormStyle>
-
+    <S.CrudFormStyle onSubmit={handleSubmit(handleSubmitForm)}>
+      <S.BaseSubtitleFormStyle>Senha atual:</S.BaseSubtitleFormStyle>
       <S.PasswordSectionFormStyle>
-        <label htmlFor="password" hidden>
+        <label htmlFor="currentPassword" hidden>
           Senha
         </label>
         <S.BaseInputFormStyle
-          {...register("password")}
-          type={passwordIsOpen ? "text" : "password"}
-          placeholder="Senha"
-          error={errors.password ? true : false}
+          {...register("currentPassword")}
+          type={currentPasswordIsOpen ? "text" : "password"}
+          placeholder="Digite sua senha..."
+          active={true}
+          error={errors.currentPassword ? true : false}
         />
-        <S.HandlePasswordDivStyle onClick={() => handlePassword("password")}>
-          {passwordIsOpen ? <EyeFill /> : <EyeSlashFill />}
+        <S.HandlePasswordDivStyle
+          onClick={() => handlePassword("currentPassword")}
+        >
+          {currentPasswordIsOpen ? <EyeFill /> : <EyeSlashFill />}
         </S.HandlePasswordDivStyle>
-        {errors.password && (
-          <S.BaseSmallFormStyle>{errors.password.message}</S.BaseSmallFormStyle>
+        {errors.currentPassword && (
+          <S.BaseSmallFormStyle>
+            {errors.currentPassword.message}
+          </S.BaseSmallFormStyle>
         )}
       </S.PasswordSectionFormStyle>
-
-      <S.PasswordSectionFormStyle className="first-section">
+      <S.BaseSubtitleFormStyle>Nova senha:</S.BaseSubtitleFormStyle>
+      <S.PasswordSectionFormStyle>
+        <label htmlFor="newPassword" hidden>
+          Senha
+        </label>
+        <S.BaseInputFormStyle
+          {...register("newPassword")}
+          type={newPasswordIsOpen ? "text" : "password"}
+          placeholder="Digite a nova senha..."
+          active={true}
+          error={errors.newPassword ? true : false}
+        />
+        <S.HandlePasswordDivStyle onClick={() => handlePassword("newPassword")}>
+          {newPasswordIsOpen ? <EyeFill /> : <EyeSlashFill />}
+        </S.HandlePasswordDivStyle>
+        {errors.newPassword && (
+          <S.BaseSmallFormStyle>
+            {errors.newPassword.message}
+          </S.BaseSmallFormStyle>
+        )}
+      </S.PasswordSectionFormStyle>
+      <S.BaseSubtitleFormStyle>Confirme a nova senha:</S.BaseSubtitleFormStyle>
+      <S.PasswordSectionFormStyle>
         <label htmlFor="confirm" hidden>
-          Confirmar Senha
+          Senha
         </label>
         <S.BaseInputFormStyle
           {...register("confirm")}
           type={confirmIsOpen ? "text" : "password"}
-          placeholder="Confirmar Senha"
+          placeholder="Confirme a nova senha..."
+          active={true}
           error={errors.confirm ? true : false}
         />
         <S.HandlePasswordDivStyle onClick={() => handlePassword("confirm")}>
@@ -116,9 +140,12 @@ const ChangePasswordForm: React.FC<Props> = ({id, action_key, handleMessage}) =>
           <S.BaseSmallFormStyle>{errors.confirm.message}</S.BaseSmallFormStyle>
         )}
       </S.PasswordSectionFormStyle>
-
-      <BaseButton type="submit">CADASTRAR-ME</BaseButton>
-    </S.RegisterFormStyle>
+      <S.CrudButtonsDiv>
+        <CrudButton type="submit" action="save">
+          Salvar
+        </CrudButton>
+      </S.CrudButtonsDiv>
+    </S.CrudFormStyle>
   );
 };
 

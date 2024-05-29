@@ -1,5 +1,5 @@
 type Document = {
-  id: string;
+  id: number;
   document_name: string;
   document_number: string;
   issue_date: Date;
@@ -11,7 +11,7 @@ type Document = {
 
 export namespace GetDocumentDTO {
   export interface IParams {
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {
@@ -51,7 +51,7 @@ export namespace UpdateDocumentDTO {
     document_number: string;
     issue_date: Date;
     location: string;
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {
@@ -62,7 +62,7 @@ export namespace UpdateDocumentDTO {
 
 export namespace DeleteDocumentDTO {
   export interface IParams {
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {

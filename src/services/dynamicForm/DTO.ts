@@ -26,7 +26,7 @@ type DynamicFormDetail = {
 
 export namespace GetDynamicFormDTO {
   export interface IParams {
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {
@@ -64,7 +64,7 @@ export namespace UpdateDynamicFormDTO {
     title?: string;
     description?: string;
     department?: string;
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {
@@ -75,7 +75,7 @@ export namespace UpdateDynamicFormDTO {
 
 export namespace DeleteDynamicFormDTO {
   export interface IParams {
-    id: string;
+    id: number;
     token: string;
   }
   export interface IResponse {
