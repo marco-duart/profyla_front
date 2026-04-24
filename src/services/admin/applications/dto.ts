@@ -1,0 +1,27 @@
+export namespace AdminApplication {
+  export type Item = {
+    id: number;
+    stage: string;
+    stage_id: number;
+    hiring_process_id: number;
+    job_name: string;
+    company_name: string;
+    candidate_name?: string;
+    candidate_email?: string;
+    job_location?: string;
+    modality?: string;
+    terminal_state: boolean;
+    status_tone: "positive" | "negative" | "neutral";
+    created_at?: string;
+    updated_at?: string;
+  };
+
+  export type MoveStageParams = {
+    application_id: number;
+    hiring_process_stage_id: number;
+    feedback_title?: string;
+    overall_assessment?: number;
+    specific_comment?: string;
+    improvements?: string;
+  };
+}

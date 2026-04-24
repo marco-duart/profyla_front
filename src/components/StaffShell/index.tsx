@@ -33,6 +33,13 @@ export function StaffShell() {
 
         <Nav>
           <NavItem to="/staff/home">Painel da equipe</NavItem>
+          <NavItem to="/staff/kanban" data-featured="true">Kanban do processo</NavItem>
+          <NavItem to="/staff/companies">Empresas</NavItem>
+          <NavItem to="/staff/jobs">Vagas</NavItem>
+          <NavItem to="/staff/hirings">Processos</NavItem>
+          <NavItem to="/staff/exams">Testes dinamicos</NavItem>
+          <NavItem to="/staff/interviews">Entrevistas</NavItem>
+          <NavItem to="/staff/account">Conta</NavItem>
         </Nav>
 
         <ActionButton type="button" onClick={handleSignOut}>

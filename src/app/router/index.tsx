@@ -10,6 +10,13 @@ import { CandidateAccountPage } from "../../pages/CandidateAccount";
 import { CandidateCurriculumPage } from "../../pages/CandidateCurriculum";
 import { CandidateOpportunitiesPage } from "../../pages/CandidateOpportunities";
 import { StaffHomePage } from "../../pages/StaffHome";
+import { StaffCompaniesPage } from "../../pages/StaffCompanies";
+import { StaffJobsPage } from "../../pages/StaffJobs";
+import { StaffExamsPage } from "../../pages/StaffExams";
+import { StaffInterviewsPage } from "../../pages/StaffInterviews";
+import { StaffHiringsPage } from "../../pages/StaffHirings";
+import { StaffKanbanPage } from "../../pages/StaffKanban";
+import { StaffAccountPage } from "../../pages/StaffAccount";
 import { useAuth } from "../../hooks/useAuth";
 
 type ProtectedRouteProps = {
@@ -79,6 +86,13 @@ export function AppRouter() {
           }
         >
           <Route path="home" element={<StaffHomePage />} />
+          <Route path="companies" element={<StaffCompaniesPage />} />
+          <Route path="jobs" element={<StaffJobsPage />} />
+          <Route path="hirings" element={<StaffHiringsPage />} />
+          <Route path="exams" element={<StaffExamsPage />} />
+          <Route path="interviews" element={<StaffInterviewsPage />} />
+          <Route path="kanban" element={<StaffKanbanPage />} />
+          <Route path="account" element={<StaffAccountPage />} />
           <Route index element={<Navigate to="home" replace />} />
         </Route>
         <Route path="*" element={<Navigate to={getDefaultRouteForRole(user?.role)} replace />} />

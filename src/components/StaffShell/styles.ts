@@ -15,13 +15,15 @@ export const Sidebar = styled("aside", {
   borderBottom: "1px solid $border",
   padding: "$5",
   display: "grid",
+  gridTemplateRows: "auto 1fr auto",
   gap: "$4",
   '@md': {
     borderRight: "1px solid $border",
     borderBottom: "none",
-    minHeight: "100dvh",
+    height: "100dvh",
     position: "sticky",
     top: 0,
+    overflowY: "auto",
   },
 });
 
@@ -50,6 +52,24 @@ export const NavItem = styled(NavLink, {
   borderRadius: "$md",
   padding: "$3 $4",
   border: "1px solid transparent",
+  transition: "all 160ms ease",
+  '&[data-featured=true]': {
+    background: "linear-gradient(135deg, $colors$brand 0%, $colors$brandStrong 100%)",
+    color: "white",
+    borderColor: "$brandStrong",
+    boxShadow: "0 10px 22px rgba(14, 132, 119, 0.35)",
+    fontWeight: "$bold",
+    '&:hover': {
+      filter: "brightness(1.03)",
+      transform: "translateY(-1px)",
+    },
+    '&.active': {
+      color: "white",
+      borderColor: "$warning",
+      boxShadow: "0 0 0 2px $colors$warningSubtle, 0 12px 24px rgba(14, 132, 119, 0.45)",
+      background: "linear-gradient(135deg, $colors$brandStrong 0%, $colors$brand 100%)",
+    },
+  },
   '&.active': {
     backgroundColor: "$brandSoft",
     borderColor: "$brand",
