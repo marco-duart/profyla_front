@@ -1,6 +1,6 @@
-import { config } from "../assets/styles/stitches.config";
+import { config } from "../theme/stitches";
 
-const { colors, fontSizes, fontWeights, shadows } = config.theme;
+const { colors, fontSizes, fontWeights, shadows, radii } = config.theme;
 
 export const toastConfig = {
   position: "top-center" as const,
@@ -8,10 +8,10 @@ export const toastConfig = {
   duration: 5000,
 
   style: {
-    background: colors.white,
-    color: colors.secondary,
-    border: `1px solid ${colors.mediumGray}`,
-    borderRadius: "10px",
+    background: colors.surface,
+    color: colors.text,
+    border: `1px solid ${colors.border}`,
+    borderRadius: radii.md,
     fontSize: fontSizes.medium,
     fontWeight: fontWeights.regular,
     padding: "14px 22px",
@@ -31,9 +31,9 @@ export const toastConfig = {
       secondary: colors.white,
     },
     style: {
-      background: `${colors.success}10`,
+      background: `${colors.successSubtle}`,
       border: `1px solid ${colors.success}`,
-      color: colors.successDark,
+      color: colors.success,
     },
   },
 
@@ -43,19 +43,19 @@ export const toastConfig = {
       secondary: colors.white,
     },
     style: {
-      background: `${colors.error}10`,
+      background: `${colors.errorSubtle}`,
       border: `1px solid ${colors.error}`,
-      color: colors.errorDark,
+      color: colors.error,
     },
   },
 
   warning: {
     iconTheme: {
       primary: colors.warningDark,
-      secondary: colors.white,
+      secondary: colors.surface,
     },
     style: {
-      background: `${colors.warning}10`,
+      background: `${colors.warningSubtle}`,
       border: `1px solid ${colors.warningDark}`,
       color: colors.warningDark,
     },

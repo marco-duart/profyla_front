@@ -1,0 +1,71 @@
+import { createStitches } from "@stitches/react";
+
+export const { styled, css, globalCss, keyframes, config } = createStitches({
+  theme: {
+    colors: {
+      canvas: "#f5efe5",
+      canvasAlt: "#efe4d6",
+      surface: "#fffaf3",
+      surfaceStrong: "#f0e3d0",
+      text: "#2f241b",
+      textMuted: "#6d5a47",
+      brand: "#0e8477",
+      brandStrong: "#055c53",
+      brandSoft: "#b9e1db",
+      accent: "#bf5e2e",
+      border: "#dbc9b3",
+      success: "#146c43",
+      successSubtle: "#dbf2e6",
+      error: "#9f1d36",
+      errorSubtle: "#f8d8e0",
+      warning: "#a55d00",
+      warningDark: "#8b4e00",
+      warningSubtle: "#fae7cf",
+    },
+    fonts: {
+      display: '"Sora", "Trebuchet MS", sans-serif',
+      body: '"Manrope", "Segoe UI", sans-serif',
+      mono: '"IBM Plex Mono", Menlo, monospace',
+    },
+    fontSizes: {
+      xs: "0.75rem",
+      sm: "0.875rem",
+      md: "1rem",
+      lg: "1.125rem",
+      xl: "1.5rem",
+      xxl: "2.1rem",
+    },
+    fontWeights: {
+      regular: "400",
+      medium: "500",
+      semibold: "600",
+      bold: "700",
+    },
+    space: {
+      1: "0.25rem",
+      2: "0.5rem",
+      3: "0.75rem",
+      4: "1rem",
+      5: "1.25rem",
+      6: "1.5rem",
+      8: "2rem",
+      10: "2.5rem",
+      12: "3rem",
+    },
+    radii: {
+      sm: "8px",
+      md: "14px",
+      lg: "22px",
+      pill: "999px",
+    },
+    shadows: {
+      soft: "0 8px 24px rgba(59, 30, 8, 0.09)",
+      medium: "0 14px 30px rgba(59, 30, 8, 0.16)",
+    },
+  },
+  media: {
+    sm: "(min-width: 540px)",
+    md: "(min-width: 768px)",
+    lg: "(min-width: 1080px)",
+  },
+});
