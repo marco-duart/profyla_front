@@ -1,9 +1,11 @@
-import { type FormEvent, useEffect, useState } from "react";
+import { type FormEvent, useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { listAdminApplications } from "../../services/admin/applications";
 import type { AdminApplication } from "../../services/admin/applications/dto";
 import { getHiring, listHirings } from "../../services/admin/hirings";
 import type { AdminHiring } from "../../services/admin/hirings/dto";
+import { listJobs } from "../../services/admin/jobs";
+import type { AdminJob } from "../../services/admin/jobs/dto";
 import {
   createInterview,
   deleteInterview,
@@ -56,26 +58,35 @@ export function StaffInterviewsPage() {
   const [items, setItems] = useState<AdminInterview.Item[]>([]);
   const [applications, setApplications] = useState<AdminApplication.Item[]>([]);
   const [hirings, setHirings] = useState<AdminHiring.Item[]>([]);
+  const [jobs, setJobs] = useState<AdminJob.Item[]>([]);
   const [stages, setStages] = useState<AdminHiring.Stage[]>([]);
   const [selectedHiringId, setSelectedHiringId] = useState<string>("");
   const [editingId, setEditingId] = useState<number | null>(null);
   const [form, setForm] = useState<FormState>(emptyForm);
 
   async function loadData() {
-    const [interviewsResponse, applicationsResponse, hiringsResponse] = await Promise.all([
+    const [interviewsResponse, applicationsResponse, hiringsResponse, jobsResponse] = await Promise.all([
       listInterviews(),
       listAdminApplications(),
       listHirings(),
+      listJobs(),
     ]);
 
     setItems(interviewsResponse);
     setApplications(applicationsResponse);
     setHirings(hiringsResponse);
+    setJobs(jobsResponse);
   }
 
   useEffect(() => {
     void loadData();
   }, []);
+
+  const jobTitleById = useMemo(() => {
+    const map = new Map<number, string>();
+    for (const job of jobs) map.set(job.id, job.title);
+    return map;
+  }, [jobs]);
 
   useEffect(() => {
     if (!selectedHiringId) {
@@ -169,7 +180,7 @@ export function StaffInterviewsPage() {
                 <option value="">Selecione</option>
                 {hirings.map((hiring) => (
                   <option key={hiring.id} value={hiring.id}>
-                    Processo #{hiring.id} - Vaga {hiring.job_posting_id}
+                    {jobTitleById.get(hiring.job_posting_id) ?? `Processo #${hiring.id}`}
                   </option>
                 ))}
               </Select>

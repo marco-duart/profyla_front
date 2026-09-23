@@ -78,6 +78,12 @@ export function StaffJobsPage() {
     return jobs.filter((job) => job.company_id === Number(selectedCompanyId));
   }, [jobs, selectedCompanyId]);
 
+  const companyNameById = useMemo(() => {
+    const map = new Map<number, string>();
+    for (const company of companies) map.set(company.id, company.company_name);
+    return map;
+  }, [companies]);
+
   function beginEdit(item: AdminJob.Item) {
     setEditingId(item.id);
     setForm({
@@ -293,7 +299,7 @@ export function StaffJobsPage() {
                   </Actions>
                 </ItemTop>
                 <Meta>
-                  Empresa ID: {job.company_id} · {job.modality || "Modalidade nao informada"} · {job.job_location || "Sem local"}
+                  {companyNameById.get(job.company_id) ?? "Empresa nao encontrada"} · {job.modality || "Modalidade nao informada"} · {job.job_location || "Sem local"}
                 </Meta>
                 {job.salary ? <Meta>Faixa: {job.salary}</Meta> : null}
               </Item>

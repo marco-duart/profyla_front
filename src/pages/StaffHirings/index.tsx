@@ -8,6 +8,8 @@ import { listJobs } from "../../services/admin/jobs";
 import type { AdminJob } from "../../services/admin/jobs/dto";
 import { listForms } from "../../services/admin/forms";
 import type { AdminForm } from "../../services/admin/forms/dto";
+import { listRecruiters } from "../../services/admin/recruiters";
+import type { AdminRecruiter } from "../../services/admin/recruiters/dto";
 import { getApiErrorMessage } from "../../utils/api-error";
 import {
   Actions,
@@ -51,22 +53,25 @@ export function StaffHiringsPage() {
   const [jobs, setJobs] = useState<AdminJob.Item[]>([]);
   const [forms, setForms] = useState<AdminForm.Item[]>([]);
   const [exams, setExams] = useState<AdminExam.Item[]>([]);
+  const [recruiters, setRecruiters] = useState<AdminRecruiter.Item[]>([]);
   const [form, setForm] = useState<FormState>(emptyForm);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [selectedJobId, setSelectedJobId] = useState<string>("");
 
   async function loadData() {
-    const [hiringsResponse, jobsResponse, formsResponse, examsResponse] = await Promise.all([
+    const [hiringsResponse, jobsResponse, formsResponse, examsResponse, recruitersResponse] = await Promise.all([
       listHirings(),
       listJobs(),
       listForms(),
       listExams(),
+      listRecruiters(),
     ]);
 
     setItems(hiringsResponse);
     setJobs(jobsResponse);
     setForms(formsResponse);
     setExams(examsResponse);
+    setRecruiters(recruitersResponse);
   }
 
   useEffect(() => {
@@ -80,6 +85,18 @@ export function StaffHiringsPage() {
 
     return items.filter((item) => item.job_posting_id === Number(selectedJobId));
   }, [items, selectedJobId]);
+
+  const jobTitleById = useMemo(() => {
+    const map = new Map<number, string>();
+    for (const job of jobs) map.set(job.id, job.title);
+    return map;
+  }, [jobs]);
+
+  const recruiterNameById = useMemo(() => {
+    const map = new Map<number, string>();
+    for (const recruiter of recruiters) map.set(recruiter.recruiter_id, recruiter.name);
+    return map;
+  }, [recruiters]);
 
   function beginEdit(item: AdminHiring.Item) {
     setEditingId(item.id);
@@ -260,7 +277,7 @@ export function StaffHiringsPage() {
             {filteredItems.map((item) => (
               <Item key={item.id}>
                 <ItemTop>
-                  <strong>Processo #{item.id}</strong>
+                  <strong>{jobTitleById.get(item.job_posting_id) ?? `Processo #${item.id}`}</strong>
                   <Actions>
                     <Button type="button" onClick={() => beginEdit(item)}>
                       Editar
@@ -271,7 +288,7 @@ export function StaffHiringsPage() {
                   </Actions>
                 </ItemTop>
                 <Meta>
-                  Vaga ID: {item.job_posting_id} · Status: {item.status} · Recrutador ID: {item.recruiter_id}
+                  Status: {item.status} · Recrutador: {recruiterNameById.get(item.recruiter_id) ?? `#${item.recruiter_id}`}
                 </Meta>
                 <Meta>
                   Inicio: {item.start_date?.slice(0, 10) || "-"} · Fim: {item.end_date?.slice(0, 10) || "-"}

@@ -13,6 +13,8 @@ export namespace AdminJob {
     start_date?: string;
     end_date?: string;
     image_url?: string;
+    created_at?: string;
+    updated_at?: string;
   };
 
   export type UpsertParams = {
