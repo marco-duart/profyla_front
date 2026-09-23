@@ -13,9 +13,14 @@ export const Lead = styled("p", {
 
 export const SearchInput = styled("input", {
   border: "1px solid $border",
-  borderRadius: "$pill",
+  borderRadius: "$sm",
   padding: "$3 $4",
   maxWidth: "420px",
+  backgroundColor: "$surface",
+  color: "$text",
+  '&::placeholder': {
+    color: "$textFaint",
+  },
 });
 
 export const Grid = styled("section", {
@@ -47,7 +52,7 @@ export const Button = styled("button", {
   border: "1px solid $brand",
   borderRadius: "$pill",
   backgroundColor: "$brand",
-  color: "$surface",
+  color: "$text",
   padding: "$2 $4",
   width: "fit-content",
 });

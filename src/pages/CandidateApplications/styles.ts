@@ -13,9 +13,14 @@ export const Lead = styled("p", {
 
 export const SearchInput = styled("input", {
   border: "1px solid $border",
-  borderRadius: "$pill",
+  borderRadius: "$sm",
   padding: "$3 $4",
   maxWidth: "420px",
+  backgroundColor: "$surface",
+  color: "$text",
+  '&::placeholder': {
+    color: "$textFaint",
+  },
 });
 
 export const List = styled("ul", {
@@ -58,7 +63,7 @@ export const StatusPill = styled("span", {
 });
 
 export const DetailLink = styled("a", {
-  color: "$brandStrong",
+  color: "$brand",
   textDecoration: "none",
   fontWeight: "$semibold",
 });

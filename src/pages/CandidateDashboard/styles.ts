@@ -96,7 +96,7 @@ export const ItemMeta = styled("div", {
 });
 
 export const InlineLink = styled("a", {
-  color: "$brandStrong",
+  color: "$brand",
   fontWeight: "$semibold",
   textDecoration: "none",
 });

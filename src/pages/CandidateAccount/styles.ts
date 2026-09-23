@@ -35,15 +35,16 @@ export const Field = styled("label", {
 
 export const Input = styled("input", {
   border: "1px solid $border",
-  borderRadius: "$md",
+  borderRadius: "$sm",
   padding: "$2 $3",
+  backgroundColor: "$canvasAlt",
 });
 
 export const Button = styled("button", {
   border: "1px solid $brand",
   borderRadius: "$pill",
   backgroundColor: "$brand",
-  color: "$surface",
+  color: "$text",
   padding: "$2 $4",
   width: "fit-content",
 });
