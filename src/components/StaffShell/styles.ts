@@ -1,17 +1,21 @@
 import { NavLink } from "react-router-dom";
 import { styled } from "../../theme/stitches";
 
+const GLASS_BLUR = "blur(20px) saturate(140%)";
+
 export const Layout = styled("div", {
   minHeight: "100dvh",
   display: "grid",
   gridTemplateColumns: "1fr",
   '@md': {
-    gridTemplateColumns: "260px 1fr",
+    gridTemplateColumns: "272px 1fr",
   },
 });
 
 export const Sidebar = styled("aside", {
   backgroundColor: "$surface",
+  backdropFilter: GLASS_BLUR,
+  WebkitBackdropFilter: GLASS_BLUR,
   borderBottom: "1px solid $border",
   padding: "$5",
   display: "grid",
@@ -28,17 +32,33 @@ export const Sidebar = styled("aside", {
 });
 
 export const Brand = styled("div", {
+  display: "flex",
+  alignItems: "center",
+  gap: "$3",
+});
+
+export const BrandIcon = styled("img", {
+  width: "36px",
+  height: "36px",
+  flexShrink: 0,
+});
+
+export const BrandText = styled("div", {
   display: "grid",
   gap: "$1",
 });
 
 export const BrandTitle = styled("h1", {
+  fontFamily: "$display",
+  fontWeight: "$bold",
   fontSize: "$lg",
+  letterSpacing: "-0.01em",
 });
 
 export const BrandSubtitle = styled("p", {
   fontSize: "$sm",
   color: "$textMuted",
+  fontFamily: "$mono",
 });
 
 export const Nav = styled("nav", {
@@ -46,45 +66,69 @@ export const Nav = styled("nav", {
   gap: "$2",
 });
 
+export const NavSectionLabel = styled("p", {
+  fontSize: "$xs",
+  fontWeight: "$bold",
+  color: "$textFaint",
+  textTransform: "uppercase",
+  letterSpacing: "0.08em",
+  marginTop: "$3",
+  '&:first-child': {
+    marginTop: 0,
+  },
+});
+
 export const NavItem = styled(NavLink, {
   textDecoration: "none",
   color: "$text",
-  borderRadius: "$md",
+  borderRadius: "$sm",
   padding: "$3 $4",
+  fontSize: "$sm",
+  fontWeight: "$medium",
   border: "1px solid transparent",
-  transition: "all 160ms ease",
+  transition: "background-color 140ms ease, border-color 140ms ease, color 140ms ease",
+  '&:hover': {
+    backgroundColor: "$surfaceStrong",
+  },
   '&[data-featured=true]': {
     background: "linear-gradient(135deg, $colors$brand 0%, $colors$brandStrong 100%)",
-    color: "white",
+    color: "$colors$text",
     borderColor: "$brandStrong",
-    boxShadow: "0 10px 22px rgba(14, 132, 119, 0.35)",
+    boxShadow: "$glowBrand",
     fontWeight: "$bold",
     '&:hover': {
-      filter: "brightness(1.03)",
-      transform: "translateY(-1px)",
+      filter: "brightness(1.06)",
     },
     '&.active': {
-      color: "white",
-      borderColor: "$warning",
-      boxShadow: "0 0 0 2px $colors$warningSubtle, 0 12px 24px rgba(14, 132, 119, 0.45)",
-      background: "linear-gradient(135deg, $colors$brandStrong 0%, $colors$brand 100%)",
+      color: "$colors$text",
+      borderColor: "$accent",
+      boxShadow: "$glowAccent",
     },
   },
   '&.active': {
     backgroundColor: "$brandSoft",
     borderColor: "$brand",
-    color: "$brandStrong",
-    fontWeight: "$semibold",
+    color: "$text",
+    fontWeight: "$bold",
   },
 });
 
 export const ActionButton = styled("button", {
   border: "1px solid $border",
-  borderRadius: "$pill",
+  borderRadius: "$sm",
   backgroundColor: "$surface",
+  backdropFilter: GLASS_BLUR,
+  WebkitBackdropFilter: GLASS_BLUR,
   color: "$text",
   padding: "$3 $4",
-  fontWeight: "$semibold",
+  fontWeight: "$bold",
+  fontSize: "$sm",
+  transition: "background-color 140ms ease, border-color 140ms ease",
+  '&:hover': {
+    borderColor: "$error",
+    color: "$error",
+    backgroundColor: "$errorSubtle",
+  },
 });
 
 export const Content = styled("main", {
