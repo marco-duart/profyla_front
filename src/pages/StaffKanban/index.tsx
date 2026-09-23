@@ -17,6 +17,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { listAdminApplications, moveApplicationStage } from "../../services/admin/applications";
 import type { AdminApplication } from "../../services/admin/applications/dto";
@@ -145,6 +146,11 @@ function SortableCard({ application, isActiveDragging, onQuickReject, disableRej
       <CardMeta>Vaga: {application.job_name}</CardMeta>
       <CardMeta>Empresa: {application.company_name}</CardMeta>
       <Actions>
+        {application.candidate_user_id ? (
+          <Link to={`/staff/candidates/${application.candidate_user_id}`} onPointerDown={(event) => event.stopPropagation()}>
+            <Button type="button">Ver perfil</Button>
+          </Link>
+        ) : null}
         <Button
           type="button"
           tone="danger"

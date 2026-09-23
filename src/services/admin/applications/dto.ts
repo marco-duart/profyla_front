@@ -6,6 +6,7 @@ export namespace AdminApplication {
     hiring_process_id: number;
     job_name: string;
     company_name: string;
+    candidate_user_id?: number;
     candidate_name?: string;
     candidate_email?: string;
     job_location?: string;
