@@ -1,17 +1,18 @@
 import { type FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import logo from "../../assets/logo-512.png";
 import { useAuth } from "../../hooks/useAuth";
 import {
   ErrorMessage,
   FieldGroup,
   Form,
   Input,
+  Logo,
   Page,
   Panel,
   SubmitButton,
   Subtitle,
-  Title,
 } from "./styles";
 
 export function LoginPage() {
@@ -52,7 +53,7 @@ export function LoginPage() {
   return (
     <Page>
       <Panel>
-        <Title>TalentFlow</Title>
+        <Logo src={logo} alt="TalentFlow" />
         <Subtitle>Entre com sua conta para acompanhar seu processo seletivo.</Subtitle>
 
         <Form onSubmit={handleSubmit}>

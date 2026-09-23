@@ -17,8 +17,11 @@ export const Panel = styled("section", {
   padding: "$8",
 });
 
-export const Title = styled("h1", {
-  marginBottom: "$2",
+export const Logo = styled("img", {
+  display: "block",
+  width: "200px",
+  height: "200px",
+  margin: "0 auto $4",
 });
 
 export const Subtitle = styled("p", {
@@ -61,7 +64,7 @@ export const SubmitButton = styled("button", {
   border: "none",
   borderRadius: "$pill",
   backgroundColor: "$brand",
-  color: "$surface",
+  color: "$text",
   fontWeight: "$bold",
   padding: "$4 $6",
   fontSize: "$md",
