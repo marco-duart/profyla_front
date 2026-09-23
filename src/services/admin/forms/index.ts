@@ -36,3 +36,15 @@ export async function createFormField(
 ): Promise<void> {
   await api.post(`/api/admins/form/${id}/field`, params);
 }
+
+export async function updateFormField(
+  formId: number,
+  fieldId: number,
+  params: Partial<{ question: string; response_type: AdminForm.Field["response_type"] }>,
+): Promise<void> {
+  await api.patch(`/api/admins/form/${formId}/field/${fieldId}`, params);
+}
+
+export async function deleteFormField(formId: number, fieldId: number): Promise<void> {
+  await api.delete(`/api/admins/form/${formId}/field/${fieldId}`);
+}

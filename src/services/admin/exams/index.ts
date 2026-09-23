@@ -26,3 +26,15 @@ export async function deleteExam(id: number): Promise<void> {
 export async function createExamQuestion(id: number, params: AdminExam.CreateQuestionParams): Promise<void> {
   await api.post(`/api/admins/exam/${id}/question`, params);
 }
+
+export async function updateExamQuestion(
+  examId: number,
+  questionId: number,
+  params: Partial<AdminExam.CreateQuestionParams>,
+): Promise<void> {
+  await api.patch(`/api/admins/exam/${examId}/question/${questionId}`, params);
+}
+
+export async function deleteExamQuestion(examId: number, questionId: number): Promise<void> {
+  await api.delete(`/api/admins/exam/${examId}/question/${questionId}`);
+}

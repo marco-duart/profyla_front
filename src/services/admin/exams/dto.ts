@@ -19,6 +19,9 @@ export namespace AdminExam {
     department: string;
     theme_url?: string;
     questions?: Question[];
+    questions_count?: number;
+    created_at?: string;
+    updated_at?: string;
   };
 
   export type UpsertParams = {

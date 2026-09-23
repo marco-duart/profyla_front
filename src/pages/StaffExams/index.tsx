@@ -4,9 +4,11 @@ import {
   createExam,
   createExamQuestion,
   deleteExam,
+  deleteExamQuestion,
   getExam,
   listExams,
   updateExam,
+  updateExamQuestion,
 } from "../../services/admin/exams";
 import type { AdminExam } from "../../services/admin/exams/dto";
 import { getApiErrorMessage } from "../../utils/api-error";
@@ -70,6 +72,7 @@ export function StaffExamsPage() {
   const [selectedExamId, setSelectedExamId] = useState<string>("");
   const [selectedExam, setSelectedExam] = useState<AdminExam.Item | null>(null);
   const [questionForm, setQuestionForm] = useState<QuestionFormState>(emptyQuestionForm);
+  const [editingQuestionId, setEditingQuestionId] = useState<number | null>(null);
 
   async function loadExams() {
     const response = await listExams();
@@ -81,6 +84,9 @@ export function StaffExamsPage() {
   }, []);
 
   useEffect(() => {
+    setEditingQuestionId(null);
+    setQuestionForm(emptyQuestionForm);
+
     if (!selectedExamId) {
       setSelectedExam(null);
       return;
@@ -146,6 +152,26 @@ export function StaffExamsPage() {
     }
   }
 
+  function beginEditQuestion(question: AdminExam.Question) {
+    const alternatives = question.alternatives;
+    const correctIndex = alternatives.findIndex((alternative) => alternative.correct);
+    setEditingQuestionId(question.id);
+    setQuestionForm({
+      text: question.text,
+      question_type: question.question_type,
+      alt1: alternatives[0]?.text ?? "",
+      alt2: alternatives[1]?.text ?? "",
+      alt3: alternatives[2]?.text ?? "",
+      alt4: alternatives[3]?.text ?? "",
+      correctIndex: String(Math.max(correctIndex, 0)),
+    });
+  }
+
+  function resetQuestionForm() {
+    setEditingQuestionId(null);
+    setQuestionForm(emptyQuestionForm);
+  }
+
   async function handleQuestionSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -169,17 +195,44 @@ export function StaffExamsPage() {
     }
 
     try {
-      await createExamQuestion(Number(selectedExamId), {
-        text: questionForm.text,
-        question_type: questionForm.question_type,
-        alternatives_attributes: alternatives,
-      });
-      toast.success("Questao adicionada.");
-      setQuestionForm(emptyQuestionForm);
+      if (editingQuestionId) {
+        await updateExamQuestion(Number(selectedExamId), editingQuestionId, {
+          text: questionForm.text,
+          question_type: questionForm.question_type,
+          alternatives_attributes: alternatives,
+        });
+        toast.success("Questao atualizada.");
+      } else {
+        await createExamQuestion(Number(selectedExamId), {
+          text: questionForm.text,
+          question_type: questionForm.question_type,
+          alternatives_attributes: alternatives,
+        });
+        toast.success("Questao adicionada.");
+      }
+      resetQuestionForm();
       const detail = await getExam(Number(selectedExamId));
       setSelectedExam(detail);
     } catch (error) {
-      toast.error(getApiErrorMessage(error, "Erro ao adicionar questao."));
+      toast.error(getApiErrorMessage(error, "Erro ao salvar questao."));
+    }
+  }
+
+  async function handleDeleteQuestion(questionId: number) {
+    if (!selectedExamId || !window.confirm("Confirma exclusao da questao?")) {
+      return;
+    }
+
+    try {
+      await deleteExamQuestion(Number(selectedExamId), questionId);
+      toast.success("Questao removida.");
+      if (editingQuestionId === questionId) {
+        resetQuestionForm();
+      }
+      const detail = await getExam(Number(selectedExamId));
+      setSelectedExam(detail);
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, "Erro ao remover questao."));
     }
   }
 
@@ -346,8 +399,13 @@ export function StaffExamsPage() {
 
               <Actions>
                 <Button tone="brand" type="submit">
-                  Adicionar questao
+                  {editingQuestionId ? "Salvar edicao" : "Adicionar questao"}
                 </Button>
+                {editingQuestionId ? (
+                  <Button type="button" tone="ghost" onClick={resetQuestionForm}>
+                    Cancelar edicao
+                  </Button>
+                ) : null}
               </Actions>
             </form>
 
@@ -355,7 +413,17 @@ export function StaffExamsPage() {
               <List>
                 {selectedExam.questions.map((question) => (
                   <Item key={question.id}>
-                    <strong>{question.text}</strong>
+                    <ItemTop>
+                      <strong>{question.text}</strong>
+                      <Actions>
+                        <Button type="button" onClick={() => beginEditQuestion(question)}>
+                          Editar
+                        </Button>
+                        <Button type="button" tone="danger" onClick={() => void handleDeleteQuestion(question.id)}>
+                          Excluir
+                        </Button>
+                      </Actions>
+                    </ItemTop>
                     {question.alternatives.map((alternative) => (
                       <Meta key={alternative.id}>
                         {alternative.correct ? "[Correta]" : "[Opcao]"} {alternative.text}
