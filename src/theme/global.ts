@@ -15,26 +15,44 @@ export const globalStyles = globalCss({
     color: "$text",
     backgroundColor: "$canvas",
     backgroundImage:
-      "radial-gradient(circle at 8% 8%, #f8dbbf 0%, transparent 40%), radial-gradient(circle at 88% 0%, #c4e4e0 0%, transparent 34%), linear-gradient(180deg, #f5efe5 0%, #efe4d6 100%)",
+      "radial-gradient(60% 50% at 12% 0%, rgba(106, 71, 245, 0.16) 0%, transparent 60%), radial-gradient(50% 45% at 92% 12%, rgba(255, 106, 77, 0.10) 0%, transparent 60%), linear-gradient(180deg, #0a0c12 0%, #0d0f17 100%)",
+    backgroundAttachment: "fixed",
     lineHeight: 1.5,
   },
   h1: {
     fontFamily: "$display",
     fontSize: "$xxl",
+    fontWeight: "$bold",
     lineHeight: 1.1,
     letterSpacing: "-0.02em",
   },
   h2: {
     fontFamily: "$display",
     fontSize: "$xl",
-    lineHeight: 1.1,
+    fontWeight: "$semibold",
+    lineHeight: 1.15,
     letterSpacing: "-0.01em",
   },
-  input: {
+  h3: {
+    fontFamily: "$display",
+    fontWeight: "$semibold",
+  },
+  "input, textarea, select": {
     fontFamily: "$body",
+    color: "$text",
+    backgroundColor: "transparent",
   },
   button: {
     fontFamily: "$body",
+    color: "$text",
     cursor: "pointer",
+  },
+  "::selection": {
+    backgroundColor: "$brandSoft",
+    color: "$text",
+  },
+  ":focus-visible": {
+    outline: "2px solid $colors$brand",
+    outlineOffset: "2px",
   },
 });

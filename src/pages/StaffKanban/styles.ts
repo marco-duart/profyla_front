@@ -1,9 +1,13 @@
 import { styled } from "../../theme/stitches";
 
+const GLASS_BLUR = "blur(20px) saturate(140%)";
+
 export const PrestigePanel = styled("section", {
   border: "1px solid $border",
   borderRadius: "$lg",
-  background: "linear-gradient(135deg, $surface 0%, $canvasAlt 100%)",
+  backgroundColor: "$surface",
+  backdropFilter: GLASS_BLUR,
+  WebkitBackdropFilter: GLASS_BLUR,
   boxShadow: "$medium",
   padding: "$5",
   display: "grid",
@@ -13,6 +17,7 @@ export const PrestigePanel = styled("section", {
 export const PrestigeTitle = styled("h3", {
   fontSize: "$xl",
   fontFamily: "$display",
+  fontWeight: "$bold",
   letterSpacing: "0.01em",
 });
 
@@ -36,15 +41,15 @@ export const BoardViewport = styled("div", {
   overflowY: "hidden",
   paddingBottom: "$2",
   '&::-webkit-scrollbar': {
-    height: "12px",
+    height: "10px",
   },
   '&::-webkit-scrollbar-track': {
     backgroundColor: "$canvasAlt",
-    borderRadius: "$pill",
+    borderRadius: "$sm",
   },
   '&::-webkit-scrollbar-thumb': {
     backgroundColor: "$brand",
-    borderRadius: "$pill",
+    borderRadius: "$sm",
     border: "2px solid $canvasAlt",
   },
 });
@@ -60,7 +65,9 @@ export const KanbanBoard = styled("div", {
 
 export const Column = styled("section", {
   border: "1px solid $border",
-  background: "linear-gradient(180deg, $surface 0%, $canvas 100%)",
+  backgroundColor: "$surface",
+  backdropFilter: GLASS_BLUR,
+  WebkitBackdropFilter: GLASS_BLUR,
   borderRadius: "$lg",
   padding: "$4",
   minHeight: "520px",
@@ -73,7 +80,7 @@ export const Column = styled("section", {
     isActiveColumn: {
       true: {
         borderColor: "$brand",
-        boxShadow: "0 0 0 2px $colors$brandSoft, 0 16px 30px rgba(14, 132, 119, 0.2)",
+        boxShadow: "$glowBrand",
       },
     },
   },
@@ -110,16 +117,18 @@ export const ColumnHeader = styled("div", {
 export const ColumnTitle = styled("h3", {
   fontSize: "$md",
   fontFamily: "$display",
+  fontWeight: "$semibold",
   textTransform: "uppercase",
   letterSpacing: "0.06em",
 });
 
 export const Badge = styled("span", {
-  borderRadius: "$pill",
+  borderRadius: "$sm",
   border: "1px solid $brand",
   backgroundColor: "$brandSoft",
-  color: "$brandStrong",
+  color: "$text",
   padding: "$1 $4",
+  fontFamily: "$mono",
   fontSize: "$xs",
   fontWeight: "$semibold",
 });
@@ -127,15 +136,15 @@ export const Badge = styled("span", {
 export const Card = styled("article", {
   border: "1px solid $border",
   borderRadius: "$md",
-  backgroundColor: "$surface",
+  backgroundColor: "$canvasAlt",
   padding: "$4",
   display: "grid",
   gap: "$2",
-  boxShadow: "0 10px 18px rgba(59, 30, 8, 0.08)",
+  boxShadow: "$soft",
   transition: "transform 140ms ease, box-shadow 140ms ease, border-color 140ms ease",
   '&:hover': {
     transform: "translateY(-2px)",
-    boxShadow: "0 12px 24px rgba(59, 30, 8, 0.12)",
+    borderColor: "$borderStrong",
   },
   variants: {
     dragging: {
@@ -147,7 +156,7 @@ export const Card = styled("article", {
       true: {
         opacity: 1,
         borderColor: "$brand",
-        boxShadow: "0 18px 32px rgba(14, 132, 119, 0.3)",
+        boxShadow: "$glowBrand",
       },
     },
   },
@@ -160,7 +169,7 @@ export const DropPreviewCard = styled("div", {
   backgroundColor: "$brandSoft",
   display: "grid",
   placeItems: "center",
-  color: "$brandStrong",
+  color: "$text",
   fontSize: "$sm",
   fontWeight: "$semibold",
   textAlign: "center",
@@ -189,7 +198,7 @@ export const ColumnFoot = styled("div", {
 export const Overlay = styled("div", {
   position: "fixed",
   inset: 0,
-  backgroundColor: "rgba(20, 16, 10, 0.45)",
+  backgroundColor: "rgba(3, 4, 8, 0.6)",
   display: "grid",
   placeItems: "center",
   zIndex: 40,
@@ -200,10 +209,13 @@ export const Modal = styled("div", {
   width: "min(680px, 96vw)",
   borderRadius: "$lg",
   border: "1px solid $border",
-  backgroundColor: "$surface",
+  backgroundColor: "$canvasAlt",
+  backdropFilter: GLASS_BLUR,
+  WebkitBackdropFilter: GLASS_BLUR,
   padding: "$5",
   display: "grid",
   gap: "$3",
+  boxShadow: "$medium",
 });
 
 export const DragHint = styled("p", {

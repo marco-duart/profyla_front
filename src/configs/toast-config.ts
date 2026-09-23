@@ -8,12 +8,12 @@ export const toastConfig = {
   duration: 5000,
 
   style: {
-    background: colors.surface,
+    background: colors.canvasAlt,
     color: colors.text,
     border: `1px solid ${colors.border}`,
     borderRadius: radii.md,
-    fontSize: fontSizes.medium,
-    fontWeight: fontWeights.regular,
+    fontSize: fontSizes.md,
+    fontWeight: fontWeights.medium,
     padding: "14px 22px",
     boxShadow: shadows.medium,
     minWidth: "320px",
@@ -28,7 +28,7 @@ export const toastConfig = {
   success: {
     iconTheme: {
       primary: colors.success,
-      secondary: colors.white,
+      secondary: colors.text,
     },
     style: {
       background: `${colors.successSubtle}`,
@@ -40,7 +40,7 @@ export const toastConfig = {
   error: {
     iconTheme: {
       primary: colors.error,
-      secondary: colors.white,
+      secondary: colors.text,
     },
     style: {
       background: `${colors.errorSubtle}`,
@@ -52,7 +52,7 @@ export const toastConfig = {
   warning: {
     iconTheme: {
       primary: colors.warningDark,
-      secondary: colors.surface,
+      secondary: colors.text,
     },
     style: {
       background: `${colors.warningSubtle}`,
@@ -61,27 +61,15 @@ export const toastConfig = {
     },
   },
 
-  info: {
-    iconTheme: {
-      primary: colors.infoDark,
-      secondary: colors.white,
-    },
-    style: {
-      background: `${colors.info}10`,
-      border: `1px solid ${colors.infoDark}`,
-      color: colors.infoDark,
-    },
-  },
-
   loading: {
     iconTheme: {
-      primary: colors.primary,
-      secondary: colors.white,
+      primary: colors.brand,
+      secondary: colors.text,
     },
     style: {
-      background: `${colors.primary}10`,
-      border: `1px solid ${colors.primary}`,
-      color: colors.primaryDark,
+      background: colors.brandSoft,
+      border: `1px solid ${colors.brand}`,
+      color: colors.brandStrong,
     },
   },
 };
