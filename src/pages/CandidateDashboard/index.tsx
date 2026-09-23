@@ -126,6 +126,16 @@ export function CandidateDashboardPage() {
             ))}
           </ItemList>
         </Card>
+
+        <Card>
+          <Title>Avaliações comportamentais</Title>
+          <Item>
+            <span>DISC e Eneagrama ajudam a equipe de recrutamento a te conhecer melhor.</span>
+            <Link to="/candidate/assessments">
+              <InlineLink>Ver avaliações</InlineLink>
+            </Link>
+          </Item>
+        </Card>
       </Grid>
     </>
   );
