@@ -1,6 +1,7 @@
-import { type FormEvent, type ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
+import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import {
   getApplicationDetail,
   respondInterview,
@@ -8,23 +9,170 @@ import {
   submitFormResponse,
   withdrawApplication,
 } from "../../services/applications";
-import type { ApplicationDetail, SubmitExamResponse, SubmitFormResponse } from "../../services/applications/dto";
+import type { ApplicationDetail } from "../../services/applications/dto";
 import { getStatusLabel } from "../../utils/candidate-status";
 import { getApiErrorMessage } from "../../utils/api-error";
 import {
-  ActionRow,
+  Actions,
+  Badge,
   Button,
-  Card,
-  DangerButton,
+  Field,
   Hero,
-  HeroMeta,
-  InfoGrid,
-  StatusPill,
-  TextArea,
-  ToolItem,
-  ToolList,
-  Wrapper,
-} from "./styles";
+  Item,
+  ItemTop,
+  List,
+  Meta,
+  OptionButton,
+  Page,
+  Panel,
+  PanelTitle,
+  StepBody,
+  StepCount,
+  StepFill,
+  StepNav,
+  StepQuestion,
+  StepTrack,
+  Textarea,
+  Input as KitInput,
+  WizardShell,
+} from "../CandidateKit/styles";
+
+function toneFor(status: ApplicationDetail.Response["status_tone"]): "positive" | "negative" | "neutral" {
+  return status;
+}
+
+function DynamicFormWizard({
+  fields,
+  onSubmit,
+}: {
+  fields: ApplicationDetail.FormField[];
+  onSubmit: (responses: Record<number, string>) => Promise<void>;
+}) {
+  const [stepIndex, setStepIndex] = useState(0);
+  const [responses, setResponses] = useState<Record<number, string>>({});
+  const [submitting, setSubmitting] = useState(false);
+
+  const field = fields[stepIndex];
+  const isLast = stepIndex === fields.length - 1;
+  const progressPct = Math.round(((stepIndex + 1) / fields.length) * 100);
+
+  function updateResponse(value: string) {
+    setResponses((current) => ({ ...current, [field.id]: value }));
+  }
+
+  async function handleNext() {
+    if (!isLast) {
+      setStepIndex((index) => index + 1);
+      return;
+    }
+    setSubmitting(true);
+    try {
+      await onSubmit(responses);
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  return (
+    <WizardShell>
+      <div>
+        <StepTrack>
+          <StepFill style={{ width: `${progressPct}%` }} />
+        </StepTrack>
+        <StepCount>Pergunta {stepIndex + 1} de {fields.length}</StepCount>
+      </div>
+      <StepBody>
+        <StepQuestion>{field.question}</StepQuestion>
+        {field.response_type === "text" ? (
+          <Textarea
+            value={responses[field.id] ?? ""}
+            onChange={(event) => updateResponse(event.target.value)}
+            placeholder="Sua resposta"
+          />
+        ) : (
+          <KitInput
+            type={field.response_type === "number" ? "number" : field.response_type === "date" ? "date" : "text"}
+            value={responses[field.id] ?? ""}
+            onChange={(event) => updateResponse(event.target.value)}
+            placeholder="Sua resposta"
+          />
+        )}
+      </StepBody>
+      <StepNav>
+        <Button type="button" tone="ghost" onClick={() => setStepIndex((index) => Math.max(0, index - 1))} disabled={stepIndex === 0}>
+          <FiArrowLeft /> Voltar
+        </Button>
+        <Button type="button" tone="brand" onClick={() => void handleNext()} disabled={submitting}>
+          {isLast ? (submitting ? "Enviando..." : "Enviar questionario") : <>Continuar <FiArrowRight /></>}
+        </Button>
+      </StepNav>
+    </WizardShell>
+  );
+}
+
+function DynamicExamWizard({
+  questions,
+  onSubmit,
+}: {
+  questions: ApplicationDetail.ExamQuestion[];
+  onSubmit: (selections: Record<number, number>) => Promise<void>;
+}) {
+  const [stepIndex, setStepIndex] = useState(0);
+  const [selections, setSelections] = useState<Record<number, number>>({});
+  const [submitting, setSubmitting] = useState(false);
+
+  const question = questions[stepIndex];
+  const isLast = stepIndex === questions.length - 1;
+  const selected = selections[question.id];
+  const progressPct = Math.round(((stepIndex + 1) / questions.length) * 100);
+
+  async function handleNext() {
+    if (!isLast) {
+      setStepIndex((index) => index + 1);
+      return;
+    }
+    setSubmitting(true);
+    try {
+      await onSubmit(selections);
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  return (
+    <WizardShell>
+      <div>
+        <StepTrack>
+          <StepFill style={{ width: `${progressPct}%` }} />
+        </StepTrack>
+        <StepCount>Questao {stepIndex + 1} de {questions.length}</StepCount>
+      </div>
+      <StepBody>
+        <StepQuestion>{question.text}</StepQuestion>
+        <Actions style={{ flexDirection: "column", alignItems: "stretch" }}>
+          {question.alternatives.map((alternative) => (
+            <OptionButton
+              key={alternative.id}
+              type="button"
+              selected={selected === alternative.id}
+              onClick={() => setSelections((current) => ({ ...current, [question.id]: alternative.id }))}
+            >
+              {alternative.text}
+            </OptionButton>
+          ))}
+        </Actions>
+      </StepBody>
+      <StepNav>
+        <Button type="button" tone="ghost" onClick={() => setStepIndex((index) => Math.max(0, index - 1))} disabled={stepIndex === 0}>
+          <FiArrowLeft /> Voltar
+        </Button>
+        <Button type="button" tone="brand" onClick={() => void handleNext()} disabled={selected === undefined || submitting}>
+          {isLast ? (submitting ? "Enviando..." : "Enviar prova") : <>Continuar <FiArrowRight /></>}
+        </Button>
+      </StepNav>
+    </WizardShell>
+  );
+}
 
 export function CandidateApplicationDetailPage() {
   const params = useParams();
@@ -32,12 +180,6 @@ export function CandidateApplicationDetailPage() {
 
   const [data, setData] = useState<ApplicationDetail.Response | null>(null);
   const [withdrawFeedback, setWithdrawFeedback] = useState<string>("");
-
-  // Form state: field_id → response string
-  const [formResponses, setFormResponses] = useState<Record<number, string>>({});
-
-  // Exam state: question_id → alternative_id
-  const [examSelections, setExamSelections] = useState<Record<number, number>>({});
 
   async function loadData() {
     const response = await getApplicationDetail(applicationId);
@@ -62,20 +204,17 @@ export function CandidateApplicationDetailPage() {
     try {
       await respondInterview(applicationId, { interview_id: interviewId, response });
       toast.success("Resposta de entrevista enviada.");
+      await loadData();
     } catch (error) {
       toast.error(getApiErrorMessage(error, "Erro ao responder entrevista."));
     }
   }
 
-  async function handleFormSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  async function handleFormSubmit(responses: Record<number, string>) {
+    if (!data?.tools.dynamic_form_id) return;
 
-    if (!data?.tools.dynamic_form_id) {
-      return;
-    }
-
-    const attributes: SubmitFormResponse.Params["form_responses_attributes"] = {};
-    for (const [fieldId, response] of Object.entries(formResponses)) {
+    const attributes: Record<number, { response: string }> = {};
+    for (const [fieldId, response] of Object.entries(responses)) {
       attributes[Number(fieldId)] = { response };
     }
 
@@ -92,19 +231,13 @@ export function CandidateApplicationDetailPage() {
     }
   }
 
-  async function handleExamSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  async function handleExamSubmit(selections: Record<number, number>) {
+    if (!data?.tools.dynamic_exam_id) return;
 
-    if (!data?.tools.dynamic_exam_id) {
-      return;
-    }
-
-    const attributes: SubmitExamResponse.Params["exam_responses_attributes"] = Object.entries(examSelections).map(
-      ([questionId, alternativeId]) => ({
-        question_id: Number(questionId),
-        alternative_id: alternativeId,
-      }),
-    );
+    const attributes = Object.entries(selections).map(([questionId, alternativeId]) => ({
+      question_id: Number(questionId),
+      alternative_id: alternativeId,
+    }));
 
     try {
       await submitExamResponse({
@@ -119,173 +252,108 @@ export function CandidateApplicationDetailPage() {
     }
   }
 
-  function handleFormFieldChange(fieldId: number, event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
-    setFormResponses((current) => ({ ...current, [fieldId]: event.target.value }));
-  }
-
-  function handleExamSelection(questionId: number, alternativeId: number) {
-    setExamSelections((current) => ({ ...current, [questionId]: alternativeId }));
-  }
-
   if (!data) {
     return <p>Carregando candidatura...</p>;
   }
 
   return (
-    <Wrapper>
+    <Page>
       <Hero>
         <h2>{data.job_name}</h2>
-        <HeroMeta>
-          <span>{data.company_name}</span>
-          {data.modality ? <span>{data.modality}</span> : null}
-          {data.job_location ? <span>{data.job_location}</span> : null}
-          {data.salary ? <span>{data.salary}</span> : null}
-        </HeroMeta>
-        <StatusPill>{getStatusLabel(data.stage)}</StatusPill>
+        <Meta>
+          {data.company_name}
+          {data.modality ? ` - ${data.modality}` : ""}
+          {data.job_location ? ` - ${data.job_location}` : ""}
+          {data.salary ? ` - ${data.salary}` : ""}
+        </Meta>
+        <Badge tone={toneFor(data.status_tone)}>{getStatusLabel(data.stage)}</Badge>
         <p>{data.summary}</p>
       </Hero>
 
-      {/* ── Questionário dinâmico ── */}
       {data.tools.has_form ? (
-        <Card>
+        <Panel>
           {data.tools.form_already_submitted ? (
             <>
-              <h3>Questionario respondido</h3>
-              <p>Voce ja enviou suas respostas para o questionario desta etapa. O RH foi notificado.</p>
+              <PanelTitle>Questionario respondido</PanelTitle>
+              <Meta>Voce ja enviou suas respostas para o questionario desta etapa. O RH foi notificado.</Meta>
             </>
           ) : (
-            <>
-              <h3>Questionario da etapa</h3>
-              <p>Responda as perguntas abaixo. Voce so pode enviar uma vez.</p>
-              <form onSubmit={handleFormSubmit}>
-                <ToolList>
-                  {data.tools.form_fields.map((field) => (
-                    <ToolItem key={field.id}>
-                      <p>{field.question}</p>
-                      {field.response_type === "text" ? (
-                        <TextArea
-                          placeholder="Sua resposta"
-                          value={formResponses[field.id] ?? ""}
-                          onChange={(event) => handleFormFieldChange(field.id, event)}
-                        />
-                      ) : (
-                        <input
-                          type={field.response_type === "number" ? "number" : field.response_type === "date" ? "date" : "text"}
-                          placeholder="Sua resposta"
-                          value={formResponses[field.id] ?? ""}
-                          onChange={(event) => handleFormFieldChange(field.id, event)}
-                          style={{ padding: "8px", border: "1px solid var(--border)", borderRadius: "6px", width: "100%" }}
-                        />
-                      )}
-                    </ToolItem>
-                  ))}
-                </ToolList>
-                <Button type="submit" style={{ marginTop: "12px" }}>Enviar questionario</Button>
-              </form>
-            </>
+            <DynamicFormWizard fields={data.tools.form_fields} onSubmit={handleFormSubmit} />
           )}
-        </Card>
+        </Panel>
       ) : null}
 
-      {/* ── Prova técnica ── */}
       {data.tools.has_exam ? (
-        <Card>
+        <Panel>
           {data.tools.exam_already_submitted ? (
             <>
-              <h3>Prova enviada</h3>
-              <p>Voce ja enviou suas respostas para a prova tecnica desta etapa. O RH foi notificado.</p>
+              <PanelTitle>Prova enviada</PanelTitle>
+              <Meta>Voce ja enviou suas respostas para a prova tecnica desta etapa. O RH foi notificado.</Meta>
             </>
           ) : (
-            <>
-              <h3>Prova tecnica</h3>
-              <p>Escolha uma alternativa para cada questao e envie ao final.</p>
-              <form onSubmit={handleExamSubmit}>
-                <ToolList>
-                  {data.tools.exam_questions.map((question, index) => (
-                    <ToolItem key={question.id}>
-                      <p><strong>{index + 1}.</strong> {question.text}</p>
-                      <ActionRow style={{ flexDirection: "column", alignItems: "flex-start" }}>
-                        {question.alternatives.map((alt) => (
-                          <label key={alt.id} style={{ display: "flex", gap: "8px", alignItems: "center", cursor: "pointer" }}>
-                            <input
-                              type="radio"
-                              name={`question-${question.id}`}
-                              value={alt.id}
-                              checked={examSelections[question.id] === alt.id}
-                              onChange={() => handleExamSelection(question.id, alt.id)}
-                            />
-                            {alt.text}
-                          </label>
-                        ))}
-                      </ActionRow>
-                    </ToolItem>
-                  ))}
-                </ToolList>
-                <Button type="submit" style={{ marginTop: "12px" }}>Enviar prova</Button>
-              </form>
-            </>
+            <DynamicExamWizard questions={data.tools.exam_questions} onSubmit={handleExamSubmit} />
           )}
-        </Card>
+        </Panel>
       ) : null}
 
-      {/* ── Entrevistas ── */}
-      <InfoGrid>
-        <Card>
-          <h3>Entrevistas</h3>
-          {data.interviews.length === 0 ? (
-            <p>Sem entrevistas agendadas no momento.</p>
-          ) : (
-            <ToolList>
-              {data.interviews.map((interview) => (
-                <ToolItem key={interview.id}>
-                  <p><strong>{interview.interview_type}</strong>{interview.interviewer ? ` com ${interview.interviewer}` : ""}</p>
-                  <p>{interview.date_time}</p>
-                  {interview.interview_method ? <p>Formato: {interview.interview_method}</p> : null}
-                  {interview.resume ? <p>{interview.resume}</p> : null}
-                  {data.tools.can_respond_interview ? (
-                    <ActionRow>
-                      <Button type="button" onClick={() => handleInterviewResponse(interview.id, "accept")}>Aceitar</Button>
-                      <Button type="button" onClick={() => handleInterviewResponse(interview.id, "reschedule")}>Reagendar</Button>
-                      <Button type="button" onClick={() => handleInterviewResponse(interview.id, "decline")}>Recusar</Button>
-                    </ActionRow>
-                  ) : null}
-                </ToolItem>
-              ))}
-            </ToolList>
-          )}
-        </Card>
+      <Panel>
+        <PanelTitle>Entrevistas</PanelTitle>
+        {data.interviews.length === 0 ? (
+          <Meta>Sem entrevistas agendadas no momento.</Meta>
+        ) : (
+          <List>
+            {data.interviews.map((interview) => (
+              <Item key={interview.id}>
+                <ItemTop>
+                  <strong>{interview.interview_type}{interview.interviewer ? ` com ${interview.interviewer}` : ""}</strong>
+                </ItemTop>
+                <Meta>{interview.date_time}{interview.interview_method ? ` - ${interview.interview_method}` : ""}</Meta>
+                {interview.resume ? <Meta>{interview.resume}</Meta> : null}
+                {data.tools.can_respond_interview ? (
+                  <Actions>
+                    <Button type="button" tone="brand" onClick={() => void handleInterviewResponse(interview.id, "accept")}>Aceitar</Button>
+                    <Button type="button" tone="ghost" onClick={() => void handleInterviewResponse(interview.id, "reschedule")}>Reagendar</Button>
+                    <Button type="button" tone="danger" onClick={() => void handleInterviewResponse(interview.id, "decline")}>Recusar</Button>
+                  </Actions>
+                ) : null}
+              </Item>
+            ))}
+          </List>
+        )}
+      </Panel>
 
-        {data.feedback ? (
-          <Card>
-            <h3>Ultimo feedback registrado</h3>
-            <p>{data.feedback.specific_comment ?? "Sem comentario adicional."}</p>
-            {data.feedback.improvements ? <p>Pontos de melhoria: {data.feedback.improvements}</p> : null}
-          </Card>
-        ) : null}
-      </InfoGrid>
+      {data.feedback ? (
+        <Panel>
+          <PanelTitle>Ultimo feedback registrado</PanelTitle>
+          <Meta>{data.feedback.specific_comment ?? "Sem comentario adicional."}</Meta>
+          {data.feedback.improvements ? <Meta>Pontos de melhoria: {data.feedback.improvements}</Meta> : null}
+        </Panel>
+      ) : null}
 
-      {/* ── Desistência ── */}
       {data.tools.can_withdraw ? (
-        <Card>
-          <h3>Desistir da vaga</h3>
-          <p>Se decidir encerrar sua participacao, o RH sera avisado automaticamente.</p>
-          <TextArea
-            value={withdrawFeedback}
-            onChange={(event) => setWithdrawFeedback(event.target.value)}
-            placeholder="Conte para o RH o motivo da desistencia"
-          />
-          <DangerButton type="button" onClick={handleWithdraw}>Confirmar desistencia</DangerButton>
-        </Card>
+        <Panel>
+          <PanelTitle>Desistir da vaga</PanelTitle>
+          <Meta>Se decidir encerrar sua participacao, o RH sera avisado automaticamente.</Meta>
+          <Field>
+            Motivo (opcional)
+            <Textarea
+              value={withdrawFeedback}
+              onChange={(event) => setWithdrawFeedback(event.target.value)}
+              placeholder="Conte para o RH o motivo da desistencia"
+            />
+          </Field>
+          <Actions>
+            <Button type="button" tone="danger" onClick={() => void handleWithdraw()}>Confirmar desistencia</Button>
+          </Actions>
+        </Panel>
       ) : null}
 
-      {/* ── Estado terminal sem ações ── */}
       {data.terminal_state && !data.feedback ? (
-        <Card>
-          <h3>Processo encerrado</h3>
-          <p>Esta candidatura foi encerrada. Nenhuma acao adicional esta disponivel.</p>
-        </Card>
+        <Panel>
+          <PanelTitle>Processo encerrado</PanelTitle>
+          <Meta>Esta candidatura foi encerrada. Nenhuma acao adicional esta disponivel.</Meta>
+        </Panel>
       ) : null}
-    </Wrapper>
+    </Page>
   );
 }
-
