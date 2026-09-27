@@ -14,6 +14,7 @@ import {
 } from "../../services/admin/interviews";
 import type { AdminInterview } from "../../services/admin/interviews/dto";
 import { getApiErrorMessage } from "../../utils/api-error";
+import { ConfirmDialog } from "../StaffKit/ConfirmDialog";
 import {
   Actions,
   Button,
@@ -62,6 +63,8 @@ export function StaffInterviewsPage() {
   const [stages, setStages] = useState<AdminHiring.Stage[]>([]);
   const [selectedHiringId, setSelectedHiringId] = useState<string>("");
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
+  const [deleting, setDeleting] = useState(false);
   const [form, setForm] = useState<FormState>(emptyForm);
 
   async function loadData() {
@@ -149,17 +152,19 @@ export function StaffInterviewsPage() {
     }
   }
 
-  async function handleDelete(id: number) {
-    if (!window.confirm("Confirma exclusao da entrevista?")) {
-      return;
-    }
+  async function confirmDelete() {
+    if (!pendingDeleteId) return;
+    setDeleting(true);
 
     try {
-      await deleteInterview(id);
+      await deleteInterview(pendingDeleteId);
       toast.success("Entrevista removida.");
+      setPendingDeleteId(null);
       await loadData();
     } catch (error) {
       toast.error(getApiErrorMessage(error, "Erro ao remover entrevista."));
+    } finally {
+      setDeleting(false);
     }
   }
 
@@ -290,7 +295,7 @@ export function StaffInterviewsPage() {
                     <Button type="button" onClick={() => beginEdit(item)}>
                       Editar
                     </Button>
-                    <Button type="button" tone="danger" onClick={() => void handleDelete(item.id)}>
+                    <Button type="button" tone="danger" onClick={() => setPendingDeleteId(item.id)}>
                       Excluir
                     </Button>
                   </Actions>
@@ -306,6 +311,15 @@ export function StaffInterviewsPage() {
           </List>
         )}
       </Panel>
+
+      <ConfirmDialog
+        open={pendingDeleteId !== null}
+        title="Excluir entrevista"
+        message="Essa acao nao pode ser desfeita."
+        confirming={deleting}
+        onConfirm={() => void confirmDelete()}
+        onCancel={() => setPendingDeleteId(null)}
+      />
     </Page>
   );
 }

@@ -4,6 +4,7 @@ import { createRecruiter } from "../../services/admin/recruiters";
 import { banUser, listUsers, unbanUser } from "../../services/admin/users";
 import type { AdminUser } from "../../services/admin/users/dto";
 import { getApiErrorMessage } from "../../utils/api-error";
+import { ConfirmDialog } from "../StaffKit/ConfirmDialog";
 import {
   Actions,
   Badge,
@@ -27,8 +28,11 @@ export function StaffUsersPage() {
   const [users, setUsers] = useState<AdminUser.Item[]>([]);
   const [promotingId, setPromotingId] = useState<number | null>(null);
   const [position, setPosition] = useState("");
-  const [banningId, setBanningId] = useState<number | null>(null);
+  const [banningUser, setBanningUser] = useState<AdminUser.Item | null>(null);
   const [banReason, setBanReason] = useState("");
+  const [banning, setBanning] = useState(false);
+  const [unbanningUser, setUnbanningUser] = useState<AdminUser.Item | null>(null);
+  const [unbanning, setUnbanning] = useState(false);
 
   async function loadUsers() {
     const response = await listUsers();
@@ -54,28 +58,36 @@ export function StaffUsersPage() {
     }
   }
 
-  async function handleBan(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!banningId || !banReason) return;
+  async function confirmBan() {
+    if (!banningUser || !banReason) return;
+    setBanning(true);
 
     try {
-      await banUser(banningId, banReason);
+      await banUser(banningUser.id, banReason);
       toast.success("Usuario banido.");
-      setBanningId(null);
+      setBanningUser(null);
       setBanReason("");
       await loadUsers();
     } catch (error) {
       toast.error(getApiErrorMessage(error, "Erro ao banir usuario."));
+    } finally {
+      setBanning(false);
     }
   }
 
-  async function handleUnban(userId: number) {
+  async function confirmUnban() {
+    if (!unbanningUser) return;
+    setUnbanning(true);
+
     try {
-      await unbanUser(userId);
+      await unbanUser(unbanningUser.id);
       toast.success("Usuario desbanido.");
+      setUnbanningUser(null);
       await loadUsers();
     } catch (error) {
       toast.error(getApiErrorMessage(error, "Erro ao desbanir usuario."));
+    } finally {
+      setUnbanning(false);
     }
   }
 
@@ -106,16 +118,16 @@ export function StaffUsersPage() {
 
                 <Actions>
                   {!item.is_recruiter && item.role !== "user" ? (
-                    <Button type="button" onClick={() => { setPromotingId(item.id); setBanningId(null); }}>
+                    <Button type="button" onClick={() => setPromotingId(item.id)}>
                       Promover a recrutador
                     </Button>
                   ) : null}
                   {item.banned ? (
-                    <Button type="button" tone="brand" onClick={() => void handleUnban(item.id)}>
+                    <Button type="button" tone="brand" onClick={() => setUnbanningUser(item)}>
                       Desbanir
                     </Button>
                   ) : (
-                    <Button type="button" tone="danger" onClick={() => { setBanningId(item.id); setPromotingId(null); }}>
+                    <Button type="button" tone="danger" onClick={() => { setBanningUser(item); setBanReason(""); }}>
                       Banir
                     </Button>
                   )}
@@ -135,26 +147,38 @@ export function StaffUsersPage() {
                     </Actions>
                   </form>
                 ) : null}
-
-                {banningId === item.id ? (
-                  <form onSubmit={handleBan}>
-                    <Grid>
-                      <Field>
-                        Motivo do banimento
-                        <Input required value={banReason} onChange={(event) => setBanReason(event.target.value)} />
-                      </Field>
-                    </Grid>
-                    <Actions>
-                      <Button type="submit" tone="danger">Confirmar banimento</Button>
-                      <Button type="button" tone="ghost" onClick={() => setBanningId(null)}>Cancelar</Button>
-                    </Actions>
-                  </form>
-                ) : null}
               </Item>
             ))}
           </List>
         )}
       </Panel>
+
+      <ConfirmDialog
+        open={banningUser !== null}
+        title={`Banir ${banningUser?.name ?? "usuario"}`}
+        message="Uma conta banida perde acesso imediatamente. Informe o motivo do banimento."
+        confirmLabel="Banir"
+        confirming={banning}
+        confirmDisabled={!banReason.trim()}
+        onConfirm={() => void confirmBan()}
+        onCancel={() => setBanningUser(null)}
+      >
+        <Field>
+          Motivo do banimento
+          <Input required value={banReason} onChange={(event) => setBanReason(event.target.value)} />
+        </Field>
+      </ConfirmDialog>
+
+      <ConfirmDialog
+        open={unbanningUser !== null}
+        title={`Desbanir ${unbanningUser?.name ?? "usuario"}`}
+        message="Essa conta voltara a ter acesso normal ao sistema."
+        confirmLabel="Desbanir"
+        tone="brand"
+        confirming={unbanning}
+        onConfirm={() => void confirmUnban()}
+        onCancel={() => setUnbanningUser(null)}
+      />
     </Page>
   );
 }

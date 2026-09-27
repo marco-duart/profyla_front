@@ -12,6 +12,7 @@ import {
 import type { ApplicationDetail } from "../../services/applications/dto";
 import { getStatusLabel } from "../../utils/candidate-status";
 import { getApiErrorMessage } from "../../utils/api-error";
+import { ConfirmDialog } from "../CandidateKit/ConfirmDialog";
 import {
   Actions,
   Badge,
@@ -180,6 +181,10 @@ export function CandidateApplicationDetailPage() {
 
   const [data, setData] = useState<ApplicationDetail.Response | null>(null);
   const [withdrawFeedback, setWithdrawFeedback] = useState<string>("");
+  const [confirmingWithdraw, setConfirmingWithdraw] = useState(false);
+  const [withdrawing, setWithdrawing] = useState(false);
+  const [pendingDeclineInterviewId, setPendingDeclineInterviewId] = useState<number | null>(null);
+  const [declining, setDeclining] = useState(false);
 
   async function loadData() {
     const response = await getApplicationDetail(applicationId);
@@ -190,23 +195,42 @@ export function CandidateApplicationDetailPage() {
     void loadData();
   }, [applicationId]);
 
-  async function handleWithdraw() {
+  async function confirmWithdraw() {
+    setWithdrawing(true);
     try {
       await withdrawApplication(applicationId, { feedback: withdrawFeedback });
       toast.success("Desistencia registrada.");
+      setConfirmingWithdraw(false);
       await loadData();
     } catch (error) {
       toast.error(getApiErrorMessage(error, "Erro ao desistir da vaga."));
+    } finally {
+      setWithdrawing(false);
     }
   }
 
-  async function handleInterviewResponse(interviewId: number, response: "accept" | "reschedule" | "decline") {
+  async function handleInterviewResponse(interviewId: number, response: "accept" | "reschedule") {
     try {
       await respondInterview(applicationId, { interview_id: interviewId, response });
       toast.success("Resposta de entrevista enviada.");
       await loadData();
     } catch (error) {
       toast.error(getApiErrorMessage(error, "Erro ao responder entrevista."));
+    }
+  }
+
+  async function confirmDeclineInterview() {
+    if (!pendingDeclineInterviewId) return;
+    setDeclining(true);
+    try {
+      await respondInterview(applicationId, { interview_id: pendingDeclineInterviewId, response: "decline" });
+      toast.success("Resposta de entrevista enviada.");
+      setPendingDeclineInterviewId(null);
+      await loadData();
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, "Erro ao responder entrevista."));
+    } finally {
+      setDeclining(false);
     }
   }
 
@@ -313,7 +337,7 @@ export function CandidateApplicationDetailPage() {
                   <Actions>
                     <Button type="button" tone="brand" onClick={() => void handleInterviewResponse(interview.id, "accept")}>Aceitar</Button>
                     <Button type="button" tone="ghost" onClick={() => void handleInterviewResponse(interview.id, "reschedule")}>Reagendar</Button>
-                    <Button type="button" tone="danger" onClick={() => void handleInterviewResponse(interview.id, "decline")}>Recusar</Button>
+                    <Button type="button" tone="danger" onClick={() => setPendingDeclineInterviewId(interview.id)}>Recusar</Button>
                   </Actions>
                 ) : null}
               </Item>
@@ -343,7 +367,7 @@ export function CandidateApplicationDetailPage() {
             />
           </Field>
           <Actions>
-            <Button type="button" tone="danger" onClick={() => void handleWithdraw()}>Confirmar desistencia</Button>
+            <Button type="button" tone="danger" onClick={() => setConfirmingWithdraw(true)}>Confirmar desistencia</Button>
           </Actions>
         </Panel>
       ) : null}
@@ -354,6 +378,26 @@ export function CandidateApplicationDetailPage() {
           <Meta>Esta candidatura foi encerrada. Nenhuma acao adicional esta disponivel.</Meta>
         </Panel>
       ) : null}
+
+      <ConfirmDialog
+        open={confirmingWithdraw}
+        title="Desistir da vaga"
+        message="Essa acao nao pode ser desfeita. Voce perdera sua posicao neste processo seletivo."
+        confirmLabel="Desistir"
+        confirming={withdrawing}
+        onConfirm={() => void confirmWithdraw()}
+        onCancel={() => setConfirmingWithdraw(false)}
+      />
+
+      <ConfirmDialog
+        open={pendingDeclineInterviewId !== null}
+        title="Recusar entrevista"
+        message="Essa acao nao pode ser desfeita."
+        confirmLabel="Recusar"
+        confirming={declining}
+        onConfirm={() => void confirmDeclineInterview()}
+        onCancel={() => setPendingDeclineInterviewId(null)}
+      />
     </Page>
   );
 }

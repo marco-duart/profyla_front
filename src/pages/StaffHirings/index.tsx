@@ -11,6 +11,7 @@ import type { AdminForm } from "../../services/admin/forms/dto";
 import { listRecruiters } from "../../services/admin/recruiters";
 import type { AdminRecruiter } from "../../services/admin/recruiters/dto";
 import { getApiErrorMessage } from "../../utils/api-error";
+import { ConfirmDialog } from "../StaffKit/ConfirmDialog";
 import {
   Actions,
   Button,
@@ -56,6 +57,8 @@ export function StaffHiringsPage() {
   const [recruiters, setRecruiters] = useState<AdminRecruiter.Item[]>([]);
   const [form, setForm] = useState<FormState>(emptyForm);
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
+  const [deleting, setDeleting] = useState(false);
   const [selectedJobId, setSelectedJobId] = useState<string>("");
 
   async function loadData() {
@@ -144,17 +147,19 @@ export function StaffHiringsPage() {
     }
   }
 
-  async function handleDelete(id: number) {
-    if (!window.confirm("Confirma exclusao do processo seletivo?")) {
-      return;
-    }
+  async function confirmDelete() {
+    if (!pendingDeleteId) return;
+    setDeleting(true);
 
     try {
-      await deleteHiring(id);
+      await deleteHiring(pendingDeleteId);
       toast.success("Processo removido.");
+      setPendingDeleteId(null);
       await loadData();
     } catch (error) {
       toast.error(getApiErrorMessage(error, "Erro ao remover processo."));
+    } finally {
+      setDeleting(false);
     }
   }
 
@@ -282,7 +287,7 @@ export function StaffHiringsPage() {
                     <Button type="button" onClick={() => beginEdit(item)}>
                       Editar
                     </Button>
-                    <Button type="button" tone="danger" onClick={() => void handleDelete(item.id)}>
+                    <Button type="button" tone="danger" onClick={() => setPendingDeleteId(item.id)}>
                       Excluir
                     </Button>
                   </Actions>
@@ -298,6 +303,15 @@ export function StaffHiringsPage() {
           </List>
         )}
       </Panel>
+
+      <ConfirmDialog
+        open={pendingDeleteId !== null}
+        title="Excluir processo seletivo"
+        message="Essa acao nao pode ser desfeita. Candidaturas e etapas vinculadas podem ser afetadas."
+        confirming={deleting}
+        onConfirm={() => void confirmDelete()}
+        onCancel={() => setPendingDeleteId(null)}
+      />
     </Page>
   );
 }

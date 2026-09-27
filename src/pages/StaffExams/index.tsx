@@ -12,6 +12,7 @@ import {
 } from "../../services/admin/exams";
 import type { AdminExam } from "../../services/admin/exams/dto";
 import { getApiErrorMessage } from "../../utils/api-error";
+import { ConfirmDialog } from "../StaffKit/ConfirmDialog";
 import {
   Actions,
   Button,
@@ -68,6 +69,10 @@ export function StaffExamsPage() {
   const [items, setItems] = useState<AdminExam.Item[]>([]);
   const [form, setForm] = useState<ExamFormState>(emptyExamForm);
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [pendingDeleteExamId, setPendingDeleteExamId] = useState<number | null>(null);
+  const [deletingExam, setDeletingExam] = useState(false);
+  const [pendingDeleteQuestionId, setPendingDeleteQuestionId] = useState<number | null>(null);
+  const [deletingQuestion, setDeletingQuestion] = useState(false);
 
   const [selectedExamId, setSelectedExamId] = useState<string>("");
   const [selectedExam, setSelectedExam] = useState<AdminExam.Item | null>(null);
@@ -137,18 +142,20 @@ export function StaffExamsPage() {
     }
   }
 
-  async function handleDelete(id: number) {
-    if (!window.confirm("Confirma exclusao da prova?")) {
-      return;
-    }
+  async function confirmDeleteExam() {
+    if (!pendingDeleteExamId) return;
+    setDeletingExam(true);
 
     try {
-      await deleteExam(id);
+      await deleteExam(pendingDeleteExamId);
       toast.success("Prova removida.");
-      setSelectedExamId((current) => (current === String(id) ? "" : current));
+      setSelectedExamId((current) => (current === String(pendingDeleteExamId) ? "" : current));
+      setPendingDeleteExamId(null);
       await loadExams();
     } catch (error) {
       toast.error(getApiErrorMessage(error, "Erro ao remover prova."));
+    } finally {
+      setDeletingExam(false);
     }
   }
 
@@ -218,21 +225,23 @@ export function StaffExamsPage() {
     }
   }
 
-  async function handleDeleteQuestion(questionId: number) {
-    if (!selectedExamId || !window.confirm("Confirma exclusao da questao?")) {
-      return;
-    }
+  async function confirmDeleteQuestion() {
+    if (!selectedExamId || !pendingDeleteQuestionId) return;
+    setDeletingQuestion(true);
 
     try {
-      await deleteExamQuestion(Number(selectedExamId), questionId);
+      await deleteExamQuestion(Number(selectedExamId), pendingDeleteQuestionId);
       toast.success("Questao removida.");
-      if (editingQuestionId === questionId) {
+      if (editingQuestionId === pendingDeleteQuestionId) {
         resetQuestionForm();
       }
+      setPendingDeleteQuestionId(null);
       const detail = await getExam(Number(selectedExamId));
       setSelectedExam(detail);
     } catch (error) {
       toast.error(getApiErrorMessage(error, "Erro ao remover questao."));
+    } finally {
+      setDeletingQuestion(false);
     }
   }
 
@@ -304,7 +313,7 @@ export function StaffExamsPage() {
                     <Button type="button" onClick={() => beginEdit(item)}>
                       Editar
                     </Button>
-                    <Button type="button" tone="danger" onClick={() => void handleDelete(item.id)}>
+                    <Button type="button" tone="danger" onClick={() => setPendingDeleteExamId(item.id)}>
                       Excluir
                     </Button>
                   </Actions>
@@ -419,7 +428,7 @@ export function StaffExamsPage() {
                         <Button type="button" onClick={() => beginEditQuestion(question)}>
                           Editar
                         </Button>
-                        <Button type="button" tone="danger" onClick={() => void handleDeleteQuestion(question.id)}>
+                        <Button type="button" tone="danger" onClick={() => setPendingDeleteQuestionId(question.id)}>
                           Excluir
                         </Button>
                       </Actions>
@@ -440,6 +449,24 @@ export function StaffExamsPage() {
           <Empty>Selecione uma prova para visualizar e editar o modelo.</Empty>
         )}
       </Panel>
+
+      <ConfirmDialog
+        open={pendingDeleteExamId !== null}
+        title="Excluir prova"
+        message="Essa acao nao pode ser desfeita. As perguntas dessa prova tambem serao removidas."
+        confirming={deletingExam}
+        onConfirm={() => void confirmDeleteExam()}
+        onCancel={() => setPendingDeleteExamId(null)}
+      />
+
+      <ConfirmDialog
+        open={pendingDeleteQuestionId !== null}
+        title="Excluir questao"
+        message="Essa acao nao pode ser desfeita."
+        confirming={deletingQuestion}
+        onConfirm={() => void confirmDeleteQuestion()}
+        onCancel={() => setPendingDeleteQuestionId(null)}
+      />
     </Page>
   );
 }

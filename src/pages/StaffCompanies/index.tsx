@@ -8,6 +8,7 @@ import {
 } from "../../services/admin/companies";
 import type { AdminCompany } from "../../services/admin/companies/dto";
 import { getApiErrorMessage } from "../../utils/api-error";
+import { ConfirmDialog } from "../StaffKit/ConfirmDialog";
 import {
   Actions,
   Button,
@@ -47,6 +48,8 @@ export function StaffCompaniesPage() {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [form, setForm] = useState<CompanyFormState>(emptyForm);
   const [loading, setLoading] = useState<boolean>(false);
+  const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   async function loadCompanies() {
     const response = await listCompanies();
@@ -103,17 +106,19 @@ export function StaffCompaniesPage() {
     }
   }
 
-  async function handleDelete(id: number) {
-    if (!window.confirm("Confirma exclusao da empresa?")) {
-      return;
-    }
+  async function confirmDelete() {
+    if (!pendingDeleteId) return;
+    setDeleting(true);
 
     try {
-      await deleteCompany(id);
+      await deleteCompany(pendingDeleteId);
       toast.success("Empresa removida.");
+      setPendingDeleteId(null);
       await loadCompanies();
     } catch (error) {
       toast.error(getApiErrorMessage(error, "Erro ao remover empresa."));
+    } finally {
+      setDeleting(false);
     }
   }
 
@@ -198,7 +203,7 @@ export function StaffCompaniesPage() {
                     <Button type="button" onClick={() => beginEdit(item)}>
                       Editar
                     </Button>
-                    <Button type="button" tone="danger" onClick={() => void handleDelete(item.id)}>
+                    <Button type="button" tone="danger" onClick={() => setPendingDeleteId(item.id)}>
                       Excluir
                     </Button>
                   </Actions>
@@ -212,6 +217,15 @@ export function StaffCompaniesPage() {
           </List>
         )}
       </Panel>
+
+      <ConfirmDialog
+        open={pendingDeleteId !== null}
+        title="Excluir empresa"
+        message="Essa acao nao pode ser desfeita. As vagas e processos vinculados podem ser afetados."
+        confirming={deleting}
+        onConfirm={() => void confirmDelete()}
+        onCancel={() => setPendingDeleteId(null)}
+      />
     </Page>
   );
 }

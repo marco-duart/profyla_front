@@ -5,6 +5,7 @@ import type { AdminCompany } from "../../services/admin/companies/dto";
 import { createJob, deleteJob, listJobs, updateJob } from "../../services/admin/jobs";
 import type { AdminJob } from "../../services/admin/jobs/dto";
 import { getApiErrorMessage } from "../../utils/api-error";
+import { ConfirmDialog } from "../StaffKit/ConfirmDialog";
 import {
   Actions,
   Button,
@@ -59,6 +60,8 @@ export function StaffJobsPage() {
   const [selectedCompanyId, setSelectedCompanyId] = useState<string>("");
   const [form, setForm] = useState<JobFormState>(emptyForm);
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   async function loadData() {
     const [jobsResponse, companiesResponse] = await Promise.all([listJobs(), listCompanies()]);
@@ -139,17 +142,19 @@ export function StaffJobsPage() {
     }
   }
 
-  async function handleDelete(id: number) {
-    if (!window.confirm("Confirma exclusao da vaga?")) {
-      return;
-    }
+  async function confirmDelete() {
+    if (!pendingDeleteId) return;
+    setDeleting(true);
 
     try {
-      await deleteJob(id);
+      await deleteJob(pendingDeleteId);
       toast.success("Vaga removida.");
+      setPendingDeleteId(null);
       await loadData();
     } catch (error) {
       toast.error(getApiErrorMessage(error, "Erro ao excluir vaga."));
+    } finally {
+      setDeleting(false);
     }
   }
 
@@ -293,7 +298,7 @@ export function StaffJobsPage() {
                     <Button type="button" onClick={() => beginEdit(job)}>
                       Editar
                     </Button>
-                    <Button type="button" tone="danger" onClick={() => void handleDelete(job.id)}>
+                    <Button type="button" tone="danger" onClick={() => setPendingDeleteId(job.id)}>
                       Excluir
                     </Button>
                   </Actions>
@@ -307,6 +312,15 @@ export function StaffJobsPage() {
           </List>
         )}
       </Panel>
+
+      <ConfirmDialog
+        open={pendingDeleteId !== null}
+        title="Excluir vaga"
+        message="Essa acao nao pode ser desfeita. Processos seletivos vinculados podem ser afetados."
+        confirming={deleting}
+        onConfirm={() => void confirmDelete()}
+        onCancel={() => setPendingDeleteId(null)}
+      />
     </Page>
   );
 }

@@ -28,6 +28,7 @@ import type { AdminHiring } from "../../services/admin/hirings/dto";
 import { listJobs } from "../../services/admin/jobs";
 import type { AdminJob } from "../../services/admin/jobs/dto";
 import { getApiErrorMessage } from "../../utils/api-error";
+import { ConfirmDialog } from "../StaffKit/ConfirmDialog";
 import {
   Actions,
   Button,
@@ -227,6 +228,8 @@ export function StaffKanbanPage() {
   const [selectedHiringId, setSelectedHiringId] = useState<string>("");
 
   const [moveDraft, setMoveDraft] = useState<MoveDraft | null>(null);
+  const [pendingQuickReject, setPendingQuickReject] = useState<AdminApplication.Item | null>(null);
+  const [rejecting, setRejecting] = useState(false);
   const [feedbackForm, setFeedbackForm] = useState<FeedbackForm>(emptyFeedback);
   const [search, setSearch] = useState<string>("");
 
@@ -393,21 +396,29 @@ export function StaffKanbanPage() {
       return;
     }
 
-    if (!window.confirm(`Reprovar ${application.candidate_name || "candidato"} agora?`)) {
-      return;
-    }
+    setPendingQuickReject(application);
+  }
 
+  async function confirmQuickReject() {
+    if (!pendingQuickReject) return;
+    const rejectStage = stages.find((stage) => stage.title === "REPROVADO");
+    if (!rejectStage) return;
+
+    setRejecting(true);
     try {
       await moveApplicationStage({
-        application_id: application.id,
+        application_id: pendingQuickReject.id,
         hiring_process_stage_id: rejectStage.id,
         feedback_title: "Resultado do processo",
         specific_comment: "Candidatura encerrada nesta etapa.",
       });
       toast.success("Candidato reprovado.");
+      setPendingQuickReject(null);
       await refreshBoard();
     } catch (error) {
       toast.error(getApiErrorMessage(error, "Erro ao reprovar candidato."));
+    } finally {
+      setRejecting(false);
     }
   }
 
@@ -652,6 +663,15 @@ export function StaffKanbanPage() {
           </Modal>
         </Overlay>
       ) : null}
+
+      <ConfirmDialog
+        open={pendingQuickReject !== null}
+        title="Reprovar candidato"
+        message={`Reprovar ${pendingQuickReject?.candidate_name || "candidato"} agora? Essa acao move a candidatura para a etapa REPROVADO.`}
+        confirming={rejecting}
+        onConfirm={() => void confirmQuickReject()}
+        onCancel={() => setPendingQuickReject(null)}
+      />
     </Page>
   );
 }

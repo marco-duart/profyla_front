@@ -12,6 +12,7 @@ import {
 } from "../../services/admin/forms";
 import type { AdminForm } from "../../services/admin/forms/dto";
 import { getApiErrorMessage } from "../../utils/api-error";
+import { ConfirmDialog } from "../StaffKit/ConfirmDialog";
 import {
   Actions,
   Button,
@@ -49,6 +50,10 @@ export function StaffFormsPage() {
   const [selectedForm, setSelectedForm] = useState<AdminForm.Item | null>(null);
   const [fieldForm, setFieldForm] = useState<FieldFormState>(emptyFieldForm);
   const [editingFieldId, setEditingFieldId] = useState<number | null>(null);
+  const [pendingDeleteFormId, setPendingDeleteFormId] = useState<number | null>(null);
+  const [deletingForm, setDeletingForm] = useState(false);
+  const [pendingDeleteFieldId, setPendingDeleteFieldId] = useState<number | null>(null);
+  const [deletingField, setDeletingField] = useState(false);
 
   async function loadForms() {
     const response = await listForms();
@@ -108,16 +113,20 @@ export function StaffFormsPage() {
     }
   }
 
-  async function handleDelete(id: number) {
-    if (!window.confirm("Confirma exclusao do formulario?")) return;
+  async function confirmDeleteForm() {
+    if (!pendingDeleteFormId) return;
+    setDeletingForm(true);
 
     try {
-      await deleteForm(id);
+      await deleteForm(pendingDeleteFormId);
       toast.success("Formulario removido.");
-      setSelectedFormId((current) => (current === String(id) ? "" : current));
+      setSelectedFormId((current) => (current === String(pendingDeleteFormId) ? "" : current));
+      setPendingDeleteFormId(null);
       await loadForms();
     } catch (error) {
       toast.error(getApiErrorMessage(error, "Erro ao remover formulario."));
+    } finally {
+      setDeletingForm(false);
     }
   }
 
@@ -159,16 +168,20 @@ export function StaffFormsPage() {
     }
   }
 
-  async function handleDeleteField(fieldId: number) {
-    if (!selectedFormId || !window.confirm("Confirma exclusao da pergunta?")) return;
+  async function confirmDeleteField() {
+    if (!selectedFormId || !pendingDeleteFieldId) return;
+    setDeletingField(true);
 
     try {
-      await deleteFormField(Number(selectedFormId), fieldId);
+      await deleteFormField(Number(selectedFormId), pendingDeleteFieldId);
       toast.success("Pergunta removida.");
-      if (editingFieldId === fieldId) resetFieldForm();
+      if (editingFieldId === pendingDeleteFieldId) resetFieldForm();
+      setPendingDeleteFieldId(null);
       await refreshSelectedForm();
     } catch (error) {
       toast.error(getApiErrorMessage(error, "Erro ao remover pergunta."));
+    } finally {
+      setDeletingField(false);
     }
   }
 
@@ -218,7 +231,7 @@ export function StaffFormsPage() {
                   <Actions>
                     <Button type="button" onClick={() => setSelectedFormId(String(item.id))}>Visualizar</Button>
                     <Button type="button" onClick={() => beginEdit(item)}>Editar</Button>
-                    <Button type="button" tone="danger" onClick={() => void handleDelete(item.id)}>Excluir</Button>
+                    <Button type="button" tone="danger" onClick={() => setPendingDeleteFormId(item.id)}>Excluir</Button>
                   </Actions>
                 </ItemTop>
                 <Meta>{item.department}</Meta>
@@ -282,7 +295,7 @@ export function StaffFormsPage() {
                       <strong>{field.question}</strong>
                       <Actions>
                         <Button type="button" onClick={() => beginEditField(field)}>Editar</Button>
-                        <Button type="button" tone="danger" onClick={() => void handleDeleteField(field.id)}>Excluir</Button>
+                        <Button type="button" tone="danger" onClick={() => setPendingDeleteFieldId(field.id)}>Excluir</Button>
                       </Actions>
                     </ItemTop>
                     <Meta>Tipo: {field.response_type}</Meta>
@@ -297,6 +310,24 @@ export function StaffFormsPage() {
           <Empty>Selecione um formulario para visualizar e editar o modelo.</Empty>
         )}
       </Panel>
+
+      <ConfirmDialog
+        open={pendingDeleteFormId !== null}
+        title="Excluir formulario"
+        message="Essa acao nao pode ser desfeita. As perguntas desse formulario tambem serao removidas."
+        confirming={deletingForm}
+        onConfirm={() => void confirmDeleteForm()}
+        onCancel={() => setPendingDeleteFormId(null)}
+      />
+
+      <ConfirmDialog
+        open={pendingDeleteFieldId !== null}
+        title="Excluir pergunta"
+        message="Essa acao nao pode ser desfeita."
+        confirming={deletingField}
+        onConfirm={() => void confirmDeleteField()}
+        onCancel={() => setPendingDeleteFieldId(null)}
+      />
     </Page>
   );
 }

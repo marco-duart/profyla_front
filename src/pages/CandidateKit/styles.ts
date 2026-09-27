@@ -182,6 +182,29 @@ export const Empty = styled("p", {
   padding: "$4",
 });
 
+export const Overlay = styled("div", {
+  position: "fixed",
+  inset: 0,
+  backgroundColor: "rgba(3, 4, 8, 0.6)",
+  display: "grid",
+  placeItems: "center",
+  zIndex: 40,
+  padding: "$5",
+});
+
+export const Modal = styled("div", {
+  width: "min(480px, 96vw)",
+  borderRadius: "$lg",
+  border: "1px solid $border",
+  backgroundColor: "$canvasAlt",
+  backdropFilter: GLASS_BLUR,
+  WebkitBackdropFilter: GLASS_BLUR,
+  padding: "$5",
+  display: "grid",
+  gap: "$3",
+  boxShadow: "$medium",
+});
+
 // --- Microform primitives (one question per screen — see Fase 2) ---
 
 export const StepTrack = styled("div", {

@@ -24,6 +24,7 @@ import type { CatalogItem, CurriculumData } from "../../services/curriculum/dto"
 import { createCandidateProfile } from "../../services/candidates";
 import type { CreateCandidateProfile } from "../../services/candidates/dto";
 import { getApiErrorMessage } from "../../utils/api-error";
+import { ConfirmDialog } from "../CandidateKit/ConfirmDialog";
 import {
   Actions,
   Badge,
@@ -334,6 +335,32 @@ export function CandidateCurriculumPage() {
   const [professionalForm, setProfessionalForm] = useState<LinkForm>(emptyLink);
   const [socialForm, setSocialForm] = useState<LinkForm>(emptyLink);
   const [documentForm, setDocumentForm] = useState<DocumentForm>(emptyDocument);
+
+  type PendingDeletion = { kind: "academic" | "employment" | "professional" | "social" | "document"; id: number } | null;
+  const [pendingDeletion, setPendingDeletion] = useState<PendingDeletion>(null);
+  const [deletingItem, setDeletingItem] = useState(false);
+
+  async function confirmDeletion() {
+    if (!pendingDeletion) return;
+    setDeletingItem(true);
+
+    try {
+      const { kind, id } = pendingDeletion;
+      if (kind === "academic") await deleteAcademic(id);
+      else if (kind === "employment") await deleteEmployment(id);
+      else if (kind === "professional") await deleteProfessionalLink(id);
+      else if (kind === "social") await deleteSocialLink(id);
+      else await deleteDocument(id);
+
+      toast.success("Removido.");
+      setPendingDeletion(null);
+      await loadCurriculum();
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, "Erro ao remover."));
+    } finally {
+      setDeletingItem(false);
+    }
+  }
 
   const [skillsCatalog, setSkillsCatalog] = useState<CatalogItem.Item[]>([]);
   const [knowledgesCatalog, setKnowledgesCatalog] = useState<CatalogItem.Item[]>([]);
@@ -740,7 +767,7 @@ export function CandidateCurriculumPage() {
                 <Item key={item.id}>
                   <ItemTop>
                     <strong>{item.title}</strong>
-                    <Button type="button" tone="danger" onClick={() => void deleteAcademic(item.id).then(loadCurriculum)}>Remover</Button>
+                    <Button type="button" tone="danger" onClick={() => setPendingDeletion({ kind: "academic", id: item.id })}>Remover</Button>
                   </ItemTop>
                   <Meta>{item.institution}{item.degree ? ` - ${item.degree}` : ""}{item.start_date ? ` - ${item.start_date}` : ""}</Meta>
                 </Item>
@@ -785,7 +812,7 @@ export function CandidateCurriculumPage() {
                 <Item key={item.id}>
                   <ItemTop>
                     <strong>{item.position}</strong>
-                    <Button type="button" tone="danger" onClick={() => void deleteEmployment(item.id).then(loadCurriculum)}>Remover</Button>
+                    <Button type="button" tone="danger" onClick={() => setPendingDeletion({ kind: "employment", id: item.id })}>Remover</Button>
                   </ItemTop>
                   <Meta>{item.company_name}{item.start_date ? ` - ${item.start_date}` : ""}{item.salary ? ` - R$ ${item.salary}` : ""}</Meta>
                 </Item>
@@ -831,7 +858,7 @@ export function CandidateCurriculumPage() {
                 <Item key={`prof-${item.id}`}>
                   <ItemTop>
                     <strong>{item.title}</strong>
-                    <Button type="button" tone="danger" onClick={() => void deleteProfessionalLink(item.id).then(loadCurriculum)}>Remover</Button>
+                    <Button type="button" tone="danger" onClick={() => setPendingDeletion({ kind: "professional", id: item.id })}>Remover</Button>
                   </ItemTop>
                   <Meta>{item.link}</Meta>
                 </Item>
@@ -840,7 +867,7 @@ export function CandidateCurriculumPage() {
                 <Item key={`social-${item.id}`}>
                   <ItemTop>
                     <strong>{item.title}</strong>
-                    <Button type="button" tone="danger" onClick={() => void deleteSocialLink(item.id).then(loadCurriculum)}>Remover</Button>
+                    <Button type="button" tone="danger" onClick={() => setPendingDeletion({ kind: "social", id: item.id })}>Remover</Button>
                   </ItemTop>
                   <Meta>{item.link}</Meta>
                 </Item>
@@ -919,7 +946,7 @@ export function CandidateCurriculumPage() {
                 <Item key={item.id}>
                   <ItemTop>
                     <strong>{item.document_name}</strong>
-                    <Button type="button" tone="danger" onClick={() => void deleteDocument(item.id).then(loadCurriculum)}>Remover</Button>
+                    <Button type="button" tone="danger" onClick={() => setPendingDeletion({ kind: "document", id: item.id })}>Remover</Button>
                   </ItemTop>
                   <Meta>{item.document_number}</Meta>
                   {item.image_url ? <a href={item.image_url} target="_blank" rel="noreferrer">Ver arquivo</a> : null}
@@ -982,6 +1009,15 @@ export function CandidateCurriculumPage() {
           </Button>
         )}
       </StepNav>
+
+      <ConfirmDialog
+        open={pendingDeletion !== null}
+        title="Remover item"
+        message="Essa acao nao pode ser desfeita."
+        confirming={deletingItem}
+        onConfirm={() => void confirmDeletion()}
+        onCancel={() => setPendingDeletion(null)}
+      />
     </WizardShell>
   );
 }
