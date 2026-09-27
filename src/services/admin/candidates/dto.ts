@@ -1,9 +1,62 @@
+import type { DiscResult } from "../../assessments/disc/dto";
+import type { EneagramaResult } from "../../assessments/eneagrama/dto";
+
 export namespace AdminCandidate {
-  export type AssessmentSummary = {
-    profile_label: string;
-    primary: string;
-    completed_at: string;
-  } | null;
+  export type ListItem = {
+    id: number;
+    candidate_id: number;
+    name: string;
+    email: string;
+    resume?: string;
+    skills: string[];
+    applications_count: number;
+    disc_label: string | null;
+    eneagrama_label: string | null;
+  };
+
+  export type Document = {
+    id: number;
+    document_name: string;
+    document_number: string;
+    issue_date?: string;
+    location?: string;
+    image_url?: string | null;
+  };
+
+  export type AcademicHistory = {
+    id: number;
+    title: string;
+    institution: string;
+    degree: string;
+    start_date?: string;
+    end_date?: string;
+  };
+
+  export type EmploymentHistory = {
+    id: number;
+    company_name: string;
+    position: string;
+    salary?: string;
+    start_date?: string;
+    end_date?: string;
+    leaving_reason?: string;
+    achievements?: string;
+    reference_name?: string;
+    reference_phone?: string;
+  };
+
+  export type LinkItem = { id: number; title: string; link: string };
+  export type TagItem = { id: number; title: string };
+
+  export type ApplicationItem = {
+    id: number;
+    job_name: string;
+    company_name: string;
+    stage: string;
+    status_tone: "positive" | "negative" | "neutral";
+    terminal_state: boolean;
+    created_at: string;
+  };
 
   export type Detail = {
     id: number;
@@ -32,10 +85,23 @@ export namespace AdminCandidate {
     smoker?: boolean;
     alcohol_consumer?: boolean;
     medication_user?: boolean;
+    first_question?: string;
+    second_question?: string;
+    third_question?: string;
+    fourth_question?: string;
+    fifth_question?: string;
     created_at?: string;
     updated_at?: string;
     curriculum_url?: string | null;
-    disc_assessment: AssessmentSummary;
-    eneagrama_assessment: AssessmentSummary;
+    documents: Document[];
+    academic_histories: AcademicHistory[];
+    employment_histories: EmploymentHistory[];
+    professional_links: LinkItem[];
+    social_links: LinkItem[];
+    skills: TagItem[];
+    knowledges: TagItem[];
+    applications: ApplicationItem[];
+    disc_assessment: DiscResult.Response;
+    eneagrama_assessment: EneagramaResult.Response;
   };
 }

@@ -47,6 +47,15 @@ export const Grid = styled("div", {
   },
 });
 
+// Fluid card grid — reflows to however many columns fit instead of a fixed
+// breakpoint count, for directory-style listings (e.g. the candidates screen).
+export const CardGrid = styled("div", {
+  display: "grid",
+  gap: "$4",
+  alignItems: "start",
+  gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+});
+
 export const Field = styled("label", {
   display: "grid",
   gap: "$2",
@@ -196,6 +205,47 @@ export const Badge = styled("span", {
   defaultVariants: {
     tone: "neutral",
   },
+});
+
+export const TagRow = styled("div", {
+  display: "flex",
+  flexWrap: "wrap",
+  gap: "$2",
+});
+
+export const Tag = styled("span", {
+  display: "inline-flex",
+  alignItems: "center",
+  border: "1px solid $border",
+  borderRadius: "$sm",
+  padding: "$1 $3",
+  fontSize: "$xs",
+  fontWeight: "$semibold",
+  backgroundColor: "$surface",
+  color: "$textMuted",
+});
+
+export const Overlay = styled("div", {
+  position: "fixed",
+  inset: 0,
+  backgroundColor: "rgba(3, 4, 8, 0.6)",
+  display: "grid",
+  placeItems: "center",
+  zIndex: 40,
+  padding: "$5",
+});
+
+export const Modal = styled("div", {
+  width: "min(560px, 96vw)",
+  borderRadius: "$lg",
+  border: "1px solid $border",
+  backgroundColor: "$canvasAlt",
+  backdropFilter: GLASS_BLUR,
+  WebkitBackdropFilter: GLASS_BLUR,
+  padding: "$5",
+  display: "grid",
+  gap: "$3",
+  boxShadow: "$medium",
 });
 
 export const InfoRow = styled("div", {

@@ -44,6 +44,7 @@ export function StaffShell() {
 
           <NavSectionLabel>Recrutamento</NavSectionLabel>
           <NavItem to="/staff/kanban" data-featured="true">Kanban do processo</NavItem>
+          <NavItem to="/staff/candidates">Candidatos</NavItem>
           <NavItem to="/staff/hirings">Processos</NavItem>
           <NavItem to="/staff/interviews">Entrevistas</NavItem>
 

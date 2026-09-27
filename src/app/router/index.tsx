@@ -23,6 +23,7 @@ import { StaffKanbanPage } from "../../pages/StaffKanban";
 import { StaffAccountPage } from "../../pages/StaffAccount";
 import { StaffUsersPage } from "../../pages/StaffUsers";
 import { StaffCandidateDetailPage } from "../../pages/StaffCandidateDetail";
+import { StaffCandidatesPage } from "../../pages/StaffCandidates";
 import { useAuth } from "../../hooks/useAuth";
 
 type ProtectedRouteProps = {
@@ -103,6 +104,7 @@ export function AppRouter() {
           <Route path="interviews" element={<StaffInterviewsPage />} />
           <Route path="kanban" element={<StaffKanbanPage />} />
           <Route path="users" element={<StaffUsersPage />} />
+          <Route path="candidates" element={<StaffCandidatesPage />} />
           <Route path="candidates/:id" element={<StaffCandidateDetailPage />} />
           <Route path="account" element={<StaffAccountPage />} />
           <Route index element={<Navigate to="home" replace />} />
