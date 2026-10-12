@@ -1,3 +1,4 @@
+import { formatDate } from "../../utils/format";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getDiscResult } from "../../services/assessments/disc";
@@ -6,12 +7,6 @@ import { getEneagramaResult } from "../../services/assessments/eneagrama";
 import type { EneagramaResult } from "../../services/assessments/eneagrama/dto";
 import { Badge, Button, Grid, Hero, Lead, Meta, Page, Panel, PanelTitle } from "../CandidateKit/styles";
 
-function formatDate(value?: string): string {
-  if (!value) return "-";
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return value;
-  return date.toLocaleDateString("pt-BR");
-}
 
 export function CandidateAssessmentsPage() {
   const [discLatest, setDiscLatest] = useState<DiscResult.Attempt | null | undefined>(undefined);
@@ -46,9 +41,7 @@ export function CandidateAssessmentsPage() {
           ) : discLatest === null ? (
             <Badge tone="neutral">Ainda não realizado</Badge>
           ) : null}
-          <Link to="/candidate/assessments/disc">
-            <Button type="button" tone="brand">{discLatest ? "Refazer avaliação" : "Iniciar avaliação"}</Button>
-          </Link>
+          <Button as={Link} to="/candidate/assessments/disc" tone="brand">{discLatest ? "Refazer avaliação" : "Iniciar avaliação"}</Button>
         </Panel>
 
         <Panel>
@@ -62,9 +55,7 @@ export function CandidateAssessmentsPage() {
           ) : eneagramaLatest === null ? (
             <Badge tone="neutral">Ainda não realizado</Badge>
           ) : null}
-          <Link to="/candidate/assessments/eneagrama">
-            <Button type="button" tone="brand">{eneagramaLatest ? "Refazer avaliação" : "Iniciar avaliação"}</Button>
-          </Link>
+          <Button as={Link} to="/candidate/assessments/eneagrama" tone="brand">{eneagramaLatest ? "Refazer avaliação" : "Iniciar avaliação"}</Button>
         </Panel>
       </Grid>
     </Page>

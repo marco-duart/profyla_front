@@ -1,3 +1,6 @@
+import { PageSkeleton } from "../../components/PageSkeleton";
+import { formatDateTime } from "../../utils/format";
+import { interviewTypeLabel } from "../../utils/labels";
 import { useEffect, useMemo, useState } from "react";
 import { listCompanies } from "../../services/admin/companies";
 import type { AdminCompany } from "../../services/admin/companies/dto";
@@ -68,8 +71,9 @@ export function StaffHomePage() {
 
   const activeApplications = useMemo(() => applications.filter((app) => !app.terminal_state), [applications]);
 
+  // "Now" is read once when the data arrives (render stays pure); good enough for a 7-day window.
+  const [now] = useState(() => Date.now());
   const upcomingInterviews = useMemo(() => {
-    const now = Date.now();
     const horizon = now + SEVEN_DAYS_MS;
     return interviews
       .filter((interview) => {
@@ -77,7 +81,7 @@ export function StaffHomePage() {
         return !Number.isNaN(time) && time >= now && time <= horizon;
       })
       .sort((a, b) => new Date(a.date_time).getTime() - new Date(b.date_time).getTime());
-  }, [interviews]);
+  }, [interviews, now]);
 
   const examsWithoutQuestions = useMemo(
     () => exams.filter((exam) => (exam.questions_count ?? exam.questions?.length ?? 0) === 0),
@@ -108,14 +112,14 @@ export function StaffHomePage() {
   );
 
   if (loading) {
-    return <p>Carregando painel...</p>;
+    return <PageSkeleton kit="staff" rows={4} />;
   }
 
   return (
     <Page>
       <Hero>
         <h2>Painel RH</h2>
-        <Lead>Visao geral do funcionamento operacional: vagas, processos, candidaturas e entrevistas em um so lugar.</Lead>
+        <Lead>Visão geral do funcionamento operacional: vagas, processos, candidaturas e entrevistas em um so lugar.</Lead>
       </Hero>
 
       <StatGrid>
@@ -140,7 +144,7 @@ export function StaffHomePage() {
           <StatLabel>Provas sem perguntas</StatLabel>
           <StatValue>{examsWithoutQuestions.length}</StatValue>
           <StatTrend tone={examsWithoutQuestions.length > 0 ? "negative" : "positive"}>
-            {examsWithoutQuestions.length > 0 ? "Pendente de configuracao" : "Tudo certo"}
+            {examsWithoutQuestions.length > 0 ? "Pendente de configuração" : "Tudo certo"}
           </StatTrend>
         </StatTile>
       </StatGrid>
@@ -168,18 +172,18 @@ export function StaffHomePage() {
         </Panel>
 
         <Panel>
-          <PanelTitle>Entrevistas nos proximos 7 dias</PanelTitle>
+          <PanelTitle>Entrevistas nos próximos 7 dias</PanelTitle>
           {upcomingInterviews.length === 0 ? (
-            <Empty>Nenhuma entrevista agendada para os proximos dias.</Empty>
+            <Empty>Nenhuma entrevista agendada para os próximos dias.</Empty>
           ) : (
             <List>
               {upcomingInterviews.map((interview) => (
                 <Item key={interview.id}>
                   <ItemTop>
-                    <strong>{interview.candidate_name || "Candidato nao definido"}</strong>
-                    <Meta>{new Date(interview.date_time).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" })}</Meta>
+                    <strong>{interview.candidate_name || "Candidato não definido"}</strong>
+                    <Meta>{formatDateTime(interview.date_time)}</Meta>
                   </ItemTop>
-                  <Meta>{interview.stage_title ?? "Etapa"} - {interview.interview_type}</Meta>
+                  <Meta>{interview.stage_title ?? "Etapa"} - {interviewTypeLabel(interview.interview_type)}</Meta>
                 </Item>
               ))}
             </List>
@@ -225,7 +229,7 @@ export function StaffHomePage() {
                   <strong>{job.title}</strong>
                   <Badge tone="neutral">Vaga</Badge>
                 </ItemTop>
-                <Meta>{job.modality || "Modalidade nao informada"}</Meta>
+                <Meta>{job.modality || "Modalidade não informada"}</Meta>
               </Item>
             ))}
             {recentCompanies.length === 0 && recentJobs.length === 0 ? (

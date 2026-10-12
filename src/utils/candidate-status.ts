@@ -3,11 +3,11 @@ export type StatusTone = "positive" | "negative" | "neutral";
 export function getStatusLabel(stage: string): string {
   switch (stage) {
     case "DESISTIU":
-      return "Encerrada por desistencia";
+      return "Encerrada por desistência";
     case "REPROVADO":
       return "Processo encerrado";
     case "CONTRATADO":
-      return "Contratacao concluida";
+      return "Contratação concluída";
     case "TRIAGEM":
       return "Em triagem";
     default:
