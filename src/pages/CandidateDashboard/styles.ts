@@ -95,7 +95,8 @@ export const ItemMeta = styled("div", {
   fontSize: "$sm",
 });
 
-export const InlineLink = styled("a", {
+export const InlineLink = styled("span", {
+  cursor: "pointer",
   color: "$brand",
   fontWeight: "$semibold",
   textDecoration: "none",

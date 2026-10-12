@@ -1,3 +1,4 @@
+import { PageSkeleton } from "../../components/PageSkeleton";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getCandidateHomeData } from "../../services/portal";
@@ -43,7 +44,7 @@ export function CandidateDashboardPage() {
   }
 
   if (!data) {
-    return <p>Carregando home...</p>;
+    return <PageSkeleton kit="candidate" rows={4} />;
   }
 
   return (
@@ -51,26 +52,26 @@ export function CandidateDashboardPage() {
       <Hero>
         <div>
           <Eyebrow>Painel do candidato</Eyebrow>
-          <Title>Seu processo, sem excesso de ruido</Title>
-          <p>Veja apenas o que precisa de atencao agora e acompanhe suas candidaturas mais recentes.</p>
+          <Title>Seu processo, sem excesso de ruído</Title>
+          <p>Veja apenas o que precisa de atenção agora e acompanhe suas candidaturas mais recentes.</p>
         </div>
 
         <MetricRow>
           <MetricCard>
-            <Eyebrow>Curriculo</Eyebrow>
+            <Eyebrow>Currículo</Eyebrow>
             <MetricValue>{data.profile_completion}%</MetricValue>
             <Progress>
               <ProgressFill style={{ width: `${data.profile_completion}%` }} />
             </Progress>
             <Link to="/candidate/curriculum">
               <InlineLink>
-                {data.profile_completion === 100 ? "Revisar curriculo" : "Continuar preenchimento"}
+                {data.profile_completion === 100 ? "Revisar currículo" : "Continuar preenchimento"}
               </InlineLink>
             </Link>
           </MetricCard>
 
           <MetricCard>
-            <Eyebrow>Acoes pendentes</Eyebrow>
+            <Eyebrow>Ações pendentes</Eyebrow>
             <MetricValue>{data.outstanding_actions_count}</MetricValue>
             <span>Entrevistas ou etapas aguardando alguma resposta sua.</span>
           </MetricCard>
@@ -79,7 +80,7 @@ export function CandidateDashboardPage() {
 
       <Grid>
         <Card>
-          <Title>Ultimas candidaturas</Title>
+          <Title>Últimas candidaturas</Title>
           <ItemList>
             {data.latest_applications.map((application) => (
               <Item key={application.id}>

@@ -2,63 +2,65 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { listCandidateApplications } from "../../services/applications";
 import type { ListApplications } from "../../services/applications/dto";
+import { PageSkeleton } from "../../components/PageSkeleton";
 import { getStatusLabel } from "../../utils/candidate-status";
 import { getApiErrorMessage } from "../../utils/api-error";
-import { DetailLink, Header, Item, ItemTop, Lead, List, Meta, SearchInput, StatusPill } from "./styles";
+import { Badge, Button, Empty, Field, Hero, Input, Item, ItemTop, Lead, List, Meta, Page } from "../CandidateKit/styles";
 
 export function CandidateApplicationsPage() {
   const [applications, setApplications] = useState<ListApplications.Item[]>([]);
   const [search, setSearch] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
       try {
-        const response = await listCandidateApplications(search);
-        setApplications(response);
+        setApplications(await listCandidateApplications(search));
+        setError("");
       } catch (requestError) {
         setError(getApiErrorMessage(requestError, "Erro ao listar candidaturas."));
+      } finally {
+        setLoading(false);
       }
     }
 
-    void load();
+    const timeout = setTimeout(() => void load(), 250);
+    return () => clearTimeout(timeout);
   }, [search]);
 
   return (
-    <section>
-      <Header>
+    <Page>
+      <Hero>
         <h2>Candidaturas</h2>
-        <Lead>Veja onde cada processo esta, quais candidaturas foram encerradas e quais ainda exigem sua atencao.</Lead>
-        <SearchInput
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-          placeholder="Buscar por vaga ou etapa"
-        />
-      </Header>
+        <Lead>Veja onde cada processo está, quais candidaturas foram encerradas e quais ainda exigem sua atenção.</Lead>
+        <Field>
+          Buscar candidatura
+          <Input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Vaga ou etapa" />
+        </Field>
+      </Hero>
 
-      {error ? <p>{error}</p> : null}
+      {error ? <p role="alert">{error}</p> : null}
+      {loading ? <PageSkeleton kit="candidate" rows={3} /> : null}
+      {!loading && !error && applications.length === 0 ? <Empty>Nenhuma candidatura encontrada.</Empty> : null}
 
       <List>
         {applications.map((application) => (
           <Item key={application.id}>
             <ItemTop>
               <strong>{application.job_name}</strong>
-              <StatusPill>{getStatusLabel(application.stage)}</StatusPill>
+              <Badge tone={application.status_tone}>{getStatusLabel(application.stage)}</Badge>
             </ItemTop>
             <Meta>
-              <span>{application.company_name}</span>
-              {application.modality ? <span>{application.modality}</span> : null}
-              {application.job_location ? <span>{application.job_location}</span> : null}
+              {[application.company_name, application.modality, application.job_location].filter(Boolean).join(" · ")}
             </Meta>
+            <Meta>Etapa atual: {application.stage}</Meta>
             <div>
-              <span>Etapa atual: {application.stage}</span>
+              <Button as={Link} to={`/candidate/applications/${application.id}`}>Abrir acompanhamento</Button>
             </div>
-            <Link to={`/candidate/applications/${application.id}`}>
-              <DetailLink>Abrir acompanhamento</DetailLink>
-            </Link>
           </Item>
         ))}
       </List>
-    </section>
+    </Page>
   );
 }
