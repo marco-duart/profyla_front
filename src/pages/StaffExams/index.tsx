@@ -183,7 +183,7 @@ export function StaffExamsPage() {
     event.preventDefault();
 
     if (!selectedExamId) {
-      toast.error("Selecione uma prova para adicionar questao.");
+      toast.error("Selecione uma prova para adicionar questão.");
       return;
     }
 
@@ -208,20 +208,20 @@ export function StaffExamsPage() {
           question_type: questionForm.question_type,
           alternatives_attributes: alternatives,
         });
-        toast.success("Questao atualizada.");
+        toast.success("Questão atualizada.");
       } else {
         await createExamQuestion(Number(selectedExamId), {
           text: questionForm.text,
           question_type: questionForm.question_type,
           alternatives_attributes: alternatives,
         });
-        toast.success("Questao adicionada.");
+        toast.success("Questão adicionada.");
       }
       resetQuestionForm();
       const detail = await getExam(Number(selectedExamId));
       setSelectedExam(detail);
     } catch (error) {
-      toast.error(getApiErrorMessage(error, "Erro ao salvar questao."));
+      toast.error(getApiErrorMessage(error, "Erro ao salvar questão."));
     }
   }
 
@@ -231,7 +231,7 @@ export function StaffExamsPage() {
 
     try {
       await deleteExamQuestion(Number(selectedExamId), pendingDeleteQuestionId);
-      toast.success("Questao removida.");
+      toast.success("Questão removida.");
       if (editingQuestionId === pendingDeleteQuestionId) {
         resetQuestionForm();
       }
@@ -239,7 +239,7 @@ export function StaffExamsPage() {
       const detail = await getExam(Number(selectedExamId));
       setSelectedExam(detail);
     } catch (error) {
-      toast.error(getApiErrorMessage(error, "Erro ao remover questao."));
+      toast.error(getApiErrorMessage(error, "Erro ao remover questão."));
     } finally {
       setDeletingQuestion(false);
     }
@@ -248,9 +248,9 @@ export function StaffExamsPage() {
   return (
     <Page>
       <Hero>
-        <h2>Testes dinamicos</h2>
+        <h2>Testes dinâmicos</h2>
         <Lead>
-          Crie provas, modele questoes e alternativas corretas, e use esses modelos ao criar processos seletivos.
+          Crie provas, modele questões e alternativas corretas, e use esses modelos ao criar processos seletivos.
         </Lead>
       </Hero>
 
@@ -259,7 +259,7 @@ export function StaffExamsPage() {
         <form onSubmit={handleExamSubmit}>
           <Grid>
             <Field>
-              Titulo
+              Título
               <Input
                 required
                 value={form.title}
@@ -277,7 +277,7 @@ export function StaffExamsPage() {
           </Grid>
 
           <Field>
-            Descricao
+            Descrição
             <Textarea
               required
               value={form.description}
@@ -326,7 +326,7 @@ export function StaffExamsPage() {
       </Panel>
 
       <Panel>
-        <PanelTitle>Modelo da prova (questoes)</PanelTitle>
+        <PanelTitle>Modelo da prova (questões)</PanelTitle>
         <Field>
           Prova para gerenciar perguntas
           <Select value={selectedExamId} onChange={(event) => setSelectedExamId(event.target.value)}>
@@ -408,11 +408,11 @@ export function StaffExamsPage() {
 
               <Actions>
                 <Button tone="brand" type="submit">
-                  {editingQuestionId ? "Salvar edicao" : "Adicionar questao"}
+                  {editingQuestionId ? "Salvar edição" : "Adicionar questão"}
                 </Button>
                 {editingQuestionId ? (
                   <Button type="button" tone="ghost" onClick={resetQuestionForm}>
-                    Cancelar edicao
+                    Cancelar edição
                   </Button>
                 ) : null}
               </Actions>
@@ -435,14 +435,14 @@ export function StaffExamsPage() {
                     </ItemTop>
                     {question.alternatives.map((alternative) => (
                       <Meta key={alternative.id}>
-                        {alternative.correct ? "[Correta]" : "[Opcao]"} {alternative.text}
+                        {alternative.correct ? "[Correta]" : "[Opção]"} {alternative.text}
                       </Meta>
                     ))}
                   </Item>
                 ))}
               </List>
             ) : (
-              <Empty>Essa prova ainda nao possui questoes.</Empty>
+              <Empty>Essa prova ainda não possui questões.</Empty>
             )}
           </>
         ) : (
@@ -453,7 +453,7 @@ export function StaffExamsPage() {
       <ConfirmDialog
         open={pendingDeleteExamId !== null}
         title="Excluir prova"
-        message="Essa acao nao pode ser desfeita. As perguntas dessa prova tambem serao removidas."
+        message="Essa ação não pode ser desfeita. As perguntas dessa prova também serão removidas."
         confirming={deletingExam}
         onConfirm={() => void confirmDeleteExam()}
         onCancel={() => setPendingDeleteExamId(null)}
@@ -461,8 +461,8 @@ export function StaffExamsPage() {
 
       <ConfirmDialog
         open={pendingDeleteQuestionId !== null}
-        title="Excluir questao"
-        message="Essa acao nao pode ser desfeita."
+        title="Excluir questão"
+        message="Essa ação não pode ser desfeita."
         confirming={deletingQuestion}
         onConfirm={() => void confirmDeleteQuestion()}
         onCancel={() => setPendingDeleteQuestionId(null)}

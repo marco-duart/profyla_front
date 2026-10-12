@@ -78,7 +78,7 @@ export function StaffFormsPage() {
         const detail = await getForm(Number(selectedFormId));
         setSelectedForm(detail);
       } catch (error) {
-        toast.error(getApiErrorMessage(error, "Erro ao carregar formulario."));
+        toast.error(getApiErrorMessage(error, "Erro ao carregar formulário."));
       }
     }
 
@@ -101,15 +101,15 @@ export function StaffFormsPage() {
     try {
       if (editingId) {
         await updateForm(editingId, form);
-        toast.success("Formulario atualizado.");
+        toast.success("Formulário atualizado.");
       } else {
         await createForm(form);
-        toast.success("Formulario criado.");
+        toast.success("Formulário criado.");
       }
       resetForm();
       await loadForms();
     } catch (error) {
-      toast.error(getApiErrorMessage(error, "Erro ao salvar formulario."));
+      toast.error(getApiErrorMessage(error, "Erro ao salvar formulário."));
     }
   }
 
@@ -119,12 +119,12 @@ export function StaffFormsPage() {
 
     try {
       await deleteForm(pendingDeleteFormId);
-      toast.success("Formulario removido.");
+      toast.success("Formulário removido.");
       setSelectedFormId((current) => (current === String(pendingDeleteFormId) ? "" : current));
       setPendingDeleteFormId(null);
       await loadForms();
     } catch (error) {
-      toast.error(getApiErrorMessage(error, "Erro ao remover formulario."));
+      toast.error(getApiErrorMessage(error, "Erro ao remover formulário."));
     } finally {
       setDeletingForm(false);
     }
@@ -149,7 +149,7 @@ export function StaffFormsPage() {
     event.preventDefault();
 
     if (!selectedFormId) {
-      toast.error("Selecione um formulario para adicionar uma pergunta.");
+      toast.error("Selecione um formulário para adicionar uma pergunta.");
       return;
     }
 
@@ -188,18 +188,18 @@ export function StaffFormsPage() {
   return (
     <Page>
       <Hero>
-        <h2>Formularios dinamicos</h2>
+        <h2>Formulários dinâmicos</h2>
         <Lead>
-          Crie formularios de triagem com perguntas personalizadas e use esses modelos ao criar processos seletivos.
+          Crie formulários de triagem com perguntas personalizadas e use esses modelos ao criar processos seletivos.
         </Lead>
       </Hero>
 
       <Panel>
-        <PanelTitle>{editingId ? "Editar formulario" : "Novo formulario"}</PanelTitle>
+        <PanelTitle>{editingId ? "Editar formulário" : "Novo formulário"}</PanelTitle>
         <form onSubmit={handleFormSubmit}>
           <Grid>
             <Field>
-              Titulo
+              Título
               <Input required value={form.title} onChange={(event) => setForm((prev) => ({ ...prev, title: event.target.value }))} />
             </Field>
             <Field>
@@ -208,20 +208,20 @@ export function StaffFormsPage() {
             </Field>
           </Grid>
           <Field>
-            Descricao
+            Descrição
             <Textarea required value={form.description} onChange={(event) => setForm((prev) => ({ ...prev, description: event.target.value }))} />
           </Field>
           <Actions>
-            <Button tone="brand" type="submit">{editingId ? "Salvar" : "Criar formulario"}</Button>
+            <Button tone="brand" type="submit">{editingId ? "Salvar" : "Criar formulário"}</Button>
             <Button type="button" tone="ghost" onClick={resetForm}>Limpar</Button>
           </Actions>
         </form>
       </Panel>
 
       <Panel>
-        <PanelTitle>Formularios cadastrados</PanelTitle>
+        <PanelTitle>Formulários cadastrados</PanelTitle>
         {items.length === 0 ? (
-          <Empty>Nenhum formulario cadastrado.</Empty>
+          <Empty>Nenhum formulário cadastrado.</Empty>
         ) : (
           <List>
             {items.map((item) => (
@@ -242,9 +242,9 @@ export function StaffFormsPage() {
       </Panel>
 
       <Panel>
-        <PanelTitle>Modelo do formulario (perguntas)</PanelTitle>
+        <PanelTitle>Modelo do formulário (perguntas)</PanelTitle>
         <Field>
-          Formulario para gerenciar perguntas
+          Formulário para gerenciar perguntas
           <Select value={selectedFormId} onChange={(event) => setSelectedFormId(event.target.value)}>
             <option value="">Selecione</option>
             {items.map((item) => (
@@ -279,10 +279,10 @@ export function StaffFormsPage() {
               </Grid>
               <Actions>
                 <Button tone="brand" type="submit">
-                  {editingFieldId ? "Salvar edicao" : "Adicionar pergunta"}
+                  {editingFieldId ? "Salvar edição" : "Adicionar pergunta"}
                 </Button>
                 {editingFieldId ? (
-                  <Button type="button" tone="ghost" onClick={resetFieldForm}>Cancelar edicao</Button>
+                  <Button type="button" tone="ghost" onClick={resetFieldForm}>Cancelar edição</Button>
                 ) : null}
               </Actions>
             </form>
@@ -303,18 +303,18 @@ export function StaffFormsPage() {
                 ))}
               </List>
             ) : (
-              <Empty>Esse formulario ainda nao possui perguntas.</Empty>
+              <Empty>Esse formulário ainda não possui perguntas.</Empty>
             )}
           </>
         ) : (
-          <Empty>Selecione um formulario para visualizar e editar o modelo.</Empty>
+          <Empty>Selecione um formulário para visualizar e editar o modelo.</Empty>
         )}
       </Panel>
 
       <ConfirmDialog
         open={pendingDeleteFormId !== null}
-        title="Excluir formulario"
-        message="Essa acao nao pode ser desfeita. As perguntas desse formulario tambem serao removidas."
+        title="Excluir formulário"
+        message="Essa ação não pode ser desfeita. As perguntas desse formulário também serão removidas."
         confirming={deletingForm}
         onConfirm={() => void confirmDeleteForm()}
         onCancel={() => setPendingDeleteFormId(null)}
@@ -323,7 +323,7 @@ export function StaffFormsPage() {
       <ConfirmDialog
         open={pendingDeleteFieldId !== null}
         title="Excluir pergunta"
-        message="Essa acao nao pode ser desfeita."
+        message="Essa ação não pode ser desfeita."
         confirming={deletingField}
         onConfirm={() => void confirmDeleteField()}
         onCancel={() => setPendingDeleteFieldId(null)}
