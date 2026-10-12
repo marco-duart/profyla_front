@@ -1,73 +1,40 @@
-# React + TypeScript + Vite
+# TalentFlow — Front-end
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React 19 + TypeScript + Vite, Stitches (design system escuro com "glass"), React Router 7.
 
-Currently, two official plugins are available:
+## Rodando
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+cp .env.example .env     # ajuste VITE_BASE_URL (ex.: http://localhost:3000)
+npm install
+npm run dev              # http://localhost:5173
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+A API (Rails) fica no repositório `talentflow_api`. Credenciais de demonstração: veja o README da API (`rails db:seed`).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Qualidade
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run lint             # ESLint
+npx tsc -b --noEmit      # tipos
+npm test                 # Vitest + Testing Library (jsdom)
+npm run build            # tsc -b && vite build
 ```
+
+O workflow `.github/workflows/ci.yml` roda lint, tipos, testes e build a cada push/PR (cota gratuita do GitHub Actions).
+
+## Estrutura
+
+- `src/pages/StaffKit` e `src/pages/CandidateKit`: primitivos visuais de cada área. Páginas de staff importam só do StaffKit; páginas de candidato só do CandidateKit.
+- `src/services`: chamadas à API (um diretório por domínio, `dto.ts` com os tipos).
+- `src/utils`: máscaras (`masks.ts`), datas (`format.ts`), rótulos de domínio (`labels.ts`), erros da API (`api-error.ts`).
+- `src/configs/api.ts`: cliente axios (rotação do token e tratamento de 401).
+
+## Docker (build estático servido por nginx)
+
+```bash
+docker build --build-arg VITE_BASE_URL=https://api.seu-dominio.com -t talentflow-front .
+docker run -p 8080:80 talentflow-front       # http://localhost:8080  (health: /healthz)
+```
+
+O endereço da API é embutido no bundle em tempo de build. O `nginx.conf` faz o fallback de SPA para `index.html`.
