@@ -1,3 +1,8 @@
+import { formatDateTime } from "../../utils/format";
+import { InterviewCalendar } from "./InterviewCalendar";
+import { ScorecardDialog } from "./ScorecardDialog";
+import { downloadInterviewCalendar } from "../../services/admin/interviews";
+import { interviewMethodLabel, interviewStatusLabel, interviewTypeLabel } from "../../utils/labels";
 import { type FormEvent, useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { listAdminApplications } from "../../services/admin/applications";
@@ -17,6 +22,7 @@ import { getApiErrorMessage } from "../../utils/api-error";
 import { ConfirmDialog } from "../StaffKit/ConfirmDialog";
 import {
   Actions,
+  Badge,
   Button,
   Empty,
   Field,
@@ -32,6 +38,8 @@ import {
   Panel,
   PanelTitle,
   Select,
+  Tab,
+  Tabs,
   Textarea,
 } from "../StaffKit/styles";
 
@@ -66,6 +74,8 @@ export function StaffInterviewsPage() {
   const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [form, setForm] = useState<FormState>(emptyForm);
+  const [view, setView] = useState<"list" | "agenda">("list");
+  const [scorecardFor, setScorecardFor] = useState<AdminInterview.Item | null>(null);
 
   async function loadData() {
     const [interviewsResponse, applicationsResponse, hiringsResponse, jobsResponse] = await Promise.all([
@@ -152,6 +162,19 @@ export function StaffInterviewsPage() {
     }
   }
 
+  // Accepting the candidate's suggestion = moving the interview to that date. The candidate is
+  // e-mailed about the change and answers again.
+  async function acceptSuggestion(item: AdminInterview.Item) {
+    if (!item.suggested_datetime) return;
+    try {
+      await updateInterview(item.id, { date_time: item.suggested_datetime });
+      toast.success("Entrevista reagendada para o horário sugerido.");
+      await loadData();
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, "Erro ao reagendar a entrevista."));
+    }
+  }
+
   async function confirmDelete() {
     if (!pendingDeleteId) return;
     setDeleting(true);
@@ -172,7 +195,7 @@ export function StaffInterviewsPage() {
     <Page>
       <Hero>
         <h2>Entrevistas</h2>
-        <Lead>Agende entrevistas por etapa, associando opcionalmente a uma candidatura especifica.</Lead>
+        <Lead>Agende entrevistas por etapa, associando opcionalmente a uma candidatura específica.</Lead>
       </Hero>
 
       <Panel>
@@ -198,7 +221,7 @@ export function StaffInterviewsPage() {
                   setForm((prev) => ({ ...prev, application_status_id: event.target.value }))
                 }
               >
-                <option value="">Sem candidatura especifica</option>
+                <option value="">Sem candidatura específica</option>
                 {applications.map((application) => (
                   <option key={application.id} value={application.id}>
                     #{application.id} - {application.candidate_name || "Candidato"} - {application.job_name}
@@ -224,7 +247,7 @@ export function StaffInterviewsPage() {
               </Select>
             </Field>
             <Field>
-              Data e horario
+              Data e horário
               <Input
                 required
                 type="datetime-local"
@@ -251,7 +274,7 @@ export function StaffInterviewsPage() {
               />
             </Field>
             <Field>
-              Metodo
+              Método
               <Input
                 required
                 value={form.interview_method}
@@ -263,7 +286,7 @@ export function StaffInterviewsPage() {
           </Grid>
 
           <Field>
-            Resumo/instrucoes
+            Resumo/instruções
             <Textarea
               value={form.resume}
               onChange={(event) => setForm((prev) => ({ ...prev, resume: event.target.value }))}
@@ -281,6 +304,22 @@ export function StaffInterviewsPage() {
         </form>
       </Panel>
 
+      <Actions css={{ justifyContent: "space-between", alignItems: "center" }}>
+        <PanelTitle>Entrevistas</PanelTitle>
+        <Tabs role="group" aria-label="Modo de exibição">
+          <Tab type="button" active={view === "list"} aria-pressed={view === "list"} onClick={() => setView("list")}>Lista</Tab>
+          <Tab type="button" active={view === "agenda"} aria-pressed={view === "agenda"} onClick={() => setView("agenda")}>Agenda</Tab>
+        </Tabs>
+      </Actions>
+
+      {view === "agenda" ? (
+        <InterviewCalendar
+          interviews={items}
+          onDownloadIcs={(interview) =>
+            void downloadInterviewCalendar(interview.id).catch((error) => toast.error(getApiErrorMessage(error, "Não foi possível baixar o arquivo de agenda.")))
+          }
+        />
+      ) : (
       <Panel>
         <PanelTitle>Entrevistas agendadas</PanelTitle>
         {items.length === 0 ? (
@@ -292,6 +331,9 @@ export function StaffInterviewsPage() {
                 <ItemTop>
                   <strong>{item.candidate_name || "Sem candidato associado"}</strong>
                   <Actions>
+                    {item.application_status_id ? (
+                      <Button type="button" onClick={() => setScorecardFor(item)}>Avaliar</Button>
+                    ) : null}
                     <Button type="button" onClick={() => beginEdit(item)}>
                       Editar
                     </Button>
@@ -301,21 +343,45 @@ export function StaffInterviewsPage() {
                   </Actions>
                 </ItemTop>
                 <Meta>
-                  Etapa: {item.stage_title || item.stage_id} · {item.date_time?.slice(0, 16).replace("T", " ")}
+                  Etapa: {item.stage_title || item.stage_id} · {formatDateTime(item.date_time)}
                 </Meta>
                 <Meta>
-                  Tipo: {item.interview_type} · Metodo: {item.interview_method} · Entrevistador: {item.interviewer}
+                  Tipo: {interviewTypeLabel(item.interview_type)} · Método: {interviewMethodLabel(item.interview_method)} · Entrevistador: {item.interviewer}
                 </Meta>
+                {item.application_status_id && item.status ? (
+                  <Badge tone={item.status === "aceita" ? "positive" : item.status === "recusada" ? "negative" : item.status === "reagendamento_solicitado" ? "warning" : "neutral"}>
+                    {interviewStatusLabel(item.status, "staff")}
+                  </Badge>
+                ) : null}
+                {item.status === "reagendamento_solicitado" ? (
+                  <>
+                    {item.suggested_datetime ? <Meta>Horário sugerido: <strong>{formatDateTime(item.suggested_datetime)}</strong></Meta> : null}
+                    {item.candidate_message ? <Meta>Mensagem do candidato: {item.candidate_message}</Meta> : null}
+                    {item.suggested_datetime ? (
+                      <Actions>
+                        <Button type="button" tone="brand" onClick={() => void acceptSuggestion(item)}>Aceitar sugestão</Button>
+                      </Actions>
+                    ) : null}
+                  </>
+                ) : null}
               </Item>
             ))}
           </List>
         )}
       </Panel>
+      )}
+
+      <ScorecardDialog
+        interviewId={scorecardFor?.id ?? null}
+        candidateName={scorecardFor?.candidate_name}
+        onClose={() => setScorecardFor(null)}
+        onSaved={() => void loadData()}
+      />
 
       <ConfirmDialog
         open={pendingDeleteId !== null}
         title="Excluir entrevista"
-        message="Essa acao nao pode ser desfeita."
+        message="Essa ação não pode ser desfeita."
         confirming={deleting}
         onConfirm={() => void confirmDelete()}
         onCancel={() => setPendingDeleteId(null)}

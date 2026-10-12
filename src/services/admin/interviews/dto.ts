@@ -11,6 +11,10 @@ export namespace AdminInterview {
     interview_method: string;
     resume?: string;
     recruiter_id?: number;
+    status?: string;
+    google_calendar_url?: string;
+    suggested_datetime?: string | null;
+    candidate_message?: string | null;
     created_at?: string;
     updated_at?: string;
   };

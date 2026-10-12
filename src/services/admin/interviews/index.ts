@@ -1,3 +1,4 @@
+import { downloadFile } from "../../../utils/download";
 import api from "../../../configs/api";
 import type { AdminInterview } from "./dto";
 
@@ -22,3 +23,6 @@ export async function updateInterview(id: number, params: Partial<AdminInterview
 export async function deleteInterview(id: number): Promise<void> {
   await api.delete(`/api/admins/interview/${id}`);
 }
+
+export const downloadInterviewCalendar = (id: number) =>
+  downloadFile(`/api/admins/interview/${id}/calendar`, "entrevista.ics");
