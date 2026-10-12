@@ -206,7 +206,8 @@ export const Overlay = styled("div", {
 });
 
 export const Modal = styled("div", {
-  width: "min(680px, 96vw)",
+  width: "100%",
+  maxWidth: "680px",
   borderRadius: "$lg",
   border: "1px solid $border",
   backgroundColor: "$canvasAlt",

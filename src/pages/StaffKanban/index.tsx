@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/refs -- dnd-kit hands out ref callbacks (setNodeRef) that must be passed during render */
 import {
   DndContext,
   DragOverlay,
@@ -19,7 +20,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
-import { listAdminApplications, moveApplicationStage } from "../../services/admin/applications";
+import { listAdminApplications, moveApplicationsBatch, moveApplicationStage } from "../../services/admin/applications";
 import type { AdminApplication } from "../../services/admin/applications/dto";
 import { listCompanies } from "../../services/admin/companies";
 import type { AdminCompany } from "../../services/admin/companies/dto";
@@ -78,6 +79,9 @@ type FeedbackForm = {
 
 type SortableCardProps = {
   application: AdminApplication.Item;
+  selectMode: boolean;
+  selected: boolean;
+  onToggleSelected: (id: number) => void;
   isActiveDragging: boolean;
   onQuickReject: (application: AdminApplication.Item) => Promise<void>;
   disableReject: boolean;
@@ -89,11 +93,14 @@ type StageColumnProps = {
   previewIndex: number;
   isOverColumn: boolean;
   activeCardId: number | null;
+  selectMode: boolean;
+  selectedIds: number[];
+  onToggleSelected: (id: number) => void;
   onQuickReject: (application: AdminApplication.Item) => Promise<void>;
 };
 
 const emptyFeedback: FeedbackForm = {
-  feedback_title: "Atualizacao de etapa",
+  feedback_title: "Atualização de etapa",
   overall_assessment: "",
   specific_comment: "",
   improvements: "",
@@ -127,7 +134,7 @@ function parseColumnId(id: string | number | null | undefined): number | null {
   return Number.isNaN(parsed) ? null : parsed;
 }
 
-function SortableCard({ application, isActiveDragging, onQuickReject, disableReject }: SortableCardProps) {
+function SortableCard({ application, selectMode, selected, onToggleSelected, isActiveDragging, onQuickReject, disableReject }: SortableCardProps) {
   const sortable = useSortable({ id: asCardId(application.id) });
   const style = {
     transform: CSS.Transform.toString(sortable.transform),
@@ -142,15 +149,30 @@ function SortableCard({ application, isActiveDragging, onQuickReject, disableRej
       {...sortable.listeners}
       dragging={isActiveDragging}
     >
+      {selectMode ? (
+        <label style={{ display: "flex", gap: "8px", alignItems: "center", fontSize: "13px" }} onPointerDown={(event) => event.stopPropagation()}>
+          <input type="checkbox" checked={selected} onChange={() => onToggleSelected(application.id)} />
+          Selecionar
+        </label>
+      ) : null}
       <CardTitle>{application.candidate_name || "Candidato sem nome"}</CardTitle>
-      <CardMeta>{application.candidate_email || "Email nao informado"}</CardMeta>
+      <CardMeta>{application.candidate_email || "Email não informado"}</CardMeta>
       <CardMeta>Vaga: {application.job_name}</CardMeta>
       <CardMeta>Empresa: {application.company_name}</CardMeta>
+      {application.match?.score != null ? (
+        <CardMeta title={`Tem: ${application.match.matched.join(", ") || "-"} · Falta: ${application.match.missing.join(", ") || "-"}`}>
+          Aderência: <strong>{application.match.score}%</strong>
+          {application.match.missing.length > 0 ? ` · falta ${application.match.missing.slice(0, 2).join(", ")}${application.match.missing.length > 2 ? "…" : ""}` : ""}
+        </CardMeta>
+      ) : null}
+      {application.scorecard?.average != null ? (
+        <CardMeta>Entrevistas: <strong>{application.scorecard.average.toLocaleString("pt-BR")}</strong>/5 ({application.scorecard.evaluations} avaliação(ões))</CardMeta>
+      ) : null}
       <Actions>
         {application.candidate_user_id ? (
-          <Link to={`/staff/candidates/${application.candidate_user_id}`} onPointerDown={(event) => event.stopPropagation()}>
-            <Button type="button">Ver perfil</Button>
-          </Link>
+          <Button as={Link} to={`/staff/candidates/${application.candidate_user_id}`} onPointerDown={(event: React.PointerEvent) => event.stopPropagation()}>
+            Ver perfil
+          </Button>
         ) : null}
         <Button
           type="button"
@@ -171,6 +193,9 @@ function StageColumn({
   previewIndex,
   isOverColumn,
   activeCardId,
+  selectMode,
+  selectedIds,
+  onToggleSelected,
   onQuickReject,
 }: StageColumnProps) {
   const stageCardIds = stageCards.map((item) => asCardId(item.id));
@@ -194,6 +219,9 @@ function StageColumn({
               ) : null}
               <SortableCard
                 application={application}
+                selectMode={selectMode}
+                selected={selectedIds.includes(application.id)}
+                onToggleSelected={onToggleSelected}
                 isActiveDragging={activeCardId === application.id}
                 onQuickReject={onQuickReject}
                 disableReject={terminalStages.has(application.stage)}
@@ -209,8 +237,8 @@ function StageColumn({
 
       <ColumnFoot>
         {terminalStages.has(stage.title)
-          ? "Etapa terminal: movimentos para ca exigem atencao de comunicacao ao candidato."
-          : "Etapa ativa: acompanhe SLA e avance candidatos com criterio."}
+          ? "Etapa terminal: movimentos para ca exigem atenção de comunicação ao candidato."
+          : "Etapa ativa: acompanhe SLA e avance candidatos com critério."}
       </ColumnFoot>
     </Column>
   );
@@ -230,6 +258,11 @@ export function StaffKanbanPage() {
   const [moveDraft, setMoveDraft] = useState<MoveDraft | null>(null);
   const [pendingQuickReject, setPendingQuickReject] = useState<AdminApplication.Item | null>(null);
   const [rejecting, setRejecting] = useState(false);
+  const [selectMode, setSelectMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [batchTargetId, setBatchTargetId] = useState("");
+  const [batchAction, setBatchAction] = useState<{ stage: AdminHiring.Stage; reject: boolean } | null>(null);
+  const [batching, setBatching] = useState(false);
   const [feedbackForm, setFeedbackForm] = useState<FeedbackForm>(emptyFeedback);
   const [search, setSearch] = useState<string>("");
 
@@ -389,10 +422,58 @@ export function StaffKanbanPage() {
     }
   }
 
+  function toggleSelected(id: number) {
+    setSelectedIds((current) => (current.includes(id) ? current.filter((value) => value !== id) : [...current, id]));
+  }
+
+  function exitSelectMode() {
+    setSelectMode(false);
+    setSelectedIds([]);
+    setBatchTargetId("");
+  }
+
+  function startBatchMove() {
+    const stage = stages.find((entry) => entry.id === Number(batchTargetId));
+    if (!stage) {
+      toast.error("Escolha a etapa de destino.");
+      return;
+    }
+    setBatchAction({ stage, reject: false });
+  }
+
+  function startBatchReject() {
+    const stage = stages.find((entry) => entry.title === "REPROVADO");
+    if (!stage) {
+      toast.error("Não existe etapa REPROVADO nesse processo.");
+      return;
+    }
+    setBatchAction({ stage, reject: true });
+  }
+
+  async function confirmBatch() {
+    if (!batchAction) return;
+    setBatching(true);
+    try {
+      const result = await moveApplicationsBatch({
+        application_ids: selectedIds,
+        hiring_process_stage_id: batchAction.stage.id,
+        ...(batchAction.reject ? { feedback_title: "Resultado do processo", specific_comment: "Candidatura encerrada nesta etapa." } : {}),
+      });
+      toast.success(result.message);
+      setBatchAction(null);
+      exitSelectMode();
+      await refreshBoard();
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, "Não foi possível mover as candidaturas. Nada foi alterado."));
+    } finally {
+      setBatching(false);
+    }
+  }
+
   async function handleQuickReject(application: AdminApplication.Item) {
     const rejectStage = stages.find((stage) => stage.title === "REPROVADO");
     if (!rejectStage) {
-      toast.error("Nao existe etapa REPROVADO nesse processo.");
+      toast.error("Não existe etapa REPROVADO nesse processo.");
       return;
     }
 
@@ -467,17 +548,17 @@ export function StaffKanbanPage() {
       <Hero>
         <h2>Kanban do processo seletivo</h2>
         <Lead>
-          Centro de controle do RH: acompanhe candidatos por etapa, arraste horizontalmente com preview de queda e confirme toda movimentacao critica.
+          Centro de controle do RH: acompanhe candidatos por etapa, arraste horizontalmente com preview de queda e confirme toda movimentação critica.
         </Lead>
       </Hero>
 
       <PrestigePanel>
         <PrestigeTitle>Painel principal do RH</PrestigeTitle>
         <PrestigeLead>
-          Este e o coracao operacional da selecao. O board e obrigatoriamente horizontal: sem quebra de linha, com scroll lateral continuo e colunas verticais de alta legibilidade.
+          Este é o coração operacional da seleção. O quadro é horizontal: sem quebra de linha, com rolagem lateral contínua e colunas verticais de alta legibilidade.
         </PrestigeLead>
         <DragHint>
-          Arraste um card e passe sobre colunas/cards para ver preview de onde ele cairia. A mudanca so e aplicada apos confirmacao.
+          Arraste um card e passe sobre colunas/cards para ver preview de onde ele cairia. A mudança só é aplicada após confirmação.
         </DragHint>
       </PrestigePanel>
 
@@ -549,6 +630,26 @@ export function StaffKanbanPage() {
         {!selectedHiringId ? (
           <Empty>Selecione empresa, vaga e processo para abrir o kanban.</Empty>
         ) : (
+          <>
+          <Actions css={{ alignItems: "center", padding: "$3 0" }}>
+            {selectMode ? (
+              <>
+                <Select value={batchTargetId} onChange={(event) => setBatchTargetId(event.target.value)} aria-label="Etapa de destino">
+                  <option value="">Mover selecionados para...</option>
+                  {stages.map((stage) => <option key={stage.id} value={stage.id}>{stage.title}</option>)}
+                </Select>
+                <Button type="button" tone="brand" disabled={selectedIds.length === 0 || !batchTargetId} onClick={startBatchMove}>
+                  Mover ({selectedIds.length})
+                </Button>
+                <Button type="button" tone="danger" disabled={selectedIds.length === 0} onClick={startBatchReject}>
+                  Reprovar ({selectedIds.length})
+                </Button>
+                <Button type="button" tone="ghost" onClick={exitSelectMode}>Cancelar seleção</Button>
+              </>
+            ) : (
+              <Button type="button" onClick={() => setSelectMode(true)}>Selecionar vários</Button>
+            )}
+          </Actions>
           <DndContext
             sensors={sensors}
             collisionDetection={closestCorners}
@@ -573,6 +674,9 @@ export function StaffKanbanPage() {
                       previewIndex={previewIndex}
                       isOverColumn={isOverColumn}
                       activeCardId={activeCardId}
+                      selectMode={selectMode}
+                      selectedIds={selectedIds}
+                      onToggleSelected={toggleSelected}
                       onQuickReject={handleQuickReject}
                     />
                   );
@@ -584,25 +688,43 @@ export function StaffKanbanPage() {
               {activeApplication ? (
                 <Card overlay>
                   <CardTitle>{activeApplication.candidate_name || "Candidato"}</CardTitle>
-                  <CardMeta>{activeApplication.candidate_email || "Email nao informado"}</CardMeta>
+                  <CardMeta>{activeApplication.candidate_email || "Email não informado"}</CardMeta>
                   <CardMeta>Vaga: {activeApplication.job_name}</CardMeta>
                 </Card>
               ) : null}
             </DragOverlay>
           </DndContext>
+          </>
         )}
       </Panel>
+
+      <ConfirmDialog
+        open={batchAction !== null}
+        title={batchAction?.reject ? "Reprovar candidatos selecionados" : `Mover para ${batchAction?.stage.title ?? ""}`}
+        message={`${selectedIds.length} candidato(s) serão movidos de uma vez, cada um recebe o e-mail da etapa. Se algum falhar, nenhum é movido.`}
+        confirmLabel={batchAction?.reject ? "Reprovar todos" : "Mover todos"}
+        tone={batchAction?.reject ? "danger" : "brand"}
+        confirming={batching}
+        onConfirm={() => void confirmBatch()}
+        onCancel={() => setBatchAction(null)}
+      >
+        <ul style={{ margin: 0, paddingLeft: "20px", maxHeight: "30dvh", overflowY: "auto" }}>
+          {applications.filter((application) => selectedIds.includes(application.id)).map((application) => (
+            <li key={application.id}>{application.candidate_name || "Candidato"} <span style={{ opacity: 0.7 }}>({application.stage})</span></li>
+          ))}
+        </ul>
+      </ConfirmDialog>
 
       {moveDraft ? (
         <Overlay>
           <Modal>
-            <h3>Confirmar movimentacao de candidato</h3>
+            <h3>Confirmar movimentação de candidato</h3>
             <p>
               Mover <strong>{moveDraft.application.candidate_name || "candidato"}</strong> para etapa <strong>{moveDraft.targetStage.title}</strong>?
             </p>
 
             <Field>
-              Titulo do feedback
+              Título do feedback
               <Input
                 value={feedbackForm.feedback_title}
                 onChange={(event) =>
@@ -612,7 +734,7 @@ export function StaffKanbanPage() {
             </Field>
 
             <Field>
-              Avaliacao geral (1-10)
+              Avaliação geral (1-10)
               <Input
                 type="number"
                 min={1}
@@ -625,7 +747,7 @@ export function StaffKanbanPage() {
             </Field>
 
             <Field>
-              Comentario
+              Comentário
               <Textarea
                 value={feedbackForm.specific_comment}
                 onChange={(event) =>
@@ -646,7 +768,7 @@ export function StaffKanbanPage() {
 
             <Actions>
               <Button tone="brand" type="button" onClick={() => void handleMoveConfirm()}>
-                Confirmar movimentacao
+                Confirmar movimentação
               </Button>
               <Button
                 type="button"
@@ -667,7 +789,7 @@ export function StaffKanbanPage() {
       <ConfirmDialog
         open={pendingQuickReject !== null}
         title="Reprovar candidato"
-        message={`Reprovar ${pendingQuickReject?.candidate_name || "candidato"} agora? Essa acao move a candidatura para a etapa REPROVADO.`}
+        message={`Reprovar ${pendingQuickReject?.candidate_name || "candidato"} agora? Essa ação move a candidatura para a etapa REPROVADO.`}
         confirming={rejecting}
         onConfirm={() => void confirmQuickReject()}
         onCancel={() => setPendingQuickReject(null)}

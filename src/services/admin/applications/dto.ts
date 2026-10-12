@@ -13,6 +13,9 @@ export namespace AdminApplication {
     modality?: string;
     terminal_state: boolean;
     status_tone: "positive" | "negative" | "neutral";
+    // Fit to the job (skills/knowledges overlap); score is null when the job lists nothing.
+    match?: { score: number | null; matched: string[]; missing: string[] };
+    scorecard?: { average: number | null; evaluations: number };
     created_at?: string;
     updated_at?: string;
   };
