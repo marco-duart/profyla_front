@@ -13,9 +13,13 @@ export namespace AdminJob {
     start_date?: string;
     end_date?: string;
     image_url?: string;
+    skills?: JobRequirement[];
+    knowledges?: JobRequirement[];
     created_at?: string;
     updated_at?: string;
   };
+
+  export type JobRequirement = { id: number; title: string; required: boolean };
 
   export type UpsertParams = {
     company_id: number;
@@ -29,5 +33,9 @@ export namespace AdminJob {
     work_schedule: string;
     start_date?: string;
     end_date?: string;
+    skill_ids?: number[];
+    required_skill_ids?: number[];
+    knowledge_ids?: number[];
+    required_knowledge_ids?: number[];
   };
 }

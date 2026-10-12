@@ -1,9 +1,15 @@
+import { PAGE_SIZE, type Paged } from "../../pagination";
 import api from "../../../configs/api";
 import type { AdminJob } from "./dto";
 
 export async function listJobs(): Promise<AdminJob.Item[]> {
   const response = await api.get<AdminJob.Item[]>("/api/admins/jobs");
   return response.data ?? [];
+}
+
+export async function listJobsPage(page: number, companyId?: number, perPage = PAGE_SIZE): Promise<Paged<AdminJob.Item>> {
+  const response = await api.get<Paged<AdminJob.Item>>("/api/admins/jobs", { params: { page, per_page: perPage, company_id: companyId } });
+  return response.data;
 }
 
 export async function getJob(id: number): Promise<AdminJob.Item> {

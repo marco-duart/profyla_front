@@ -1,8 +1,11 @@
+import { listKnowledgesCatalog, listSkillsCatalog, type CatalogEntry } from "../../services/admin/catalog";
+import type { Pagination as PaginationData } from "../../services/pagination";
+import { Pagination } from "../StaffKit/Pagination";
 import { type FormEvent, useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { listCompanies } from "../../services/admin/companies";
 import type { AdminCompany } from "../../services/admin/companies/dto";
-import { createJob, deleteJob, listJobs, updateJob } from "../../services/admin/jobs";
+import { createJob, deleteJob, listJobsPage, updateJob } from "../../services/admin/jobs";
 import type { AdminJob } from "../../services/admin/jobs/dto";
 import { getApiErrorMessage } from "../../utils/api-error";
 import { ConfirmDialog } from "../StaffKit/ConfirmDialog";
@@ -19,6 +22,8 @@ import {
   Lead,
   List,
   Meta,
+  Chip,
+  ChipRow,
   Page,
   Panel,
   PanelTitle,
@@ -54,6 +59,37 @@ const emptyForm: JobFormState = {
   end_date: "",
 };
 
+// Click a chip to want it; click again to make it required (*), once more to drop it.
+function RequirementPicker({ label, catalog, wanted, onChange }: {
+  label: string;
+  catalog: CatalogEntry[];
+  wanted: Map<number, boolean>;
+  onChange: (next: Map<number, boolean>) => void;
+}) {
+  function cycle(id: number) {
+    const next = new Map(wanted);
+    if (!next.has(id)) next.set(id, false);
+    else if (next.get(id) === false) next.set(id, true);
+    else next.delete(id);
+    onChange(next);
+  }
+
+  return (
+    <Field as="div">
+      {label}
+      <Meta>Toque para desejar; toque de novo para tornar obrigatória (*, vale o dobro no cálculo de aderência).</Meta>
+      <ChipRow>
+        {catalog.map((entry) => (
+          <Chip key={entry.id} type="button" selected={wanted.has(entry.id)} required={wanted.get(entry.id) === true} aria-pressed={wanted.has(entry.id)} onClick={() => cycle(entry.id)}>
+            {entry.title}{wanted.get(entry.id) ? " *" : ""}
+          </Chip>
+        ))}
+        {catalog.length === 0 ? <Meta>Nenhum item no catálogo.</Meta> : null}
+      </ChipRow>
+    </Field>
+  );
+}
+
 export function StaffJobsPage() {
   const [jobs, setJobs] = useState<AdminJob.Item[]>([]);
   const [companies, setCompanies] = useState<AdminCompany.Item[]>([]);
@@ -63,23 +99,41 @@ export function StaffJobsPage() {
   const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
   const [deleting, setDeleting] = useState(false);
 
-  async function loadData() {
-    const [jobsResponse, companiesResponse] = await Promise.all([listJobs(), listCompanies()]);
-    setJobs(jobsResponse);
+  const [skillsCatalog, setSkillsCatalog] = useState<CatalogEntry[]>([]);
+  const [knowledgesCatalog, setKnowledgesCatalog] = useState<CatalogEntry[]>([]);
+  // id -> required?  (present = wanted by the job; true = hard requirement, counts double in the fit score)
+  const [wantedSkills, setWantedSkills] = useState<Map<number, boolean>>(new Map());
+  const [wantedKnowledges, setWantedKnowledges] = useState<Map<number, boolean>>(new Map());
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState<PaginationData | null>(null);
+
+  // The company list is small and needed for names/selects; the jobs list is paged on the server
+  // (and filtered there by company).
+  async function loadData(targetPage = page) {
+    const [jobsResponse, companiesResponse] = await Promise.all([
+      listJobsPage(targetPage, selectedCompanyId ? Number(selectedCompanyId) : undefined),
+      listCompanies(),
+    ]);
+    if (jobsResponse.records.length === 0 && targetPage > 1) {
+      setPage(targetPage - 1);
+      return;
+    }
+    setJobs(jobsResponse.records);
+    setPagination(jobsResponse.pagination);
     setCompanies(companiesResponse);
   }
 
   useEffect(() => {
-    void loadData();
+    void listSkillsCatalog().then(setSkillsCatalog);
+    void listKnowledgesCatalog().then(setKnowledgesCatalog);
   }, []);
 
-  const filteredJobs = useMemo(() => {
-    if (!selectedCompanyId) {
-      return jobs;
-    }
+  useEffect(() => {
+    void loadData(page);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, selectedCompanyId]);
 
-    return jobs.filter((job) => job.company_id === Number(selectedCompanyId));
-  }, [jobs, selectedCompanyId]);
+  const filteredJobs = jobs;
 
   const companyNameById = useMemo(() => {
     const map = new Map<number, string>();
@@ -89,6 +143,8 @@ export function StaffJobsPage() {
 
   function beginEdit(item: AdminJob.Item) {
     setEditingId(item.id);
+    setWantedSkills(new Map((item.skills ?? []).map((entry) => [entry.id, entry.required])));
+    setWantedKnowledges(new Map((item.knowledges ?? []).map((entry) => [entry.id, entry.required])));
     setForm({
       company_id: String(item.company_id),
       title: item.title,
@@ -107,6 +163,8 @@ export function StaffJobsPage() {
   function resetForm() {
     setEditingId(null);
     setForm(emptyForm);
+    setWantedSkills(new Map());
+    setWantedKnowledges(new Map());
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -125,6 +183,10 @@ export function StaffJobsPage() {
         work_schedule: form.work_schedule,
         start_date: form.start_date || undefined,
         end_date: form.end_date || undefined,
+        skill_ids: [...wantedSkills.keys()],
+        required_skill_ids: [...wantedSkills].filter(([, required]) => required).map(([id]) => id),
+        knowledge_ids: [...wantedKnowledges.keys()],
+        required_knowledge_ids: [...wantedKnowledges].filter(([, required]) => required).map(([id]) => id),
       };
 
       if (editingId) {
@@ -162,7 +224,7 @@ export function StaffJobsPage() {
     <Page>
       <Hero>
         <h2>Vagas</h2>
-        <Lead>Gerencie vagas pre-cadastradas e depois conecte cada uma a processos seletivos especificos.</Lead>
+        <Lead>Gerencie vagas pré-cadastradas e depois conecte cada uma a processos seletivos específicos.</Lead>
       </Hero>
 
       <Panel>
@@ -185,7 +247,7 @@ export function StaffJobsPage() {
               </Select>
             </Field>
             <Field>
-              Titulo da vaga
+              Título da vaga
               <Input
                 required
                 value={form.title}
@@ -216,6 +278,7 @@ export function StaffJobsPage() {
             <Field>
               Faixa salarial
               <Input
+                placeholder="Ex.: R$ 4.000 a R$ 6.000"
                 value={form.salary}
                 onChange={(event) => setForm((prev) => ({ ...prev, salary: event.target.value }))}
               />
@@ -246,7 +309,7 @@ export function StaffJobsPage() {
           </Grid>
 
           <Field>
-            Descricao
+            Descrição
             <Textarea
               value={form.description}
               onChange={(event) => setForm((prev) => ({ ...prev, description: event.target.value }))}
@@ -261,9 +324,22 @@ export function StaffJobsPage() {
             />
           </Field>
 
+          <RequirementPicker
+            label="Habilidades desejadas"
+            catalog={skillsCatalog}
+            wanted={wantedSkills}
+            onChange={setWantedSkills}
+          />
+          <RequirementPicker
+            label="Conhecimentos desejados"
+            catalog={knowledgesCatalog}
+            wanted={wantedKnowledges}
+            onChange={setWantedKnowledges}
+          />
+
           <Actions>
             <Button tone="brand" type="submit">
-              {editingId ? "Salvar edicao" : "Criar vaga"}
+              {editingId ? "Salvar edição" : "Criar vaga"}
             </Button>
             <Button type="button" tone="ghost" onClick={resetForm}>
               Limpar
@@ -276,7 +352,7 @@ export function StaffJobsPage() {
         <PanelTitle>Lista de vagas</PanelTitle>
         <Field>
           Filtrar por empresa
-          <Select value={selectedCompanyId} onChange={(event) => setSelectedCompanyId(event.target.value)}>
+          <Select value={selectedCompanyId} onChange={(event) => { setSelectedCompanyId(event.target.value); setPage(1); }}>
             <option value="">Todas</option>
             {companies.map((company) => (
               <option key={company.id} value={company.id}>
@@ -304,19 +380,25 @@ export function StaffJobsPage() {
                   </Actions>
                 </ItemTop>
                 <Meta>
-                  {companyNameById.get(job.company_id) ?? "Empresa nao encontrada"} · {job.modality || "Modalidade nao informada"} · {job.job_location || "Sem local"}
+                  {companyNameById.get(job.company_id) ?? "Empresa não encontrada"} · {job.modality || "Modalidade não informada"} · {job.job_location || "Sem local"}
                 </Meta>
                 {job.salary ? <Meta>Faixa: {job.salary}</Meta> : null}
+                {(job.skills?.length ?? 0) + (job.knowledges?.length ?? 0) > 0 ? (
+                  <Meta>
+                    Procura: {[...(job.skills ?? []), ...(job.knowledges ?? [])].map((entry) => `${entry.title}${entry.required ? "*" : ""}`).join(", ")}
+                  </Meta>
+                ) : null}
               </Item>
             ))}
           </List>
         )}
+        <Pagination pagination={pagination} onChange={setPage} />
       </Panel>
 
       <ConfirmDialog
         open={pendingDeleteId !== null}
         title="Excluir vaga"
-        message="Essa acao nao pode ser desfeita. Processos seletivos vinculados podem ser afetados."
+        message="Essa ação não pode ser desfeita. Processos seletivos vinculados podem ser afetados."
         confirming={deleting}
         onConfirm={() => void confirmDelete()}
         onCancel={() => setPendingDeleteId(null)}
