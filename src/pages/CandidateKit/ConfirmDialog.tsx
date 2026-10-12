@@ -1,4 +1,5 @@
-import type { ReactNode } from "react";
+import { type ReactNode, useId, useRef } from "react";
+import { useDialogA11y } from "../../hooks/useDialogA11y";
 import { Actions, Button, Modal, Overlay } from "./styles";
 
 type ConfirmDialogProps = {
@@ -28,19 +29,26 @@ export function ConfirmDialog({
   onCancel,
   children,
 }: ConfirmDialogProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const titleId = useId();
+  // Esc cancels, except while a request is in flight.
+  useDialogA11y(open, containerRef, () => {
+    if (!confirming) onCancel();
+  });
+
   if (!open) return null;
 
   return (
     <Overlay>
-      <Modal>
-        <h3>{title}</h3>
+      <Modal ref={containerRef} role="dialog" aria-modal="true" aria-labelledby={titleId}>
+        <h3 id={titleId}>{title}</h3>
         {message ? <p>{message}</p> : null}
         {children}
         <Actions>
           <Button type="button" tone={tone} onClick={onConfirm} disabled={confirming || confirmDisabled}>
             {confirming ? "Aguarde..." : confirmLabel}
           </Button>
-          <Button type="button" tone="ghost" onClick={onCancel} disabled={confirming}>
+          <Button type="button" tone="ghost" data-dialog-initial-focus onClick={onCancel} disabled={confirming}>
             {cancelLabel}
           </Button>
         </Actions>
