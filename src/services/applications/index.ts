@@ -1,3 +1,4 @@
+import { downloadFile } from "../../utils/download";
 import api from "../../configs/api";
 import type {
   ApplicationDetail,
@@ -60,3 +61,6 @@ export async function submitExamResponse(
   const response = await api.post<SubmitExamResponse.Response>("/api/candidates/application-exam/response", params);
   return response.data;
 }
+
+export const downloadInterviewCalendar = (applicationId: number, interviewId: number) =>
+  downloadFile(`/api/candidates/application/${applicationId}/interview/${interviewId}/calendar`, "entrevista.ics");

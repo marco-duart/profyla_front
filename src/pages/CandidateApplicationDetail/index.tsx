@@ -1,3 +1,6 @@
+import { PageSkeleton } from "../../components/PageSkeleton";
+import { formatDateTime, formatDateTimeLong } from "../../utils/format";
+import { interviewMethodLabel, interviewStatusLabel, interviewTypeLabel } from "../../utils/labels";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -5,6 +8,7 @@ import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import {
   getApplicationDetail,
   respondInterview,
+  downloadInterviewCalendar,
   submitExamResponse,
   submitFormResponse,
   withdrawApplication,
@@ -16,6 +20,8 @@ import { ConfirmDialog } from "../CandidateKit/ConfirmDialog";
 import {
   Actions,
   Badge,
+  Timeline,
+  TimelineItem,
   Button,
   Field,
   Hero,
@@ -104,7 +110,7 @@ function DynamicFormWizard({
           <FiArrowLeft /> Voltar
         </Button>
         <Button type="button" tone="brand" onClick={() => void handleNext()} disabled={submitting}>
-          {isLast ? (submitting ? "Enviando..." : "Enviar questionario") : <>Continuar <FiArrowRight /></>}
+          {isLast ? (submitting ? "Enviando..." : "Enviar questionário") : <>Continuar <FiArrowRight /></>}
         </Button>
       </StepNav>
     </WizardShell>
@@ -146,7 +152,7 @@ function DynamicExamWizard({
         <StepTrack>
           <StepFill style={{ width: `${progressPct}%` }} />
         </StepTrack>
-        <StepCount>Questao {stepIndex + 1} de {questions.length}</StepCount>
+        <StepCount>Questão {stepIndex + 1} de {questions.length}</StepCount>
       </div>
       <StepBody>
         <StepQuestion>{question.text}</StepQuestion>
@@ -184,6 +190,10 @@ export function CandidateApplicationDetailPage() {
   const [confirmingWithdraw, setConfirmingWithdraw] = useState(false);
   const [withdrawing, setWithdrawing] = useState(false);
   const [pendingDeclineInterviewId, setPendingDeclineInterviewId] = useState<number | null>(null);
+  const [rescheduleInterviewId, setRescheduleInterviewId] = useState<number | null>(null);
+  const [suggestedDateTime, setSuggestedDateTime] = useState("");
+  const [rescheduleMessage, setRescheduleMessage] = useState("");
+  const [rescheduling, setRescheduling] = useState(false);
   const [declining, setDeclining] = useState(false);
 
   async function loadData() {
@@ -199,7 +209,7 @@ export function CandidateApplicationDetailPage() {
     setWithdrawing(true);
     try {
       await withdrawApplication(applicationId, { feedback: withdrawFeedback });
-      toast.success("Desistencia registrada.");
+      toast.success("Desistência registrada.");
       setConfirmingWithdraw(false);
       await loadData();
     } catch (error) {
@@ -209,7 +219,37 @@ export function CandidateApplicationDetailPage() {
     }
   }
 
-  async function handleInterviewResponse(interviewId: number, response: "accept" | "reschedule") {
+  async function handleCalendarDownload(interviewId: number) {
+    try {
+      await downloadInterviewCalendar(applicationId, interviewId);
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, "Não foi possível baixar o arquivo de agenda."));
+    }
+  }
+
+  async function confirmReschedule() {
+    if (!rescheduleInterviewId) return;
+    setRescheduling(true);
+    try {
+      await respondInterview(applicationId, {
+        interview_id: rescheduleInterviewId,
+        response: "reschedule",
+        suggested_datetime: new Date(suggestedDateTime).toISOString(),
+        message: rescheduleMessage.trim() || undefined,
+      });
+      toast.success("Pedido de reagendamento enviado.");
+      setRescheduleInterviewId(null);
+      setSuggestedDateTime("");
+      setRescheduleMessage("");
+      await loadData();
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, "Erro ao pedir reagendamento."));
+    } finally {
+      setRescheduling(false);
+    }
+  }
+
+  async function handleInterviewResponse(interviewId: number, response: "accept") {
     try {
       await respondInterview(applicationId, { interview_id: interviewId, response });
       toast.success("Resposta de entrevista enviada.");
@@ -248,10 +288,10 @@ export function CandidateApplicationDetailPage() {
         dynamic_form_id: data.tools.dynamic_form_id,
         form_responses_attributes: attributes,
       });
-      toast.success("Questionario enviado com sucesso.");
+      toast.success("Questionário enviado com sucesso.");
       await loadData();
     } catch (error) {
-      toast.error(getApiErrorMessage(error, "Erro ao enviar questionario."));
+      toast.error(getApiErrorMessage(error, "Erro ao enviar questionário."));
     }
   }
 
@@ -277,7 +317,7 @@ export function CandidateApplicationDetailPage() {
   }
 
   if (!data) {
-    return <p>Carregando candidatura...</p>;
+    return <PageSkeleton kit="candidate" rows={4} />;
   }
 
   return (
@@ -298,8 +338,8 @@ export function CandidateApplicationDetailPage() {
         <Panel>
           {data.tools.form_already_submitted ? (
             <>
-              <PanelTitle>Questionario respondido</PanelTitle>
-              <Meta>Voce ja enviou suas respostas para o questionario desta etapa. O RH foi notificado.</Meta>
+              <PanelTitle>Questionário respondido</PanelTitle>
+              <Meta>Você já enviou suas respostas para o questionário desta etapa. O RH foi notificado.</Meta>
             </>
           ) : (
             <DynamicFormWizard fields={data.tools.form_fields} onSubmit={handleFormSubmit} />
@@ -312,13 +352,27 @@ export function CandidateApplicationDetailPage() {
           {data.tools.exam_already_submitted ? (
             <>
               <PanelTitle>Prova enviada</PanelTitle>
-              <Meta>Voce ja enviou suas respostas para a prova tecnica desta etapa. O RH foi notificado.</Meta>
+              <Meta>Você já enviou suas respostas para a prova técnica desta etapa. O RH foi notificado.</Meta>
             </>
           ) : (
             <DynamicExamWizard questions={data.tools.exam_questions} onSubmit={handleExamSubmit} />
           )}
         </Panel>
       ) : null}
+
+      <Panel>
+        <PanelTitle>Linha do tempo</PanelTitle>
+        <Timeline>
+          {[...data.timeline].reverse().map((entry, index) => (
+            <TimelineItem key={`${entry.kind}-${entry.at}-${index}`} kind={entry.kind}>
+              <strong>{entry.title}</strong>
+              <Meta>{formatDateTime(entry.at)}</Meta>
+              {entry.kind === "interview" && entry.scheduled_for ? <Meta>Marcada para {formatDateTimeLong(entry.scheduled_for)}</Meta> : null}
+              {entry.description ? <Meta>{entry.description}</Meta> : null}
+            </TimelineItem>
+          ))}
+        </Timeline>
+      </Panel>
 
       <Panel>
         <PanelTitle>Entrevistas</PanelTitle>
@@ -329,14 +383,24 @@ export function CandidateApplicationDetailPage() {
             {data.interviews.map((interview) => (
               <Item key={interview.id}>
                 <ItemTop>
-                  <strong>{interview.interview_type}{interview.interviewer ? ` com ${interview.interviewer}` : ""}</strong>
+                  <strong>{interviewTypeLabel(interview.interview_type)}{interview.interviewer ? ` com ${interview.interviewer}` : ""}</strong>
+                  {interview.status ? <Badge tone={interview.status === "recusada" ? "negative" : interview.status === "aceita" ? "positive" : "neutral"}>{interviewStatusLabel(interview.status)}</Badge> : null}
                 </ItemTop>
-                <Meta>{interview.date_time}{interview.interview_method ? ` - ${interview.interview_method}` : ""}</Meta>
+                <Meta>{formatDateTimeLong(interview.date_time)}{interview.interview_method ? ` · ${interviewMethodLabel(interview.interview_method)}` : ""}</Meta>
                 {interview.resume ? <Meta>{interview.resume}</Meta> : null}
-                {data.tools.can_respond_interview ? (
+                <Actions>
+                  <Button type="button" onClick={() => void handleCalendarDownload(interview.id)}>Baixar .ics</Button>
+                  {interview.google_calendar_url ? (
+                    <Button as="a" href={interview.google_calendar_url} target="_blank" rel="noreferrer">Google Agenda</Button>
+                  ) : null}
+                </Actions>
+                {interview.status === "reagendamento_solicitado" && interview.suggested_datetime ? (
+                  <Meta>Você sugeriu: {formatDateTimeLong(interview.suggested_datetime)}. Aguarde o retorno da equipe.</Meta>
+                ) : null}
+                {data.tools.can_respond_interview && (!interview.status || interview.status === "pendente") ? (
                   <Actions>
                     <Button type="button" tone="brand" onClick={() => void handleInterviewResponse(interview.id, "accept")}>Aceitar</Button>
-                    <Button type="button" tone="ghost" onClick={() => void handleInterviewResponse(interview.id, "reschedule")}>Reagendar</Button>
+                    <Button type="button" tone="ghost" onClick={() => setRescheduleInterviewId(interview.id)}>Reagendar</Button>
                     <Button type="button" tone="danger" onClick={() => setPendingDeclineInterviewId(interview.id)}>Recusar</Button>
                   </Actions>
                 ) : null}
@@ -348,8 +412,8 @@ export function CandidateApplicationDetailPage() {
 
       {data.feedback ? (
         <Panel>
-          <PanelTitle>Ultimo feedback registrado</PanelTitle>
-          <Meta>{data.feedback.specific_comment ?? "Sem comentario adicional."}</Meta>
+          <PanelTitle>Último feedback registrado</PanelTitle>
+          <Meta>{data.feedback.specific_comment ?? "Sem comentário adicional."}</Meta>
           {data.feedback.improvements ? <Meta>Pontos de melhoria: {data.feedback.improvements}</Meta> : null}
         </Panel>
       ) : null}
@@ -357,17 +421,17 @@ export function CandidateApplicationDetailPage() {
       {data.tools.can_withdraw ? (
         <Panel>
           <PanelTitle>Desistir da vaga</PanelTitle>
-          <Meta>Se decidir encerrar sua participacao, o RH sera avisado automaticamente.</Meta>
+          <Meta>Se decidir encerrar sua participação, o RH será avisado automaticamente.</Meta>
           <Field>
             Motivo (opcional)
             <Textarea
               value={withdrawFeedback}
               onChange={(event) => setWithdrawFeedback(event.target.value)}
-              placeholder="Conte para o RH o motivo da desistencia"
+              placeholder="Conte para o RH o motivo da desistência"
             />
           </Field>
           <Actions>
-            <Button type="button" tone="danger" onClick={() => setConfirmingWithdraw(true)}>Confirmar desistencia</Button>
+            <Button type="button" tone="danger" onClick={() => setConfirmingWithdraw(true)}>Confirmar desistência</Button>
           </Actions>
         </Panel>
       ) : null}
@@ -375,14 +439,14 @@ export function CandidateApplicationDetailPage() {
       {data.terminal_state && !data.feedback ? (
         <Panel>
           <PanelTitle>Processo encerrado</PanelTitle>
-          <Meta>Esta candidatura foi encerrada. Nenhuma acao adicional esta disponivel.</Meta>
+          <Meta>Esta candidatura foi encerrada. Nenhuma ação adicional está disponível.</Meta>
         </Panel>
       ) : null}
 
       <ConfirmDialog
         open={confirmingWithdraw}
         title="Desistir da vaga"
-        message="Essa acao nao pode ser desfeita. Voce perdera sua posicao neste processo seletivo."
+        message="Essa ação não pode ser desfeita. Você perderá sua posição neste processo seletivo."
         confirmLabel="Desistir"
         confirming={withdrawing}
         onConfirm={() => void confirmWithdraw()}
@@ -390,9 +454,30 @@ export function CandidateApplicationDetailPage() {
       />
 
       <ConfirmDialog
+        open={rescheduleInterviewId !== null}
+        title="Pedir outro horário"
+        message="Sugira uma nova data e horário. A equipe de recrutamento vai analisar o pedido."
+        confirmLabel="Enviar pedido"
+        tone="brand"
+        confirming={rescheduling}
+        confirmDisabled={!suggestedDateTime}
+        onConfirm={() => void confirmReschedule()}
+        onCancel={() => setRescheduleInterviewId(null)}
+      >
+        <Field>
+          Nova data e horário
+          <KitInput type="datetime-local" value={suggestedDateTime} onChange={(event) => setSuggestedDateTime(event.target.value)} />
+        </Field>
+        <Field>
+          Mensagem (opcional)
+          <Textarea value={rescheduleMessage} onChange={(event) => setRescheduleMessage(event.target.value)} placeholder="Ex.: Tenho um compromisso nesse horário." />
+        </Field>
+      </ConfirmDialog>
+
+      <ConfirmDialog
         open={pendingDeclineInterviewId !== null}
         title="Recusar entrevista"
-        message="Essa acao nao pode ser desfeita."
+        message="Essa ação não pode ser desfeita."
         confirmLabel="Recusar"
         confirming={declining}
         onConfirm={() => void confirmDeclineInterview()}

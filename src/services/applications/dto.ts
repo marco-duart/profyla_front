@@ -29,6 +29,15 @@ export namespace CreateApplication {
 }
 
 export namespace ApplicationDetail {
+  export type TimelineEntry = {
+    kind: "stage" | "interview" | "form" | "exam";
+    at: string;
+    title: string;
+    description?: string | null;
+    scheduled_for?: string;
+    status?: string;
+  };
+
   export type Interview = {
     id: number;
     date_time: string;
@@ -36,6 +45,10 @@ export namespace ApplicationDetail {
     interviewer: string;
     interview_method: string;
     resume: string;
+    status?: string;
+    google_calendar_url?: string;
+    suggested_datetime?: string | null;
+    candidate_message?: string | null;
   };
 
   export type FormField = {
@@ -69,6 +82,7 @@ export namespace ApplicationDetail {
     status_tone: "positive" | "negative" | "neutral";
     summary: string;
     interviews: Interview[];
+    timeline: TimelineEntry[];
     feedback: {
       specific_comment?: string;
       improvements?: string;
