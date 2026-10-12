@@ -1,4 +1,4 @@
-import { styled } from "../../theme/stitches";
+import { keyframes, styled } from "../../theme/stitches";
 
 const GLASS_BLUR = "blur(20px) saturate(140%)";
 
@@ -38,6 +38,7 @@ export const PanelTitle = styled("h3", {
 });
 
 export const Grid = styled("div", {
+  "@media print": { gridTemplateColumns: "1fr !important" },
   display: "grid",
   gap: "$3",
   alignItems: "start",
@@ -67,6 +68,8 @@ export const Field = styled("label", {
 });
 
 const controlBase = {
+  minWidth: 0,
+  maxWidth: "100%",
   border: "1px solid $border",
   borderRadius: "$sm",
   padding: "$3 $4",
@@ -104,6 +107,9 @@ export const Actions = styled("div", {
 });
 
 export const Button = styled("button", {
+  textDecoration: "none", // also rendered as <a> (Button as={Link})
+  display: "inline-block",
+  textAlign: "center",
   border: "1px solid $border",
   borderRadius: "$md",
   padding: "$2 $5",
@@ -236,7 +242,8 @@ export const Overlay = styled("div", {
 });
 
 export const Modal = styled("div", {
-  width: "min(560px, 96vw)",
+  width: "100%",
+  maxWidth: "560px",
   borderRadius: "$lg",
   border: "1px solid $border",
   backgroundColor: "$canvasAlt",
@@ -362,6 +369,161 @@ export const FunnelFill = styled("div", {
       positive: { backgroundColor: "$success" },
       negative: { backgroundColor: "$error" },
       neutral: { backgroundColor: "$brand" },
+    },
+  },
+});
+
+// --- Loading skeletons (replace plain "Carregando..." text) ---
+
+const shimmer = keyframes({
+  "0%": { backgroundPosition: "200% 0" },
+  "100%": { backgroundPosition: "-200% 0" },
+});
+
+export const Skeleton = styled("div", {
+  height: "16px",
+  borderRadius: "$sm",
+  border: "1px solid $border",
+  backgroundColor: "$surface",
+  backgroundImage: "linear-gradient(90deg, transparent 0%, $colors$surfaceStrong 50%, transparent 100%)",
+  backgroundSize: "200% 100%",
+  animation: `${shimmer} 1.4s linear infinite`,
+  '@media (prefers-reduced-motion: reduce)': { animation: "none" },
+  variants: {
+    size: {
+      line: { height: "16px" },
+      title: { height: "28px", width: "40%" },
+      block: { height: "96px" },
+    },
+  },
+});
+
+// --- Calendar (agenda) primitives ---
+
+export const Tabs = styled("div", {
+  display: "inline-flex",
+  border: "1px solid $border",
+  borderRadius: "$sm",
+  overflow: "hidden",
+});
+
+export const Tab = styled("button", {
+  padding: "$2 $4",
+  border: "none",
+  borderRight: "1px solid $border",
+  backgroundColor: "transparent",
+  color: "$textMuted",
+  fontWeight: "$semibold",
+  fontSize: "$sm",
+  '&:last-child': { borderRight: "none" },
+  '&:hover': { backgroundColor: "$surfaceStrong" },
+  '&:focus-visible': { outline: "2px solid $brand", outlineOffset: "-2px" },
+  variants: {
+    active: { true: { backgroundColor: "$brandSoft", color: "$text" } },
+  },
+});
+
+export const CalendarGrid = styled("div", {
+  display: "grid",
+  gap: "1px",
+  backgroundColor: "$border",
+  border: "1px solid $border",
+  gridTemplateColumns: "repeat(7, minmax(0, 1fr))",
+  variants: {
+    // Week view stacks the days on small screens; the month grid keeps 7 columns (compact cells).
+    stackOnMobile: {
+      true: {
+        gridTemplateColumns: "1fr",
+        '@md': { gridTemplateColumns: "repeat(7, minmax(0, 1fr))" },
+      },
+    },
+  },
+});
+
+export const CalendarHead = styled("div", {
+  padding: "$2",
+  textAlign: "center",
+  fontSize: "$xs",
+  fontWeight: "$bold",
+  textTransform: "uppercase",
+  letterSpacing: "0.06em",
+  color: "$textMuted",
+  backgroundColor: "$canvasAlt",
+});
+
+export const CalendarDay = styled("div", {
+  minHeight: "64px",
+  padding: "$2",
+  display: "grid",
+  alignContent: "start",
+  gap: "$1",
+  backgroundColor: "$surface",
+  '@md': { minHeight: "96px" },
+  variants: {
+    muted: { true: { backgroundColor: "$canvasAlt", color: "$textFaint" } },
+    today: { true: { boxShadow: "inset 0 0 0 1px $colors$accent" } },
+    selected: { true: { boxShadow: "inset 0 0 0 1px $colors$brand", backgroundColor: "$brandSoft" } },
+  },
+});
+
+export const CalendarDayNumber = styled("span", {
+  fontFamily: "$mono",
+  fontSize: "$xs",
+  fontWeight: "$semibold",
+});
+
+export const CalendarEvent = styled("button", {
+  display: "block",
+  width: "100%",
+  textAlign: "left",
+  padding: "2px $2",
+  border: "1px solid $border",
+  borderLeft: "3px solid $brand",
+  backgroundColor: "$canvasAlt",
+  color: "$text",
+  fontSize: "$xs",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  whiteSpace: "nowrap",
+  '&:hover': { borderColor: "$borderStrong" },
+  '&:focus-visible': { outline: "2px solid $brand", outlineOffset: "1px" },
+  variants: {
+    tone: {
+      positive: { borderLeftColor: "$success" },
+      negative: { borderLeftColor: "$error" },
+      warning: { borderLeftColor: "$warning" },
+      neutral: { borderLeftColor: "$brand" },
+    },
+  },
+});
+
+// Selectable pill (multi-select such as skills); `selected` highlights it, `required` marks a hard requirement.
+export const ChipRow = styled("div", {
+  display: "flex",
+  flexWrap: "wrap",
+  gap: "$2",
+});
+
+export const Chip = styled("button", {
+  display: "inline-flex",
+  alignItems: "center",
+  gap: "$2",
+  border: "1px solid $border",
+  borderRadius: "$sm",
+  padding: "$1 $3",
+  fontSize: "$sm",
+  fontWeight: "$semibold",
+  backgroundColor: "$surface",
+  color: "$textMuted",
+  transition: "background-color 140ms ease, border-color 140ms ease, color 140ms ease",
+  '&:hover': { borderColor: "$borderStrong" },
+  '&:focus-visible': { outline: "2px solid $brand", outlineOffset: "2px" },
+  variants: {
+    selected: {
+      true: { backgroundColor: "$brandSoft", borderColor: "$brand", color: "$text" },
+    },
+    required: {
+      true: { borderColor: "$accent", boxShadow: "inset 0 0 0 1px $colors$accent" },
     },
   },
 });

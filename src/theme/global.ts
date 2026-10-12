@@ -55,4 +55,26 @@ export const globalStyles = globalCss({
     outline: "2px solid $colors$brand",
     outlineOffset: "2px",
   },
+  // Print / "save as PDF" (candidate profile): light page, no chrome, no buttons.
+  "@media print": {
+    "html, body": {
+      backgroundColor: "#ffffff !important",
+      backgroundImage: "none !important",
+      color: "#111111 !important",
+    },
+    "*": {
+      backgroundColor: "transparent !important",
+      backgroundImage: "none !important",
+      color: "#111111 !important",
+      boxShadow: "none !important",
+      backdropFilter: "none !important",
+      WebkitBackdropFilter: "none !important",
+      borderColor: "#bbbbbb !important",
+      textShadow: "none !important",
+    },
+    "[data-print-hide], button, aside, nav, [role='dialog']": { display: "none !important" },
+    "a": { textDecoration: "none" },
+    "section, article, li, tr": { breakInside: "avoid" },
+    "main": { padding: "0 !important" },
+  },
 });

@@ -1,4 +1,4 @@
-import { styled } from "../../theme/stitches";
+import { keyframes, styled } from "../../theme/stitches";
 
 const GLASS_BLUR = "blur(20px) saturate(140%)";
 
@@ -58,6 +58,8 @@ export const Field = styled("label", {
 });
 
 const controlBase = {
+  minWidth: 0,
+  maxWidth: "100%",
   border: "1px solid $border",
   borderRadius: "$sm",
   padding: "$3 $4",
@@ -96,6 +98,9 @@ export const Actions = styled("div", {
 });
 
 export const Button = styled("button", {
+  textDecoration: "none", // also rendered as <a> (Button as={Link})
+  display: "inline-block",
+  textAlign: "center",
   border: "1px solid $border",
   borderRadius: "$md",
   padding: "$3 $5",
@@ -193,7 +198,8 @@ export const Overlay = styled("div", {
 });
 
 export const Modal = styled("div", {
-  width: "min(480px, 96vw)",
+  width: "100%",
+  maxWidth: "480px",
   borderRadius: "$lg",
   border: "1px solid $border",
   backgroundColor: "$canvasAlt",
@@ -424,6 +430,97 @@ export const OptionButton = styled("button", {
         color: "$text",
         fontWeight: "$semibold",
       },
+    },
+  },
+});
+
+// Small helper line under a field (purpose of a sensitive/optional question).
+export const FieldNote = styled("span", {
+  color: "$textMuted",
+  fontSize: "$xs",
+  fontWeight: "$regular",
+  letterSpacing: 0,
+  textTransform: "none",
+  lineHeight: 1.5,
+});
+
+// Fluid card grid for directory-style listings (vagas, etc.).
+export const CardGrid = styled("div", {
+  display: "grid",
+  gap: "$4",
+  alignItems: "start",
+  gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+});
+
+export const TagRow = styled("div", {
+  display: "flex",
+  flexWrap: "wrap",
+  alignItems: "center",
+  gap: "$2",
+});
+
+// --- Loading skeletons (replace plain "Carregando..." text) ---
+
+const shimmer = keyframes({
+  "0%": { backgroundPosition: "200% 0" },
+  "100%": { backgroundPosition: "-200% 0" },
+});
+
+export const Skeleton = styled("div", {
+  height: "16px",
+  borderRadius: "$sm",
+  border: "1px solid $border",
+  backgroundColor: "$surface",
+  backgroundImage: "linear-gradient(90deg, transparent 0%, $colors$surfaceStrong 50%, transparent 100%)",
+  backgroundSize: "200% 100%",
+  animation: `${shimmer} 1.4s linear infinite`,
+  '@media (prefers-reduced-motion: reduce)': { animation: "none" },
+  variants: {
+    size: {
+      line: { height: "16px" },
+      title: { height: "28px", width: "40%" },
+      block: { height: "96px" },
+    },
+  },
+});
+
+// --- Vertical timeline (application history) ---
+
+export const Timeline = styled("ol", {
+  listStyle: "none",
+  margin: 0,
+  padding: 0,
+  display: "grid",
+  gap: 0,
+});
+
+export const TimelineItem = styled("li", {
+  position: "relative",
+  display: "grid",
+  gap: "$1",
+  padding: "0 0 $5 $6",
+  borderLeft: "1px solid $border",
+  marginLeft: "6px",
+  '&:last-child': {
+    paddingBottom: 0,
+    borderLeftColor: "transparent",
+  },
+  '&::before': {
+    content: '""',
+    position: "absolute",
+    left: "-6px",
+    top: "4px",
+    width: "11px",
+    height: "11px",
+    backgroundColor: "$brand",
+    border: "2px solid $canvas",
+  },
+  variants: {
+    kind: {
+      stage: { '&::before': { backgroundColor: "$brand" } },
+      interview: { '&::before': { backgroundColor: "$accent" } },
+      form: { '&::before': { backgroundColor: "$success" } },
+      exam: { '&::before': { backgroundColor: "$success" } },
     },
   },
 });
