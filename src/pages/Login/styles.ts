@@ -78,3 +78,62 @@ export const SubmitButton = styled("button", {
     cursor: "not-allowed",
   },
 });
+
+// --- Shared by the other public auth pages (register, forgot/reset password, confirmation) ---
+
+export const Notice = styled("p", {
+  color: "$textMuted",
+  fontSize: "$md",
+  marginBottom: "$4",
+});
+
+export const FieldHint = styled("span", {
+  color: "$textMuted",
+  fontSize: "$xs",
+  fontWeight: "$regular",
+});
+
+export const FieldError = styled("span", {
+  color: "$error",
+  fontSize: "$xs",
+});
+
+export const CheckboxLabel = styled("label", {
+  display: "flex",
+  gap: "$3",
+  alignItems: "flex-start",
+  fontSize: "$sm",
+  cursor: "pointer",
+  '& input': { marginTop: "3px", accentColor: "$colors$brand" },
+  '& a': { color: "$brand", fontWeight: "$semibold" },
+});
+
+export const StrengthTrack = styled("span", {
+  display: "block",
+  height: "4px",
+  backgroundColor: "$canvasAlt",
+});
+
+export const StrengthFill = styled("span", {
+  display: "block",
+  height: "100%",
+  transition: "width 160ms ease",
+  variants: {
+    score: {
+      0: { width: "0%" },
+      1: { width: "33%", backgroundColor: "$error" },
+      2: { width: "66%", backgroundColor: "$warning" },
+      3: { width: "100%", backgroundColor: "$success" },
+    },
+  },
+});
+
+export const SwitchRow = styled("p", {
+  marginTop: "$4",
+  fontSize: "$sm",
+  color: "$textMuted",
+  display: "flex",
+  gap: "$3",
+  flexWrap: "wrap",
+  '& a': { color: "$brand", fontWeight: "$semibold" },
+});

@@ -22,3 +22,16 @@ export namespace ValidateToken {
     data: SignIn.User;
   };
 }
+
+export namespace Register {
+  export type Params = {
+    name: string;
+    cpf: string;
+    email: string;
+    password: string;
+    password_confirmation: string;
+    accept_terms: boolean;
+    accept_privacy: boolean;
+    confirm_success_url: string;
+  };
+}
