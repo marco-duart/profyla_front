@@ -1,9 +1,12 @@
+import { PageSkeleton } from "../../components/PageSkeleton";
+import { formatDate } from "../../utils/format";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { FiArrowLeft } from "react-icons/fi";
 import { getDiscQuestions, getDiscResult, submitDiscAssessment } from "../../services/assessments/disc";
 import type { DiscQuestions, DiscResult } from "../../services/assessments/disc/dto";
+import { useAssessmentNotice } from "../../components/AssessmentNotice";
 import { getApiErrorMessage } from "../../utils/api-error";
 import {
   Badge,
@@ -42,12 +45,6 @@ const DIMENSION_LABELS: Record<string, string> = {
   C: "Conformidade",
 };
 
-function formatDate(value?: string): string {
-  if (!value) return "-";
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return value;
-  return date.toLocaleDateString("pt-BR");
-}
 
 function shuffle<T>(items: T[]): T[] {
   const copy = [...items];
@@ -61,6 +58,7 @@ function shuffle<T>(items: T[]): T[] {
 type Phase = "loading" | "landing" | "quiz";
 
 export function CandidateDiscAssessmentPage() {
+  const { ensureAccepted, dialog: noticeDialog } = useAssessmentNotice();
   const [phase, setPhase] = useState<Phase>("loading");
   const [latest, setLatest] = useState<DiscResult.Attempt | null>(null);
   const [questions, setQuestions] = useState<DiscQuestions.Item[]>([]);
@@ -76,6 +74,7 @@ export function CandidateDiscAssessmentPage() {
   }, []);
 
   async function startQuiz() {
+    if (!(await ensureAccepted())) return;
     try {
       const items = await getDiscQuestions();
       setQuestions(shuffle(items));
@@ -118,7 +117,7 @@ export function CandidateDiscAssessmentPage() {
   }
 
   if (phase === "loading") {
-    return <p>Carregando...</p>;
+    return <PageSkeleton kit="candidate" />;
   }
 
   if (phase === "quiz") {
@@ -160,9 +159,7 @@ export function CandidateDiscAssessmentPage() {
 
   return (
     <Page>
-      <Link to="/candidate/assessments">
-        <Button type="button" tone="ghost"><FiArrowLeft /> Voltar para avaliações</Button>
-      </Link>
+      <Button as={Link} to="/candidate/assessments" tone="ghost"><FiArrowLeft /> Voltar para avaliações</Button>
 
       <Panel>
         <PanelTitle>DISC comportamental</PanelTitle>
@@ -183,6 +180,19 @@ export function CandidateDiscAssessmentPage() {
               </ScoreRow>
             ))}
 
+            {latest.interpretation ? (
+              <>
+                <h3>O que isso sugere</h3>
+                {latest.interpretation.dimensions.map((dimension) => (
+                  <div key={dimension.key}>
+                    <strong>{dimension.name}: {dimension.band_label}</strong>
+                    <Meta>{dimension.text}</Meta>
+                  </div>
+                ))}
+                <Meta>{latest.interpretation.disclaimer}</Meta>
+              </>
+            ) : null}
+
             <Button type="button" tone="brand" onClick={() => void startQuiz()}>Refazer avaliação</Button>
           </>
         ) : (
@@ -193,6 +203,7 @@ export function CandidateDiscAssessmentPage() {
           </>
         )}
       </Panel>
+      {noticeDialog}
     </Page>
   );
 }

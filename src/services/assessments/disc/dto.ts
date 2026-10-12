@@ -27,6 +27,13 @@ export namespace DiscResult {
     profile: Profile;
     quality: Quality;
     completed_at: string;
+    interpretation?: Interpretation;
+  };
+
+  export type Interpretation = {
+    version: string;
+    disclaimer: string;
+    dimensions: { key: string; name: string; summary: string; score: number; band: string; band_label: string; text: string }[];
   };
 
   export type Response = {

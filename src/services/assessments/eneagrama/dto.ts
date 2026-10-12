@@ -37,6 +37,17 @@ export namespace EneagramaResult {
     profile: Profile;
     quality: Quality;
     completed_at: string;
+    interpretation?: Interpretation;
+  };
+
+  export type TypeText = { key: string; name: string; summary: string; attention: string };
+
+  export type Interpretation = {
+    version: string;
+    disclaimer: string;
+    primary: TypeText | null;
+    secondary: TypeText | null;
+    wing: string;
   };
 
   export type Response = {

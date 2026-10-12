@@ -1,9 +1,12 @@
+import { PageSkeleton } from "../../components/PageSkeleton";
+import { formatDate } from "../../utils/format";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { FiArrowLeft } from "react-icons/fi";
 import { getEneagramaQuestions, getEneagramaResult, submitEneagramaAssessment } from "../../services/assessments/eneagrama";
 import type { EneagramaQuestions, EneagramaResult } from "../../services/assessments/eneagrama/dto";
+import { useAssessmentNotice } from "../../components/AssessmentNotice";
 import { getApiErrorMessage } from "../../utils/api-error";
 import {
   Badge,
@@ -53,12 +56,6 @@ const CENTER_LABELS: Record<string, string> = {
   mental: "Mental",
 };
 
-function formatDate(value?: string): string {
-  if (!value) return "-";
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return value;
-  return date.toLocaleDateString("pt-BR");
-}
 
 function shuffle<T>(items: T[]): T[] {
   const copy = [...items];
@@ -72,6 +69,7 @@ function shuffle<T>(items: T[]): T[] {
 type Phase = "loading" | "landing" | "quiz";
 
 export function CandidateEneagramaAssessmentPage() {
+  const { ensureAccepted, dialog: noticeDialog } = useAssessmentNotice();
   const [phase, setPhase] = useState<Phase>("loading");
   const [latest, setLatest] = useState<EneagramaResult.Attempt | null>(null);
   const [questions, setQuestions] = useState<EneagramaQuestions.Item[]>([]);
@@ -87,6 +85,7 @@ export function CandidateEneagramaAssessmentPage() {
   }, []);
 
   async function startQuiz() {
+    if (!(await ensureAccepted())) return;
     try {
       const items = await getEneagramaQuestions();
       setQuestions(shuffle(items));
@@ -129,7 +128,7 @@ export function CandidateEneagramaAssessmentPage() {
   }
 
   if (phase === "loading") {
-    return <p>Carregando...</p>;
+    return <PageSkeleton kit="candidate" />;
   }
 
   if (phase === "quiz") {
@@ -171,9 +170,7 @@ export function CandidateEneagramaAssessmentPage() {
 
   return (
     <Page>
-      <Link to="/candidate/assessments">
-        <Button type="button" tone="ghost"><FiArrowLeft /> Voltar para avaliações</Button>
-      </Link>
+      <Button as={Link} to="/candidate/assessments" tone="ghost"><FiArrowLeft /> Voltar para avaliações</Button>
 
       <Panel>
         <PanelTitle>Eneagrama</PanelTitle>
@@ -209,6 +206,23 @@ export function CandidateEneagramaAssessmentPage() {
               </ScoreRow>
             ))}
 
+            {latest.interpretation ? (
+              <>
+                <h3>O que isso sugere</h3>
+                {[latest.interpretation.primary, latest.interpretation.secondary].map((type, index) =>
+                  type ? (
+                    <div key={type.key}>
+                      <strong>{index === 0 ? "Tipo predominante" : "Segundo tipo"}: {type.name}</strong>
+                      <Meta>{type.summary}</Meta>
+                      <Meta>Ponto de atenção: {type.attention}</Meta>
+                    </div>
+                  ) : null,
+                )}
+                <Meta>{latest.interpretation.wing}</Meta>
+                <Meta>{latest.interpretation.disclaimer}</Meta>
+              </>
+            ) : null}
+
             <Button type="button" tone="brand" onClick={() => void startQuiz()}>Refazer avaliação</Button>
           </>
         ) : (
@@ -219,6 +233,7 @@ export function CandidateEneagramaAssessmentPage() {
           </>
         )}
       </Panel>
+      {noticeDialog}
     </Page>
   );
 }
