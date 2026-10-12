@@ -9,6 +9,8 @@ type AuthContextValue = {
   signOutSession: () => Promise<void>;
 };
 
+// The context and its provider live together on purpose.
+// eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext<AuthContextValue>({
   user: null,
   loading: true,

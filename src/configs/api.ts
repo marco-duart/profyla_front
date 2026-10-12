@@ -82,6 +82,23 @@ function persistRotatedHeaders(headers: unknown): void {
   });
 }
 
+// Endpoints where a 401 means "wrong credentials", not "session expired".
+const PUBLIC_AUTH_PATHS = ["/auth/sign_in", "/auth/password", "/auth/confirmation"];
+
+function isSessionExpiredResponse(error: { config?: { url?: string }; response?: { status?: number } }): boolean {
+  if (error.response?.status !== 401) {
+    return false;
+  }
+
+  const url = error.config?.url ?? "";
+  if (PUBLIC_AUTH_PATHS.some((path) => url.includes(path))) {
+    return false;
+  }
+
+  // Credentials already cleared by a parallel request that failed first: nothing left to expire.
+  return getStoredAuthHeaders() !== null;
+}
+
 api.interceptors.response.use(
   (response) => {
     persistRotatedHeaders(response.headers);
@@ -91,6 +108,14 @@ api.interceptors.response.use(
     if (error?.response) {
       persistRotatedHeaders(error.response.headers);
     }
+
+    if (isSessionExpiredResponse(error)) {
+      clearStoredAuthHeaders();
+      if (!window.location.pathname.startsWith("/login")) {
+        window.location.assign("/login?expired=1");
+      }
+    }
+
     return Promise.reject(error);
   },
 );
