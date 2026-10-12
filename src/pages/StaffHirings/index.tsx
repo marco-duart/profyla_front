@@ -1,8 +1,11 @@
+import type { Pagination as PaginationData } from "../../services/pagination";
+import { Pagination } from "../StaffKit/Pagination";
 import { type FormEvent, useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { listExams } from "../../services/admin/exams";
 import type { AdminExam } from "../../services/admin/exams/dto";
-import { createHiring, deleteHiring, listHirings, updateHiring } from "../../services/admin/hirings";
+import { getCriteria, saveCriteria } from "../../services/admin/scorecards";
+import { alertCompatibleCandidates, exportHiringApplicationsCsv, createHiring, deleteHiring, listHiringsPage, updateHiring } from "../../services/admin/hirings";
 import type { AdminHiring } from "../../services/admin/hirings/dto";
 import { listJobs } from "../../services/admin/jobs";
 import type { AdminJob } from "../../services/admin/jobs/dto";
@@ -29,7 +32,20 @@ import {
   Panel,
   PanelTitle,
   Select,
+  Textarea,
+  Badge,
 } from "../StaffKit/styles";
+
+const STATUS_OPTIONS = [
+  { value: "draft", label: "Rascunho", tone: "neutral" },
+  { value: "open", label: "Aberto", tone: "positive" },
+  { value: "paused", label: "Pausado", tone: "warning" },
+  { value: "closed", label: "Encerrado", tone: "negative" },
+] as const;
+
+function statusOption(value: string) {
+  return STATUS_OPTIONS.find((option) => option.value === value);
+}
 
 type FormState = {
   job_id: string;
@@ -44,7 +60,7 @@ const emptyForm: FormState = {
   job_id: "",
   start_date: "",
   end_date: "",
-  status: "ativo",
+  status: "open",
   dynamic_form_id: "",
   dynamic_exam_id: "",
 };
@@ -59,18 +75,31 @@ export function StaffHiringsPage() {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [pendingAlertId, setPendingAlertId] = useState<number | null>(null);
+  const [criteriaFor, setCriteriaFor] = useState<number | null>(null);
+  const [criteriaText, setCriteriaText] = useState("");
+  const [savingCriteria, setSavingCriteria] = useState(false);
+  const [alerting, setAlerting] = useState(false);
   const [selectedJobId, setSelectedJobId] = useState<string>("");
 
-  async function loadData() {
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState<PaginationData | null>(null);
+
+  async function loadData(targetPage = page) {
     const [hiringsResponse, jobsResponse, formsResponse, examsResponse, recruitersResponse] = await Promise.all([
-      listHirings(),
+      listHiringsPage(targetPage, selectedJobId ? Number(selectedJobId) : undefined),
       listJobs(),
       listForms(),
       listExams(),
       listRecruiters(),
     ]);
 
-    setItems(hiringsResponse);
+    if (hiringsResponse.records.length === 0 && targetPage > 1) {
+      setPage(targetPage - 1);
+      return;
+    }
+    setItems(hiringsResponse.records);
+    setPagination(hiringsResponse.pagination);
     setJobs(jobsResponse);
     setForms(formsResponse);
     setExams(examsResponse);
@@ -78,16 +107,11 @@ export function StaffHiringsPage() {
   }
 
   useEffect(() => {
-    void loadData();
-  }, []);
+    void loadData(page);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, selectedJobId]);
 
-  const filteredItems = useMemo(() => {
-    if (!selectedJobId) {
-      return items;
-    }
-
-    return items.filter((item) => item.job_posting_id === Number(selectedJobId));
-  }, [items, selectedJobId]);
+  const filteredItems = items;
 
   const jobTitleById = useMemo(() => {
     const map = new Map<number, string>();
@@ -147,6 +171,54 @@ export function StaffHiringsPage() {
     }
   }
 
+  async function openCriteria(id: number) {
+    try {
+      const current = await getCriteria(id);
+      setCriteriaText(current.length > 0 ? current.map((criterion) => criterion.name).join("\n") : "Comunicação\nConhecimento técnico\nAlinhamento cultural");
+      setCriteriaFor(id);
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, "Erro ao carregar os critérios."));
+    }
+  }
+
+  async function confirmCriteria() {
+    if (!criteriaFor) return;
+    setSavingCriteria(true);
+    try {
+      await saveCriteria(criteriaFor, criteriaText.split("\n"));
+      toast.success("Critérios salvos.");
+      setCriteriaFor(null);
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, "Não foi possível salvar os critérios."));
+    } finally {
+      setSavingCriteria(false);
+    }
+  }
+
+  async function confirmAlert() {
+    if (!pendingAlertId) return;
+    setAlerting(true);
+    try {
+      const result = await alertCompatibleCandidates(pendingAlertId);
+      toast.success(`${result.sent} candidato(s) avisado(s). ${result.below_threshold} abaixo do mínimo de aderência (${result.threshold}%), ${result.already_applied} já candidatado(s).`);
+      setPendingAlertId(null);
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, "Não foi possível enviar o alerta."));
+    } finally {
+      setAlerting(false);
+    }
+  }
+
+  async function changeStatus(item: AdminHiring.Item, status: string) {
+    try {
+      await updateHiring(item.id, { status });
+      toast.success(status === "closed" ? "Processo encerrado." : "Processo aberto.");
+      await loadData();
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, "Não foi possível alterar o status."));
+    }
+  }
+
   async function confirmDelete() {
     if (!pendingDeleteId) return;
     setDeleting(true);
@@ -168,7 +240,7 @@ export function StaffHiringsPage() {
       <Hero>
         <h2>Processos seletivos</h2>
         <Lead>
-          Uma vaga pode gerar varios processos. Configure periodo, status e vincule formulario/prova para automatizar as etapas.
+          Uma vaga pode gerar vários processos. Configure período, status e vincule formulário/prova para automatizar as etapas.
         </Lead>
       </Hero>
 
@@ -194,11 +266,16 @@ export function StaffHiringsPage() {
             </Field>
             <Field>
               Status
-              <Input
-                required
+              <Select
                 value={form.status}
                 onChange={(event) => setForm((prev) => ({ ...prev, status: event.target.value }))}
-              />
+              >
+                {STATUS_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </Select>
             </Field>
             <Field>
               Data inicial
@@ -219,7 +296,7 @@ export function StaffHiringsPage() {
               />
             </Field>
             <Field>
-              Formulario para TRIAGEM
+              Formulário para TRIAGEM
               <Select
                 disabled={Boolean(editingId)}
                 value={form.dynamic_form_id}
@@ -234,7 +311,7 @@ export function StaffHiringsPage() {
               </Select>
             </Field>
             <Field>
-              Prova para TESTE TECNICO
+              Prova para TESTE TÉCNICO
               <Select
                 disabled={Boolean(editingId)}
                 value={form.dynamic_exam_id}
@@ -265,7 +342,7 @@ export function StaffHiringsPage() {
         <PanelTitle>Processos cadastrados</PanelTitle>
         <Field>
           Filtrar por vaga
-          <Select value={selectedJobId} onChange={(event) => setSelectedJobId(event.target.value)}>
+          <Select value={selectedJobId} onChange={(event) => { setSelectedJobId(event.target.value); setPage(1); }}>
             <option value="">Todos</option>
             {jobs.map((job) => (
               <option key={job.id} value={job.id}>
@@ -284,6 +361,25 @@ export function StaffHiringsPage() {
                 <ItemTop>
                   <strong>{jobTitleById.get(item.job_posting_id) ?? `Processo #${item.id}`}</strong>
                   <Actions>
+                    {item.status === "open" ? (
+                      <Button type="button" onClick={() => void changeStatus(item, "closed")}>
+                        Encerrar
+                      </Button>
+                    ) : (
+                      <Button type="button" onClick={() => void changeStatus(item, "open")}>
+                        {item.status === "closed" ? "Reabrir" : "Abrir"}
+                      </Button>
+                    )}
+                    {item.status === "open" ? (
+                      <Button type="button" onClick={() => setPendingAlertId(item.id)}>Alertar compatíveis</Button>
+                    ) : null}
+                    <Button type="button" onClick={() => void openCriteria(item.id)}>Critérios</Button>
+                    <Button
+                      type="button"
+                      onClick={() => void exportHiringApplicationsCsv(item.id).catch((error) => toast.error(getApiErrorMessage(error, "Não foi possível exportar.")))}
+                    >
+                      Exportar CSV
+                    </Button>
                     <Button type="button" onClick={() => beginEdit(item)}>
                       Editar
                     </Button>
@@ -293,7 +389,10 @@ export function StaffHiringsPage() {
                   </Actions>
                 </ItemTop>
                 <Meta>
-                  Status: {item.status} · Recrutador: {recruiterNameById.get(item.recruiter_id) ?? `#${item.recruiter_id}`}
+                  <Badge tone={statusOption(item.status)?.tone ?? "neutral"}>
+                    {statusOption(item.status)?.label ?? item.status}
+                  </Badge>{" "}
+                  · Recrutador: {recruiterNameById.get(item.recruiter_id) ?? `#${item.recruiter_id}`}
                 </Meta>
                 <Meta>
                   Inicio: {item.start_date?.slice(0, 10) || "-"} · Fim: {item.end_date?.slice(0, 10) || "-"}
@@ -302,12 +401,37 @@ export function StaffHiringsPage() {
             ))}
           </List>
         )}
+      <Pagination pagination={pagination} onChange={setPage} />
       </Panel>
+
+      <ConfirmDialog
+        open={criteriaFor !== null}
+        title="Critérios de avaliação das entrevistas"
+        message="Um critério por linha (de 1 a 10). Cada entrevistador dará nota de 1 a 5 em cada um. Remover um critério apaga as notas dele."
+        confirmLabel="Salvar critérios"
+        tone="brand"
+        confirming={savingCriteria}
+        onConfirm={() => void confirmCriteria()}
+        onCancel={() => setCriteriaFor(null)}
+      >
+        <Textarea value={criteriaText} onChange={(event) => setCriteriaText(event.target.value)} rows={6} aria-label="Critérios, um por linha" />
+      </ConfirmDialog>
+
+      <ConfirmDialog
+        open={pendingAlertId !== null}
+        title="Alertar candidatos compatíveis"
+        message="Envia um e-mail só para candidatos que têm as habilidades desejadas da vaga (aderência mínima configurada no servidor), aceitam e-mails de oportunidades e ainda não se candidataram. A vaga precisa ter habilidades ou conhecimentos cadastrados."
+        confirmLabel="Enviar alerta"
+        tone="brand"
+        confirming={alerting}
+        onConfirm={() => void confirmAlert()}
+        onCancel={() => setPendingAlertId(null)}
+      />
 
       <ConfirmDialog
         open={pendingDeleteId !== null}
         title="Excluir processo seletivo"
-        message="Essa acao nao pode ser desfeita. Candidaturas e etapas vinculadas podem ser afetadas."
+        message="Essa ação não pode ser desfeita. Candidaturas e etapas vinculadas podem ser afetadas."
         confirming={deleting}
         onConfirm={() => void confirmDelete()}
         onCancel={() => setPendingDeleteId(null)}
