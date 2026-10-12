@@ -7,6 +7,7 @@ export namespace Account {
     role: string;
     confirmed_at: string | null;
     candidate_id: number | null;
+    photo_url?: string | null;
   };
 }
 
@@ -35,4 +36,10 @@ export namespace UpdatePassword {
   export type Response = {
     message: string;
   };
+}
+
+export namespace EmailPreferences {
+  export type Category = "opportunities" | "birthday" | "digest";
+  export type Preferences = Record<Category, boolean>;
+  export type Response = { preferences: Preferences };
 }
