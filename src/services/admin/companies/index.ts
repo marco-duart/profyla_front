@@ -1,9 +1,15 @@
+import { PAGE_SIZE, type Paged } from "../../pagination";
 import api from "../../../configs/api";
 import type { AdminCompany } from "./dto";
 
 export async function listCompanies(): Promise<AdminCompany.Item[]> {
   const response = await api.get<AdminCompany.ListResponse>("/api/admins/companies");
   return response.data.companies ?? [];
+}
+
+export async function listCompaniesPage(page: number, perPage = PAGE_SIZE): Promise<Paged<AdminCompany.Item>> {
+  const response = await api.get<Paged<AdminCompany.Item>>("/api/admins/companies", { params: { page, per_page: perPage } });
+  return response.data;
 }
 
 export async function getCompany(id: number): Promise<AdminCompany.Item> {

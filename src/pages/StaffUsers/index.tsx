@@ -1,7 +1,9 @@
+import type { Pagination as PaginationData } from "../../services/pagination";
+import { Pagination } from "../StaffKit/Pagination";
 import { type FormEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { createRecruiter } from "../../services/admin/recruiters";
-import { banUser, listUsers, unbanUser } from "../../services/admin/users";
+import { banUser, listUsersPage, unbanUser } from "../../services/admin/users";
 import type { AdminUser } from "../../services/admin/users/dto";
 import { getApiErrorMessage } from "../../utils/api-error";
 import { ConfirmDialog } from "../StaffKit/ConfirmDialog";
@@ -34,14 +36,25 @@ export function StaffUsersPage() {
   const [unbanningUser, setUnbanningUser] = useState<AdminUser.Item | null>(null);
   const [unbanning, setUnbanning] = useState(false);
 
-  async function loadUsers() {
-    const response = await listUsers();
-    setUsers(response);
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const [pagination, setPagination] = useState<PaginationData | null>(null);
+
+  async function loadUsers(targetPage = page) {
+    const response = await listUsersPage(targetPage, search);
+    if (response.records.length === 0 && targetPage > 1) {
+      setPage(targetPage - 1);
+      return;
+    }
+    setUsers(response.records);
+    setPagination(response.pagination);
   }
 
   useEffect(() => {
-    void loadUsers();
-  }, []);
+    const timeout = setTimeout(() => void loadUsers(page), 250);
+    return () => clearTimeout(timeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, search]);
 
   async function handlePromote(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -49,12 +62,12 @@ export function StaffUsersPage() {
 
     try {
       await createRecruiter({ user_id: promotingId, position });
-      toast.success("Usuario promovido a recrutador.");
+      toast.success("Usuário promovido a recrutador.");
       setPromotingId(null);
       setPosition("");
       await loadUsers();
     } catch (error) {
-      toast.error(getApiErrorMessage(error, "Erro ao promover usuario."));
+      toast.error(getApiErrorMessage(error, "Erro ao promover usuário."));
     }
   }
 
@@ -64,12 +77,12 @@ export function StaffUsersPage() {
 
     try {
       await banUser(banningUser.id, banReason);
-      toast.success("Usuario banido.");
+      toast.success("Usuário banido.");
       setBanningUser(null);
       setBanReason("");
       await loadUsers();
     } catch (error) {
-      toast.error(getApiErrorMessage(error, "Erro ao banir usuario."));
+      toast.error(getApiErrorMessage(error, "Erro ao banir usuário."));
     } finally {
       setBanning(false);
     }
@@ -81,11 +94,11 @@ export function StaffUsersPage() {
 
     try {
       await unbanUser(unbanningUser.id);
-      toast.success("Usuario desbanido.");
+      toast.success("Usuário desbanido.");
       setUnbanningUser(null);
       await loadUsers();
     } catch (error) {
-      toast.error(getApiErrorMessage(error, "Erro ao desbanir usuario."));
+      toast.error(getApiErrorMessage(error, "Erro ao desbanir usuário."));
     } finally {
       setUnbanning(false);
     }
@@ -94,14 +107,18 @@ export function StaffUsersPage() {
   return (
     <Page>
       <Hero>
-        <h2>Usuarios</h2>
+        <h2>Usuários</h2>
         <Lead>Promova recrutadores e gerencie o acesso de contas bloqueadas.</Lead>
       </Hero>
 
       <Panel>
         <PanelTitle>Todas as contas</PanelTitle>
+        <Field>
+          Buscar
+          <Input value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); }} placeholder="Nome ou e-mail" />
+        </Field>
         {users.length === 0 ? (
-          <Empty>Nenhum usuario cadastrado.</Empty>
+          <Empty>Nenhum usuário encontrado.</Empty>
         ) : (
           <List>
             {users.map((item) => (
@@ -138,11 +155,11 @@ export function StaffUsersPage() {
                     <Grid>
                       <Field>
                         Cargo do recrutador
-                        <Input required value={position} onChange={(event) => setPosition(event.target.value)} placeholder="Ex: Recrutador Tecnico" />
+                        <Input required value={position} onChange={(event) => setPosition(event.target.value)} placeholder="Ex: Recrutador Técnico" />
                       </Field>
                     </Grid>
                     <Actions>
-                      <Button type="submit" tone="brand">Confirmar promocao</Button>
+                      <Button type="submit" tone="brand">Confirmar promoção</Button>
                       <Button type="button" tone="ghost" onClick={() => setPromotingId(null)}>Cancelar</Button>
                     </Actions>
                   </form>
@@ -151,11 +168,12 @@ export function StaffUsersPage() {
             ))}
           </List>
         )}
+        <Pagination pagination={pagination} onChange={setPage} />
       </Panel>
 
       <ConfirmDialog
         open={banningUser !== null}
-        title={`Banir ${banningUser?.name ?? "usuario"}`}
+        title={`Banir ${banningUser?.name ?? "usuário"}`}
         message="Uma conta banida perde acesso imediatamente. Informe o motivo do banimento."
         confirmLabel="Banir"
         confirming={banning}
@@ -171,8 +189,8 @@ export function StaffUsersPage() {
 
       <ConfirmDialog
         open={unbanningUser !== null}
-        title={`Desbanir ${unbanningUser?.name ?? "usuario"}`}
-        message="Essa conta voltara a ter acesso normal ao sistema."
+        title={`Desbanir ${unbanningUser?.name ?? "usuário"}`}
+        message="Essa conta voltará a ter acesso normal ao sistema."
         confirmLabel="Desbanir"
         tone="brand"
         confirming={unbanning}

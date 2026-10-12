@@ -1,9 +1,12 @@
+import type { Pagination as PaginationData } from "../../services/pagination";
+import { Pagination } from "../StaffKit/Pagination";
+import { maskCnpj, onlyDigits } from "../../utils/masks";
 import { type FormEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import {
   createCompany,
   deleteCompany,
-  listCompanies,
+  listCompaniesPage,
   updateCompany,
 } from "../../services/admin/companies";
 import type { AdminCompany } from "../../services/admin/companies/dto";
@@ -51,20 +54,30 @@ export function StaffCompaniesPage() {
   const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
   const [deleting, setDeleting] = useState(false);
 
-  async function loadCompanies() {
-    const response = await listCompanies();
-    setItems(response);
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState<PaginationData | null>(null);
+
+  async function loadCompanies(targetPage = page) {
+    const response = await listCompaniesPage(targetPage);
+    // Deleting the last item of a page falls back to the previous one.
+    if (response.records.length === 0 && targetPage > 1) {
+      setPage(targetPage - 1);
+      return;
+    }
+    setItems(response.records);
+    setPagination(response.pagination);
   }
 
   useEffect(() => {
-    void loadCompanies();
-  }, []);
+    void loadCompanies(page);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
 
   function beginEdit(item: AdminCompany.Item) {
     setEditingId(item.id);
     setForm({
       company_name: item.company_name,
-      cnpj: item.cnpj,
+      cnpj: maskCnpj(item.cnpj),
       sector: item.sector,
       company_size: String(item.company_size),
       company_location: item.company_location,
@@ -83,7 +96,7 @@ export function StaffCompaniesPage() {
     try {
       const payload = {
         company_name: form.company_name,
-        cnpj: form.cnpj,
+        cnpj: onlyDigits(form.cnpj),
         sector: form.sector,
         company_size: Number(form.company_size),
         company_location: form.company_location,
@@ -127,7 +140,7 @@ export function StaffCompaniesPage() {
       <Hero>
         <h2>Empresas e CNPJs</h2>
         <Lead>
-          Cadastre e mantenha empresas do ecossistema RH. Uma mesma razao social pode existir com CNPJs diferentes para diferentes frentes de contratacao.
+          Cadastre e mantenha empresas do ecossistema RH. Uma mesma razão social pode existir com CNPJs diferentes para diferentes frentes de contratação.
         </Lead>
       </Hero>
 
@@ -147,8 +160,10 @@ export function StaffCompaniesPage() {
               CNPJ
               <Input
                 required
+                inputMode="numeric"
+                placeholder="00.000.000/0000-00"
                 value={form.cnpj}
-                onChange={(event) => setForm((prev) => ({ ...prev, cnpj: event.target.value }))}
+                onChange={(event) => setForm((prev) => ({ ...prev, cnpj: maskCnpj(event.target.value) }))}
               />
             </Field>
             <Field>
@@ -164,12 +179,14 @@ export function StaffCompaniesPage() {
               <Input
                 required
                 type="number"
+                inputMode="numeric"
+                min={1}
                 value={form.company_size}
                 onChange={(event) => setForm((prev) => ({ ...prev, company_size: event.target.value }))}
               />
             </Field>
             <Field>
-              Localizacao
+              Localização
               <Input
                 required
                 value={form.company_location}
@@ -180,7 +197,7 @@ export function StaffCompaniesPage() {
 
           <Actions>
             <Button tone="brand" type="submit" disabled={loading}>
-              {editingId ? "Salvar edicao" : "Criar empresa"}
+              {editingId ? "Salvar edição" : "Criar empresa"}
             </Button>
             <Button type="button" tone="ghost" onClick={resetForm}>
               Limpar
@@ -208,7 +225,7 @@ export function StaffCompaniesPage() {
                     </Button>
                   </Actions>
                 </ItemTop>
-                <Meta>CNPJ: {item.cnpj}</Meta>
+                <Meta>CNPJ: {maskCnpj(item.cnpj)}</Meta>
                 <Meta>
                   Setor: {item.sector} · Tamanho: {item.company_size} · Local: {item.company_location}
                 </Meta>
@@ -216,12 +233,13 @@ export function StaffCompaniesPage() {
             ))}
           </List>
         )}
+        <Pagination pagination={pagination} onChange={setPage} />
       </Panel>
 
       <ConfirmDialog
         open={pendingDeleteId !== null}
         title="Excluir empresa"
-        message="Essa acao nao pode ser desfeita. As vagas e processos vinculados podem ser afetados."
+        message="Essa ação não pode ser desfeita. As vagas e processos vinculados podem ser afetados."
         confirming={deleting}
         onConfirm={() => void confirmDelete()}
         onCancel={() => setPendingDeleteId(null)}

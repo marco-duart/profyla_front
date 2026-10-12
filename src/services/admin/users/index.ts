@@ -1,9 +1,17 @@
+import { PAGE_SIZE, type Paged } from "../../pagination";
 import api from "../../../configs/api";
 import type { AdminUser } from "./dto";
 
 export async function listUsers(): Promise<AdminUser.Item[]> {
   const response = await api.get<AdminUser.Item[]>("/api/admins/users");
   return response.data ?? [];
+}
+
+export async function listUsersPage(page: number, search?: string, perPage = PAGE_SIZE): Promise<Paged<AdminUser.Item>> {
+  const response = await api.get<Paged<AdminUser.Item>>("/api/admins/users", {
+    params: { page, per_page: perPage, search: search || undefined },
+  });
+  return response.data;
 }
 
 export async function banUser(userId: number, banReason: string): Promise<void> {
