@@ -82,6 +82,20 @@ function documentFormData(params: CreateDocument.Params): FormData {
   return formData;
 }
 
+export async function uploadCurriculumFile(file: File): Promise<CurriculumData.Response> {
+  const form = new FormData();
+  form.append("file", file);
+  const response = await api.put<CurriculumData.Response>("/api/candidates/curriculum/file", form, {
+    headers: { "Content-Type": undefined },
+  });
+  return response.data;
+}
+
+export async function deleteCurriculumFile(): Promise<CurriculumData.Response> {
+  const response = await api.delete<CurriculumData.Response>("/api/candidates/curriculum/file");
+  return response.data;
+}
+
 export async function createDocument(params: CreateDocument.Params): Promise<void> {
   await api.post("/api/candidates/document", documentFormData(params), {
     headers: { "Content-Type": undefined },

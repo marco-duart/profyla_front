@@ -1,4 +1,5 @@
 export namespace CreateCandidateProfile {
+  // Sensitive answers (LGPD) are optional: omit or send null to leave them blank.
   export type Params = {
     phone_number1: string;
     phone_number2: string;
@@ -7,20 +8,20 @@ export namespace CreateCandidateProfile {
     birthplace: string;
     gender: string;
     birthdate: string;
-    marital_status: string;
+    marital_status?: string | null;
     address_neighborhood: string;
     address_city: string;
-    mother_name: string;
-    spouse_name: string;
-    number_of_children: number;
+    mother_name?: string | null;
+    spouse_name?: string | null;
+    number_of_children?: number | null;
     residence_status: string;
-    possessions: string;
-    other_incomes: boolean;
-    relatives_in_company: boolean;
-    pcd: string;
-    smoker: boolean;
-    alcohol_consumer: boolean;
-    medication_user: boolean;
+    possessions?: string | null;
+    other_incomes?: boolean | null;
+    relatives_in_company?: boolean | null;
+    pcd?: string | null;
+    smoker?: boolean | null;
+    alcohol_consumer?: boolean | null;
+    medication_user?: boolean | null;
     first_question?: string;
     second_question?: string;
     third_question?: string;

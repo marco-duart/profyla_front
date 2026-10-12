@@ -80,6 +80,7 @@ export namespace CurriculumData {
 
   export type Response = {
     candidate_profile: Profile | null;
+    curriculum_file: { filename: string; byte_size: number; url: string } | null;
     documents: Document[];
     academic_histories: AcademicHistory[];
     employment_histories: EmploymentHistory[];

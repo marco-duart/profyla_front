@@ -1,3 +1,6 @@
+import { NotificationBell } from "../NotificationBell";
+import { Avatar } from "../Avatar";
+import { useAccountPhoto } from "../../hooks/useAccountPhoto";
 import { Outlet, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import {
@@ -9,6 +12,7 @@ import {
   FiUser,
 } from "react-icons/fi";
 import icon from "../../assets/icon-192.png";
+import { LegalLinks } from "../LegalLinks";
 import { useAuth } from "../../hooks/useAuth";
 import {
   ActionButton,
@@ -35,10 +39,11 @@ import {
 export function CandidateShell() {
   const navigate = useNavigate();
   const { user, signOutSession } = useAuth();
+  const photoUrl = useAccountPhoto();
 
   async function handleSignOut(): Promise<void> {
     await signOutSession();
-    toast.success("Sessao encerrada.");
+    toast.success("Sessão encerrada.");
     navigate("/login", { replace: true });
   }
 
@@ -49,25 +54,29 @@ export function CandidateShell() {
           <TopBarIcon src={icon} alt="" />
           <TopBarTitle>TalentFlow</TopBarTitle>
         </TopBarBrand>
-        <TopBarLogout type="button" onClick={handleSignOut} aria-label="Sair">
-          <FiLogOut size={18} />
-        </TopBarLogout>
+        <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+          <NotificationBell />
+          <TopBarLogout type="button" onClick={handleSignOut} aria-label="Sair">
+            <FiLogOut size={18} />
+          </TopBarLogout>
+        </div>
       </TopBar>
 
       <Sidebar>
         <Brand>
-          <BrandIcon src={icon} alt="" />
+          {photoUrl ? <Avatar src={photoUrl} name={user?.name} size={36} /> : <BrandIcon src={icon} alt="" />}
           <BrandText>
             <BrandTitle>TalentFlow</BrandTitle>
             <BrandSubtitle>{user?.name}</BrandSubtitle>
           </BrandText>
+          <span style={{ marginLeft: "auto" }}><NotificationBell side="left" /></span>
         </Brand>
 
         <Nav>
           <NavItem to="/candidate/home">Home</NavItem>
           <NavItem to="/candidate/opportunities">Oportunidades</NavItem>
           <NavItem to="/candidate/applications">Candidaturas</NavItem>
-          <NavItem to="/candidate/curriculum">Curriculo</NavItem>
+          <NavItem to="/candidate/curriculum">Currículo</NavItem>
           <NavItem to="/candidate/assessments">Avaliações comportamentais</NavItem>
           <NavItem to="/candidate/account">Conta</NavItem>
         </Nav>
@@ -76,6 +85,7 @@ export function CandidateShell() {
           <ActionButton type="button" onClick={handleSignOut}>
             Sair
           </ActionButton>
+          <LegalLinks />
         </BottomActions>
       </Sidebar>
 

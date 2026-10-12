@@ -1,3 +1,4 @@
+import { PhotoUploader } from "../../components/PhotoUploader";
 import { type FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -12,6 +13,7 @@ export function StaffAccountPage() {
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [photoUrl, setPhotoUrl] = useState<string | null>(null);
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
 
@@ -20,13 +22,14 @@ export function StaffAccountPage() {
       const account = await getAccount();
       setName(account.name);
       setEmail(account.email);
+      setPhotoUrl(account.photo_url ?? null);
     }
     void load();
   }, []);
 
   async function handleSignOut() {
     await signOutSession();
-    toast.success("Sessao encerrada.");
+    toast.success("Sessão encerrada.");
     navigate("/login", { replace: true });
   }
 
@@ -64,6 +67,11 @@ export function StaffAccountPage() {
       </Hero>
 
       <Panel>
+        <PanelTitle>Foto de perfil</PanelTitle>
+        <PhotoUploader name={name} currentUrl={photoUrl} />
+      </Panel>
+
+      <Panel>
         <PanelTitle>Dados de acesso</PanelTitle>
         <Meta>Papel: {user?.role}</Meta>
         <form onSubmit={handleUpdateAccount}>
@@ -84,7 +92,7 @@ export function StaffAccountPage() {
       </Panel>
 
       <Panel>
-        <PanelTitle>Seguranca</PanelTitle>
+        <PanelTitle>Segurança</PanelTitle>
         <form onSubmit={handleUpdatePassword}>
           <Grid>
             <Field>
@@ -103,10 +111,10 @@ export function StaffAccountPage() {
       </Panel>
 
       <Panel>
-        <PanelTitle>Sessao</PanelTitle>
+        <PanelTitle>Sessão</PanelTitle>
         <Actions>
           <Button tone="danger" type="button" onClick={() => void handleSignOut()}>
-            Encerrar sessao
+            Encerrar sessão
           </Button>
         </Actions>
       </Panel>

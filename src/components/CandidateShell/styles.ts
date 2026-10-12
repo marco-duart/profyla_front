@@ -5,6 +5,7 @@ const GLASS_BLUR = "blur(20px) saturate(140%)";
 const BOTTOM_NAV_HEIGHT = "72px";
 
 export const Layout = styled("div", {
+  "@media print": { display: "block" },
   minHeight: "100dvh",
   display: "grid",
   gridTemplateColumns: "1fr",
@@ -117,6 +118,7 @@ export const Content = styled("main", {
 });
 
 export const TopBar = styled("header", {
+  "@media print": { display: "none" },
   position: "sticky",
   top: 0,
   zIndex: 30,
