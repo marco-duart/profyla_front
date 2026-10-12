@@ -9,6 +9,7 @@ export namespace AdminCandidate {
     email: string;
     resume?: string;
     skills: string[];
+    tags: string[];
     applications_count: number;
     disc_label: string | null;
     eneagrama_label: string | null;
@@ -20,7 +21,7 @@ export namespace AdminCandidate {
     document_number: string;
     issue_date?: string;
     location?: string;
-    image_url?: string | null;
+    file_attached?: boolean;
   };
 
   export type AcademicHistory = {
@@ -55,6 +56,8 @@ export namespace AdminCandidate {
     stage: string;
     status_tone: "positive" | "negative" | "neutral";
     terminal_state: boolean;
+    match_score?: number | null;
+    scorecard?: { average: number | null; evaluations: number };
     created_at: string;
   };
 
@@ -92,7 +95,7 @@ export namespace AdminCandidate {
     fifth_question?: string;
     created_at?: string;
     updated_at?: string;
-    curriculum_url?: string | null;
+    curriculum_attached?: boolean;
     documents: Document[];
     academic_histories: AcademicHistory[];
     employment_histories: EmploymentHistory[];
@@ -100,8 +103,10 @@ export namespace AdminCandidate {
     social_links: LinkItem[];
     skills: TagItem[];
     knowledges: TagItem[];
+    tags?: string[];
     applications: ApplicationItem[];
-    disc_assessment: DiscResult.Response;
-    eneagrama_assessment: EneagramaResult.Response;
+    // null when the candidate withdrew the assessment consent (results are then hidden).
+    disc_assessment: DiscResult.Response | null;
+    eneagrama_assessment: EneagramaResult.Response | null;
   };
 }

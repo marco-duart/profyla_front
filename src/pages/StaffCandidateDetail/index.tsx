@@ -1,13 +1,19 @@
+import { Annotations } from "./Annotations";
+import { PageSkeleton } from "../../components/PageSkeleton";
+import { Avatar } from "../../components/Avatar";
+import { maskPhone } from "../../utils/masks";
+import { formatDate, formatDateTime } from "../../utils/format";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import { FiArrowLeft } from "react-icons/fi";
-import { getCandidate } from "../../services/admin/candidates";
+import { downloadCandidateCurriculum, downloadCandidateDocument, getCandidate } from "../../services/admin/candidates";
 import type { AdminCandidate } from "../../services/admin/candidates/dto";
 import type { DiscResult } from "../../services/assessments/disc/dto";
 import type { EneagramaResult } from "../../services/assessments/eneagrama/dto";
 import { getApiErrorMessage } from "../../utils/api-error";
 import {
+  Actions,
   Badge,
   Button,
   Empty,
@@ -35,23 +41,11 @@ const ENEAGRAMA_LABELS: Record<string, string> = {
   E6: "Leal", E7: "Entusiasta", E8: "Desafiador", E9: "Pacificador",
 };
 
-function formatDate(value?: string): string {
-  if (!value) return "-";
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return value;
-  return date.toLocaleDateString("pt-BR");
-}
 
-function formatDateTime(value?: string): string {
-  if (!value) return "-";
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return value;
-  return date.toLocaleString("pt-BR");
-}
 
 function yesNo(value?: boolean): string {
   if (value === undefined) return "-";
-  return value ? "Sim" : "Nao";
+  return value ? "Sim" : "Não";
 }
 
 function DiscPanel({ assessment }: { assessment: DiscResult.Response }) {
@@ -79,6 +73,17 @@ function DiscPanel({ assessment }: { assessment: DiscResult.Response }) {
             </FunnelRow>
           ))}
 
+          {latest.interpretation ? (
+            <>
+              {latest.interpretation.dimensions.map((dimension) => (
+                <div key={dimension.key}>
+                  <strong>{dimension.name}: {dimension.band_label}</strong>
+                  <Meta>{dimension.text}</Meta>
+                </div>
+              ))}
+              <Meta>{latest.interpretation.disclaimer}</Meta>
+            </>
+          ) : null}
           {history.length > 1 ? (
             <>
               <Meta>Histórico de tentativas</Meta>
@@ -129,6 +134,21 @@ function EneagramaPanel({ assessment }: { assessment: EneagramaResult.Response }
             </FunnelRow>
           ))}
 
+          {latest.interpretation ? (
+            <>
+              {[latest.interpretation.primary, latest.interpretation.secondary].map((type, index) =>
+                type ? (
+                  <div key={type.key}>
+                    <strong>{index === 0 ? "Predominante" : "Secundário"}: {type.name}</strong>
+                    <Meta>{type.summary}</Meta>
+                    <Meta>Atenção: {type.attention}</Meta>
+                  </div>
+                ) : null,
+              )}
+              <Meta>{latest.interpretation.wing}</Meta>
+              <Meta>{latest.interpretation.disclaimer}</Meta>
+            </>
+          ) : null}
           {history.length > 1 ? (
             <>
               <Meta>Histórico de tentativas</Meta>
@@ -164,31 +184,42 @@ export function StaffCandidateDetailPage() {
       .catch((error) => toast.error(getApiErrorMessage(error, "Erro ao carregar candidato.")));
   }, [id]);
 
+  async function handleDownload(download: () => Promise<void>) {
+    try {
+      await download();
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, "Não foi possível baixar o arquivo."));
+    }
+  }
+
   if (!candidate) {
-    return <p>Carregando...</p>;
+    return <PageSkeleton kit="staff" rows={4} />;
   }
 
   const links = [...candidate.professional_links, ...candidate.social_links];
 
   return (
     <Page>
-      <Link to="/staff/candidates">
-        <Button type="button"><FiArrowLeft /> Voltar para candidatos</Button>
-      </Link>
+      <Button as={Link} to="/staff/candidates"><FiArrowLeft /> Voltar para candidatos</Button>
 
       <Hero>
-        <div>
-          <PanelTitle>{candidate.name}</PanelTitle>
-          <Lead>{candidate.email}</Lead>
+        <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
+          <Avatar src={candidate.photo_url} name={candidate.name} size={64} />
+          <div>
+            <PanelTitle>{candidate.name}</PanelTitle>
+            <Lead>{candidate.email}</Lead>
+          </div>
         </div>
-        {candidate.curriculum_url ? (
-          <a href={candidate.curriculum_url} target="_blank" rel="noreferrer">
-            <Button type="button" tone="brand">Baixar curriculo</Button>
-          </a>
+        <Button type="button" onClick={() => window.print()}>Imprimir / salvar PDF</Button>
+        {candidate.curriculum_attached ? (
+          <Button type="button" tone="brand" onClick={() => void handleDownload(() => downloadCandidateCurriculum(candidate.id))}>
+            Baixar currículo
+          </Button>
         ) : null}
       </Hero>
 
       <Grid>
+        <Annotations userId={candidate.id} initialTags={candidate.tags ?? []} />
         {candidate.resume ? (
           <Panel>
             <PanelTitle>Resumo profissional</PanelTitle>
@@ -199,11 +230,12 @@ export function StaffCandidateDetailPage() {
         <Panel>
           <PanelTitle>Dados pessoais</PanelTitle>
           <TagRow>
-            <Tag>Tel: {candidate.phone_number1 || "-"}</Tag>
+            <Tag>Tel: {candidate.phone_number1 ? maskPhone(candidate.phone_number1) : "-"}</Tag>
             <Tag>Cidade: {candidate.address_city || "-"}</Tag>
             <Tag>Nasc.: {formatDate(candidate.birthdate)}</Tag>
-            <Tag>Est. civil: {candidate.marital_status || "-"}</Tag>
-            <Tag>PCD: {candidate.pcd || "-"}</Tag>
+            {/* Sensitive answers are optional: only shown when the candidate filled them in. */}
+            {candidate.marital_status ? <Tag>Est. civil: {candidate.marital_status}</Tag> : null}
+            {candidate.pcd ? <Tag>PCD: {candidate.pcd}</Tag> : null}
             <Tag>Empregado: {yesNo(candidate.employee)}</Tag>
           </TagRow>
         </Panel>
@@ -279,9 +311,16 @@ export function StaffCandidateDetailPage() {
                 <Item key={item.id}>
                   <ItemTop>
                     <strong>{item.document_name}</strong>
-                    {item.image_url ? <Badge tone="positive">Anexado</Badge> : null}
+                    {item.file_attached ? <Badge tone="positive">Anexado</Badge> : null}
                   </ItemTop>
                   <Meta>{item.document_number}</Meta>
+                  {item.file_attached ? (
+                    <Actions>
+                      <Button type="button" onClick={() => void handleDownload(() => downloadCandidateDocument(candidate.id, item.id))}>
+                        Baixar arquivo
+                      </Button>
+                    </Actions>
+                  ) : null}
                 </Item>
               ))}
             </List>
@@ -301,14 +340,31 @@ export function StaffCandidateDetailPage() {
                     <Badge tone={item.status_tone}>{item.stage}</Badge>
                   </ItemTop>
                   <Meta>{item.company_name}</Meta>
+                  {item.match_score != null ? <Meta>Aderência à vaga: <strong>{item.match_score}%</strong></Meta> : null}
+                  {item.scorecard?.average != null ? <Meta>Entrevistas: <strong>{item.scorecard.average.toLocaleString("pt-BR")}</strong>/5 ({item.scorecard.evaluations} avaliação(ões))</Meta> : null}
                 </Item>
               ))}
             </List>
           )}
         </Panel>
 
-        <DiscPanel assessment={candidate.disc_assessment} />
-        <EneagramaPanel assessment={candidate.eneagrama_assessment} />
+        {candidate.disc_assessment || candidate.eneagrama_assessment ? (
+          <Panel>
+            <PanelTitle>Testes comportamentais</PanelTitle>
+            <Meta>
+              DISC e Eneagrama são questionários de autoconhecimento, não instrumentos psicométricos validados nem diagnóstico.
+              <strong> Não use como critério único de eliminação.</strong>
+            </Meta>
+          </Panel>
+        ) : null}
+        {candidate.disc_assessment ? <DiscPanel assessment={candidate.disc_assessment} /> : null}
+        {candidate.eneagrama_assessment ? <EneagramaPanel assessment={candidate.eneagrama_assessment} /> : null}
+        {!candidate.disc_assessment && !candidate.eneagrama_assessment ? (
+          <Panel>
+            <PanelTitle>Testes comportamentais</PanelTitle>
+            <Empty>Sem resultados disponíveis (não realizados ou consentimento revogado pelo candidato).</Empty>
+          </Panel>
+        ) : null}
       </Grid>
     </Page>
   );
