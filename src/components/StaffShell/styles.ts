@@ -4,6 +4,7 @@ import { styled } from "../../theme/stitches";
 const GLASS_BLUR = "blur(20px) saturate(140%)";
 
 export const Layout = styled("div", {
+  "@media print": { display: "block" },
   minHeight: "100dvh",
   display: "grid",
   gridTemplateColumns: "1fr",
@@ -12,22 +13,106 @@ export const Layout = styled("div", {
   },
 });
 
+// Below @md the sidebar is an off-canvas drawer (data-open); from @md on it is the fixed column.
 export const Sidebar = styled("aside", {
+  backgroundColor: "$canvasAlt",
+  backdropFilter: GLASS_BLUR,
+  WebkitBackdropFilter: GLASS_BLUR,
+  borderRight: "1px solid $border",
+  padding: "$5",
+  display: "grid",
+  gridTemplateRows: "auto auto 1fr auto",
+  alignContent: "start",
+  gap: "$4",
+  position: "fixed",
+  top: 0,
+  left: 0,
+  bottom: 0,
+  width: "min(86vw, 300px)",
+  overflowY: "auto",
+  zIndex: 50,
+  transform: "translateX(-102%)",
+  visibility: "hidden",
+  transition: "transform 200ms ease, visibility 0s linear 200ms",
+  '&[data-open=true]': {
+    transform: "translateX(0)",
+    visibility: "visible",
+    transition: "transform 200ms ease, visibility 0s",
+  },
+  '@md': {
+    gridTemplateRows: "auto 1fr auto",
+    position: "sticky",
+    width: "auto",
+    height: "100dvh",
+    transform: "none",
+    visibility: "visible",
+    backgroundColor: "$surface",
+    zIndex: "auto",
+  },
+});
+
+export const Backdrop = styled("div", {
+  position: "fixed",
+  inset: 0,
+  zIndex: 40,
+  backgroundColor: "rgba(3, 4, 8, 0.6)",
+  '@md': {
+    display: "none",
+  },
+});
+
+export const TopBar = styled("header", {
+  "@media print": { display: "none" },
+  position: "sticky",
+  top: 0,
+  zIndex: 30,
+  display: "flex",
+  alignItems: "center",
+  gap: "$3",
+  padding: "$3 $4",
+  paddingTop: "calc(12px + env(safe-area-inset-top, 0px))",
   backgroundColor: "$surface",
   backdropFilter: GLASS_BLUR,
   WebkitBackdropFilter: GLASS_BLUR,
   borderBottom: "1px solid $border",
-  padding: "$5",
-  display: "grid",
-  gridTemplateRows: "auto 1fr auto",
-  gap: "$4",
   '@md': {
-    borderRight: "1px solid $border",
-    borderBottom: "none",
-    height: "100dvh",
-    position: "sticky",
-    top: 0,
-    overflowY: "auto",
+    display: "none",
+  },
+});
+
+export const MenuButton = styled("button", {
+  display: "grid",
+  placeItems: "center",
+  width: "40px",
+  height: "40px",
+  border: "1px solid $border",
+  borderRadius: "$sm",
+  backgroundColor: "$surface",
+  color: "$text",
+  '&:focus-visible': {
+    outline: "2px solid $brand",
+    outlineOffset: "2px",
+  },
+});
+
+export const TopBarTitle = styled("span", {
+  fontFamily: "$display",
+  fontWeight: "$bold",
+  fontSize: "$md",
+});
+
+export const DrawerClose = styled("button", {
+  justifySelf: "end",
+  display: "grid",
+  placeItems: "center",
+  width: "36px",
+  height: "36px",
+  border: "1px solid $border",
+  borderRadius: "$sm",
+  backgroundColor: "transparent",
+  color: "$text",
+  '@md': {
+    display: "none",
   },
 });
 
