@@ -20,4 +20,9 @@ export default defineConfig([
       globals: globals.browser,
     },
   },
+  {
+    // The API DTOs are grouped in namespaces (Account.Response, ...): a deliberate project convention.
+    files: ['src/services/**/dto.ts'],
+    rules: { '@typescript-eslint/no-namespace': 'off' },
+  },
 ])
