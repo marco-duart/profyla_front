@@ -1,4 +1,4 @@
-# TalentFlow — Front-end
+# Profyla — Front-end
 
 React 19 + TypeScript + Vite, Stitches (design system escuro com "glass"), React Router 7.
 
@@ -10,7 +10,7 @@ npm install
 npm run dev              # http://localhost:5173
 ```
 
-A API (Rails) fica no repositório `talentflow_api`. Credenciais de demonstração: veja o README da API (`rails db:seed`).
+A API (Rails) fica no repositório `profyla_api`. Credenciais de demonstração: veja o README da API (`rails db:seed`).
 
 ## Qualidade
 
@@ -33,8 +33,8 @@ O workflow `.github/workflows/ci.yml` roda lint, tipos, testes e build a cada pu
 ## Docker (build estático servido por nginx)
 
 ```bash
-docker build --build-arg VITE_BASE_URL=https://api.seu-dominio.com -t talentflow-front .
-docker run -p 8080:80 talentflow-front       # http://localhost:8080  (health: /healthz)
+docker build --build-arg VITE_BASE_URL=https://api.seu-dominio.com -t profyla-front .
+docker run -p 8080:80 profyla-front       # http://localhost:8080  (health: /healthz)
 ```
 
 O endereço da API é embutido no bundle em tempo de build. O `nginx.conf` faz o fallback de SPA para `index.html`.
