@@ -9,7 +9,7 @@ RUN npm ci
 
 COPY . .
 # The API address is baked into the bundle at build time:
-#   docker build --build-arg VITE_BASE_URL=https://api.your-domain.com -t talentflow-front .
+#   docker build --build-arg VITE_BASE_URL=https://api.your-domain.com -t profyla-front .
 ARG VITE_BASE_URL
 ARG VITE_API_KEY=""
 ENV VITE_BASE_URL=$VITE_BASE_URL \
