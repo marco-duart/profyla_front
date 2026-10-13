@@ -1,7 +1,7 @@
 import axios from "axios";
 import { env } from "./env";
 
-const AUTH_STORAGE_KEY = "talentflow.auth.headers";
+const AUTH_STORAGE_KEY = "profyla.auth.headers";
 
 export type AuthHeaders = {
   accessToken: string;

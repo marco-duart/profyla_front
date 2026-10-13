@@ -1,4 +1,4 @@
-const KEY = "talentflow.postLoginRedirect";
+const KEY = "profyla.postLoginRedirect";
 
 // Only same-site paths are accepted (never "//host" or absolute URLs): avoids open redirects.
 export function safeRedirect(value: string | null | undefined): string | null {

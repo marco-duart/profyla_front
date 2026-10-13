@@ -22,4 +22,4 @@ export async function revokeConsent(kind: Legal.Kind): Promise<Legal.Consents> {
 }
 
 // Lets the ConsentGate (mounted once, above the pages) re-check right after a revoke/accept.
-export const CONSENTS_CHANGED_EVENT = "talentflow:consents-changed";
+export const CONSENTS_CHANGED_EVENT = "profyla:consents-changed";

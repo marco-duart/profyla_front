@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getAccount } from "../services/account";
 
-export const PHOTO_CHANGED_EVENT = "talentflow:photo-changed";
+export const PHOTO_CHANGED_EVENT = "profyla:photo-changed";
 
 // Current user's profile photo (for the shells). Refreshes when the photo is changed elsewhere.
 export function useAccountPhoto(): string | null {
