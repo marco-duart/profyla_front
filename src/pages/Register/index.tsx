@@ -90,10 +90,10 @@ export function RegisterPage() {
     return (
       <Page>
         <Panel>
-          <Logo src={logo} alt="TalentFlow" />
+          <Logo src={logo} alt="Profyla" />
           <Notice>
             <strong>Verifique seu e-mail.</strong> Enviamos um link de confirmação para{" "}
-            <strong>{registeredEmail}</strong>. Acesse-o para ativar sua conta e depois entre no TalentFlow.
+            <strong>{registeredEmail}</strong>. Acesse-o para ativar sua conta e depois entre no Profyla.
           </Notice>
           <Notice>Não encontrou? Veja a caixa de spam. O link expira em alguns dias.</Notice>
           <SwitchRow><Link to="/login">Ir para o login</Link></SwitchRow>
@@ -105,7 +105,7 @@ export function RegisterPage() {
   return (
     <Page>
       <Panel>
-        <Logo src={logo} alt="TalentFlow" />
+        <Logo src={logo} alt="Profyla" />
         <Subtitle>Crie sua conta para se candidatar às vagas.</Subtitle>
 
         <Form onSubmit={handleSubmit} noValidate>

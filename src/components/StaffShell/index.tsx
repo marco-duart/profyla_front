@@ -91,7 +91,7 @@ export function StaffShell() {
         >
           <FiMenu size={20} />
         </MenuButton>
-        <TopBarTitle>TalentFlow</TopBarTitle>
+        <TopBarTitle>Profyla</TopBarTitle>
         <span style={{ marginLeft: "auto" }}><NotificationBell /></span>
       </TopBar>
       {drawerOpen ? <Backdrop onClick={closeDrawer} aria-hidden="true" /> : null}
@@ -103,7 +103,7 @@ export function StaffShell() {
         <Brand>
           {photoUrl ? <Avatar src={photoUrl} name={user?.name} size={36} /> : <BrandIcon src={icon} alt="" />}
           <BrandText>
-            <BrandTitle>TalentFlow</BrandTitle>
+            <BrandTitle>Profyla</BrandTitle>
             <BrandSubtitle>{user?.name} | equipe</BrandSubtitle>
           </BrandText>
           <span style={{ marginLeft: "auto" }}><NotificationBell side="left" /></span>

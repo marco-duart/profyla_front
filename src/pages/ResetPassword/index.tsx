@@ -63,7 +63,7 @@ export function ResetPasswordPage() {
     return (
       <Page>
         <Panel>
-          <Logo src={logo} alt="TalentFlow" />
+          <Logo src={logo} alt="Profyla" />
           <Notice><strong>Link inválido.</strong> Solicite um novo link de redefinição de senha.</Notice>
           <SwitchRow><Link to="/esqueci-senha">Esqueci minha senha</Link></SwitchRow>
         </Panel>
@@ -74,7 +74,7 @@ export function ResetPasswordPage() {
   return (
     <Page>
       <Panel>
-        <Logo src={logo} alt="TalentFlow" />
+        <Logo src={logo} alt="Profyla" />
         <Subtitle>Crie uma nova senha para a sua conta.</Subtitle>
         <Form onSubmit={handleSubmit}>
           <FieldGroup>

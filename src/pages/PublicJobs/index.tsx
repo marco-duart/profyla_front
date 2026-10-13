@@ -11,7 +11,7 @@ import { formatCurrency } from "../../utils/masks";
 import { Badge, Button, CardGrid, Empty, Field, Hero, Input, Lead, Meta, Page, Panel, PanelTitle, TagRow } from "../CandidateKit/styles";
 
 export function PublicJobsPage() {
-  usePageMeta("Vagas abertas", "Encontre vagas abertas e candidate-se pelo TalentFlow.");
+  usePageMeta("Vagas abertas", "Encontre vagas abertas e candidate-se pelo Profyla.");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [data, setData] = useState<PublicJobs.List | null>(null);

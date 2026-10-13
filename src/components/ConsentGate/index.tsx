@@ -57,7 +57,7 @@ export function ConsentGate({ children }: PropsWithChildren) {
           <Modal role="dialog" aria-modal="true" aria-labelledby="consent-title">
             <h2 id="consent-title">Antes de continuar</h2>
             <p>
-              Para usar o TalentFlow, você precisa ler e aceitar:{" "}
+              Para usar o Profyla, você precisa ler e aceitar:{" "}
               {pending.map((kind, index) => (
                 <span key={kind}>
                   {index > 0 ? " e " : ""}

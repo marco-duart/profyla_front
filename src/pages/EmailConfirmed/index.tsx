@@ -28,11 +28,11 @@ export function EmailConfirmedPage() {
   return (
     <Page>
       <Panel>
-        <Logo src={logo} alt="TalentFlow" />
+        <Logo src={logo} alt="Profyla" />
         {success ? (
           <>
             <Notice>
-              <strong>E-mail confirmado!</strong> Sua conta está ativa. Agora você já pode entrar no TalentFlow.
+              <strong>E-mail confirmado!</strong> Sua conta está ativa. Agora você já pode entrar no Profyla.
             </Notice>
             <Link to="/login"><SubmitButton as="span" style={{ display: "block", textAlign: "center" }}>Entrar</SubmitButton></Link>
           </>

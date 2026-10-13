@@ -17,7 +17,7 @@ export function LegalDocumentPage({ kind }: { kind: Legal.Kind }) {
 
   useEffect(() => {
     getLegalDocument(kind).then(setDocument).catch(() => setFailed(true));
-    window.document.title = `${TITLES[kind]} - TalentFlow`;
+    window.document.title = `${TITLES[kind]} - Profyla`;
   }, [kind]);
 
   return (

@@ -128,7 +128,7 @@ export function CandidateAccountPage() {
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `talentflow-meus-dados-${new Date().toISOString().slice(0, 10)}.json`;
+      link.download = `profyla-meus-dados-${new Date().toISOString().slice(0, 10)}.json`;
       link.click();
       URL.revokeObjectURL(url);
       toast.success("Arquivo gerado.");
@@ -272,7 +272,7 @@ export function CandidateAccountPage() {
         )}
 
         <h3>Baixar meus dados</h3>
-        <FieldNote>Um arquivo JSON com tudo o que o TalentFlow guarda sobre você: perfil, currículo, candidaturas, testes e consentimentos.</FieldNote>
+        <FieldNote>Um arquivo JSON com tudo o que o Profyla guarda sobre você: perfil, currículo, candidaturas, testes e consentimentos.</FieldNote>
         <Actions>
           <Button type="button" onClick={() => void handleExport()} disabled={exporting}>
             {exporting ? "Gerando..." : "Baixar meus dados"}
@@ -292,7 +292,7 @@ export function CandidateAccountPage() {
       <ConfirmDialog
         open={pendingRevoke !== null}
         title="Revogar consentimento"
-        message="Sem esse consentimento você não poderá continuar usando o TalentFlow. Na próxima tela, você poderá aceitar novamente ou sair."
+        message="Sem esse consentimento você não poderá continuar usando o Profyla. Na próxima tela, você poderá aceitar novamente ou sair."
         confirmLabel="Revogar"
         confirming={revoking}
         onConfirm={() => void confirmRevoke()}

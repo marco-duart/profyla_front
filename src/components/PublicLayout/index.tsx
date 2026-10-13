@@ -1,6 +1,6 @@
 import { type PropsWithChildren } from "react";
 import { Link } from "react-router-dom";
-import logo from "../../assets/logo-512.png";
+import logo from "../../assets/icon-192.png";
 import { useAuth } from "../../hooks/useAuth";
 import { styled } from "../../theme/stitches";
 import { LegalLinks } from "../LegalLinks";
@@ -38,7 +38,7 @@ export function PublicLayout({ children }: PropsWithChildren) {
     <Shell>
       <Bar>
         <Brand to="/vagas">
-          <img src={logo} alt="" width={32} height={32} /> TalentFlow Vagas
+          <img src={logo} alt="" width={32} height={32} /> Profyla Vagas
         </Brand>
         <Actions aria-label="Conta">
           {user ? (

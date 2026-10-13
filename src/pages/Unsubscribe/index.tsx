@@ -42,7 +42,7 @@ export function UnsubscribePage() {
   return (
     <Page>
       <Panel>
-        <Logo src={logo} alt="TalentFlow" />
+        <Logo src={logo} alt="Profyla" />
         {!token || !isCategory(category) ? (
           <Notice>
             <strong>Link inválido.</strong> Use o link que veio no final do e-mail, ou ajuste suas preferências na área de conta.
@@ -55,7 +55,7 @@ export function UnsubscribePage() {
         ) : (
           <>
             <Notice>
-              Deseja deixar de receber <strong>{CATEGORY_LABELS[category]}</strong> do TalentFlow? E-mails importantes da sua
+              Deseja deixar de receber <strong>{CATEGORY_LABELS[category]}</strong> do Profyla? E-mails importantes da sua
               conta (acesso, senha, andamento de processos) continuam sendo enviados.
             </Notice>
             <SubmitButton type="button" onClick={() => void handleConfirm()} disabled={sending}>

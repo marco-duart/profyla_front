@@ -52,7 +52,7 @@ export function CandidateShell() {
       <TopBar>
         <TopBarBrand>
           <TopBarIcon src={icon} alt="" />
-          <TopBarTitle>TalentFlow</TopBarTitle>
+          <TopBarTitle>Profyla</TopBarTitle>
         </TopBarBrand>
         <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
           <NotificationBell />
@@ -66,7 +66,7 @@ export function CandidateShell() {
         <Brand>
           {photoUrl ? <Avatar src={photoUrl} name={user?.name} size={36} /> : <BrandIcon src={icon} alt="" />}
           <BrandText>
-            <BrandTitle>TalentFlow</BrandTitle>
+            <BrandTitle>Profyla</BrandTitle>
             <BrandSubtitle>{user?.name}</BrandSubtitle>
           </BrandText>
           <span style={{ marginLeft: "auto" }}><NotificationBell side="left" /></span>

@@ -22,7 +22,7 @@ export function usePageMeta(title: string | undefined, description?: string) {
   useEffect(() => {
     if (!title) return undefined;
     const previousTitle = document.title;
-    document.title = `${title} - TalentFlow`;
+    document.title = `${title} - Profyla`;
     const undo = [
       setMeta('meta[property="og:title"]', "property", "og:title", title),
       setMeta('meta[name="description"]', "name", "description", description ?? title),

@@ -26,7 +26,7 @@ export function ForgotPasswordPage() {
   return (
     <Page>
       <Panel>
-        <Logo src={logo} alt="TalentFlow" />
+        <Logo src={logo} alt="Profyla" />
         {sent ? (
           <>
             <Notice>

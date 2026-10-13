@@ -92,7 +92,7 @@ export function LoginPage() {
   return (
     <Page>
       <Panel>
-        <Logo src={logo} alt="TalentFlow" />
+        <Logo src={logo} alt="Profyla" />
         <Subtitle>Entre com sua conta para acompanhar seu processo seletivo.</Subtitle>
 
         <Form onSubmit={handleSubmit}>
