@@ -1,5 +1,5 @@
 import api from "../../configs/api";
-import type { CatalogItem, CreateAcademic, CreateDocument, CreateEmployment, CreateLink, CurriculumData } from "./dto";
+import type { CatalogItem, CreateAcademic, CreateDocument, CreateEmployment, CreateLink, CurriculumData, CurriculumImport } from "./dto";
 
 export async function getCurriculum(): Promise<CurriculumData.Response> {
   const response = await api.get<CurriculumData.Response>("/api/candidates/curriculum");
@@ -104,4 +104,15 @@ export async function createDocument(params: CreateDocument.Params): Promise<voi
 
 export async function deleteDocument(id: number): Promise<void> {
   await api.delete(`/api/candidates/document/${id}`);
+}
+
+// WP-42: lê o PDF anexado e devolve um rascunho (não grava nada).
+export async function getImportDraft(): Promise<CurriculumImport.Draft> {
+  const response = await api.post<CurriculumImport.Draft>("/api/candidates/curriculum/import");
+  return response.data;
+}
+
+export async function applyImport(payload: CurriculumImport.ApplyPayload): Promise<CurriculumData.Response> {
+  const response = await api.post<CurriculumData.Response>("/api/candidates/curriculum/import/apply", payload);
+  return response.data;
 }

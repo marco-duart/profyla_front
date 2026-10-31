@@ -139,3 +139,89 @@ export namespace CatalogItem {
     title: string;
   };
 }
+
+// WP-42: importação do currículo a partir do PDF (rascunho -> revisão -> aplicar).
+export namespace CurriculumImport {
+  export type Confidence = "high" | "medium" | "low";
+  export type ProfileField =
+    | "phone_number1"
+    | "phone_number2"
+    | "address_city"
+    | "address_neighborhood"
+    | "birthplace"
+    | "birthdate"
+    | "employee"
+    | "resume";
+
+  export type ProfileItem = {
+    field: ProfileField;
+    value: string | boolean;
+    current: string | boolean | null;
+    confidence: Confidence;
+    selected: boolean;
+  };
+
+  export type EmploymentData = {
+    company_name: string | null;
+    position: string | null;
+    start_date: string | null;
+    end_date: string | null;
+    achievements: string | null;
+  };
+
+  export type AcademicData = {
+    title: string | null;
+    institution: string | null;
+    degree: string | null;
+    start_date: string | null;
+    end_date: string | null;
+  };
+
+  export type LinkData = { title: string; link: string };
+
+  export type ListItem<T> = {
+    key: string;
+    confidence: Confidence;
+    selected: boolean;
+    missing: string[];
+    warnings: string[];
+    data: T;
+  };
+
+  export type CatalogEntry = { skill_id?: number; knowledge_id?: number; title: string; selected: boolean };
+
+  export type Draft = {
+    run_id: number;
+    source: {
+      filename: string;
+      pages_read: number;
+      truncated: boolean;
+      columns_detected: boolean;
+      headings_found: boolean;
+      parser_version: string;
+      skipped_duplicates: number;
+      notes: string[];
+    };
+    profile: ProfileItem[];
+    employment_histories: ListItem<EmploymentData>[];
+    academic_histories: ListItem<AcademicData>[];
+    professional_links: ListItem<LinkData>[];
+    social_links: ListItem<LinkData>[];
+    skills: CatalogEntry[];
+    knowledges: CatalogEntry[];
+    unmatched_terms: string[];
+  };
+
+  export type ApplyItem<T> = { data: T; edited: boolean };
+
+  export type ApplyPayload = {
+    run_id: number;
+    profile: Partial<Record<ProfileField, string | boolean>>;
+    employment_histories: ApplyItem<EmploymentData>[];
+    academic_histories: ApplyItem<AcademicData>[];
+    professional_links: ApplyItem<LinkData>[];
+    social_links: ApplyItem<LinkData>[];
+    skill_ids: number[];
+    knowledge_ids: number[];
+  };
+}
