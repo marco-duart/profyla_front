@@ -2,6 +2,7 @@ import { PageSkeleton } from "../../components/PageSkeleton";
 import { currencyToDecimal, formatCurrency, maskCurrency, maskPhone, onlyDigits } from "../../utils/masks";
 import { type ChangeEvent, type FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import { FiArrowLeft, FiArrowRight, FiCheck } from "react-icons/fi";
 import {
   addKnowledge,
@@ -64,6 +65,8 @@ import {
   Input as KitInput,
   WizardShell,
 } from "../CandidateKit/styles";
+
+const RESUME_MAX = 2000;
 
 const OPEN_QUESTIONS = [
   "Descreva suas principais características. O que mais admira em você? O que você considera como sua característica mais marcante.",
@@ -192,6 +195,25 @@ function formatSize(bytes: number): string {
   return bytes >= 1024 * 1024 ? `${(bytes / 1024 / 1024).toFixed(1)} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`;
 }
 
+// What is wrong with a chosen résumé file, if anything (the server checks type and size again).
+function pdfProblem(file: File): string | null {
+  if (file.type !== "application/pdf") return "O currículo deve ser um arquivo PDF.";
+  if (file.size > 5 * 1024 * 1024) return "O PDF deve ter no máximo 5 MB.";
+  return null;
+}
+
+// Starts the PDF import (WP-42): disabled until the personal data exists; the note says why.
+function ImportButton({ canImport, importing, onImport }: { canImport: boolean; importing: boolean; onImport: () => void }) {
+  return (
+    <>
+      <Button type="button" tone="brand" disabled={!canImport || importing} onClick={onImport}>
+        {importing ? "Enviando..." : "Preencher a partir do PDF"}
+      </Button>
+      {!canImport ? <FieldNote>Preencha seus dados pessoais primeiro.</FieldNote> : null}
+    </>
+  );
+}
+
 // Upload / replace / remove the résumé PDF (server checks type and the 5 MB limit too).
 function CurriculumFileSection({ file, onChange }: { file: CurriculumData.Response["curriculum_file"]; onChange: (next: CurriculumData.Response) => void }) {
   const input = useRef<HTMLInputElement>(null);
@@ -199,12 +221,9 @@ function CurriculumFileSection({ file, onChange }: { file: CurriculumData.Respon
 
   async function handleFile(chosen: File | undefined) {
     if (!chosen) return;
-    if (chosen.type !== "application/pdf") {
-      toast.error("O currículo deve ser um arquivo PDF.");
-      return;
-    }
-    if (chosen.size > 5 * 1024 * 1024) {
-      toast.error("O PDF deve ter no máximo 5 MB.");
+    const problem = pdfProblem(chosen);
+    if (problem) {
+      toast.error(problem);
       return;
     }
     setBusy(true);
@@ -255,7 +274,7 @@ function CurriculumFileSection({ file, onChange }: { file: CurriculumData.Respon
   );
 }
 
-function CurriculumView({ curriculum, onEdit, onCurriculumChange }: { curriculum: CurriculumData.Response; onEdit: (step?: StepId) => void; onCurriculumChange: (next: CurriculumData.Response) => void }) {
+function CurriculumView({ curriculum, onEdit, onCurriculumChange, onImport, importing }: { curriculum: CurriculumData.Response; onEdit: (step?: StepId) => void; onCurriculumChange: (next: CurriculumData.Response) => void; onImport: () => void; importing: boolean }) {
   const profile = curriculum.candidate_profile;
   const links = [...curriculum.professional_links, ...curriculum.social_links];
 
@@ -268,6 +287,7 @@ function CurriculumView({ curriculum, onEdit, onCurriculumChange }: { curriculum
         </div>
         <Actions>
           <Button type="button" tone="brand" onClick={() => onEdit()}>Editar currículo</Button>
+          <ImportButton canImport={Boolean(profile)} importing={importing} onImport={onImport} />
         </Actions>
       </Hero>
 
@@ -396,6 +416,7 @@ function CurriculumView({ curriculum, onEdit, onCurriculumChange }: { curriculum
         <PanelTitle>Currículo em PDF</PanelTitle>
         <Button type="button" tone="ghost" css={{ justifySelf: "start" }} aria-label="Editar seção: Currículo em PDF" onClick={() => onEdit("pdf")}>Editar esta seção</Button>
         <CurriculumFileSection file={curriculum.curriculum_file} onChange={onCurriculumChange} />
+        <ImportButton canImport={Boolean(profile)} importing={importing} onImport={onImport} />
       </Panel>
 
       <Panel>
@@ -432,6 +453,10 @@ export function CandidateCurriculumPage() {
   const modeInitialized = useRef(false);
   const [stepIndex, setStepIndex] = useState(0);
   const [saving, setSaving] = useState(false);
+  const navigate = useNavigate();
+  const importInput = useRef<HTMLInputElement>(null);
+  const [importing, setImporting] = useState(false);
+  const [showImportInvite, setShowImportInvite] = useState(false);
 
   const [profile, setProfile] = useState<ProfileDraft>(emptyProfile);
 
@@ -512,6 +537,32 @@ export function CandidateCurriculumPage() {
     }
   }
 
+  // PDF import: with a PDF already attached go straight to the review; otherwise pick one first.
+  function startImport() {
+    if (!curriculum?.candidate_profile) return;
+    if (curriculum.curriculum_file) navigate("/candidate/curriculum/import");
+    else importInput.current?.click();
+  }
+
+  async function handleImportFile(chosen: File | undefined) {
+    if (!chosen) return;
+    const problem = pdfProblem(chosen);
+    if (problem) {
+      toast.error(problem);
+      return;
+    }
+    setImporting(true);
+    try {
+      await uploadCurriculumFile(chosen);
+      navigate("/candidate/curriculum/import");
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, "Não foi possível enviar o currículo."));
+    } finally {
+      setImporting(false);
+      if (importInput.current) importInput.current.value = "";
+    }
+  }
+
   // Opens the wizard at a given step (the "Editar esta seção" links) or at the first one.
   function startEditing(step?: StepId) {
     setStepIndex(step ? Math.max(0, STEP_IDS.indexOf(step)) : 0);
@@ -542,6 +593,7 @@ export function CandidateCurriculumPage() {
       return;
     }
 
+    const firstSave = !curriculum?.candidate_profile;
     setSaving(true);
     try {
       await createCandidateProfile({
@@ -558,6 +610,10 @@ export function CandidateCurriculumPage() {
         number_of_children: profile.number_of_children,
       });
       toast.success("Dados salvos.");
+      if (firstSave) {
+        setShowImportInvite(true);
+        await loadCurriculum();
+      }
       goNext();
     } catch (error) {
       toast.error(getApiErrorMessage(error, "Erro ao salvar seus dados."));
@@ -687,12 +743,32 @@ export function CandidateCurriculumPage() {
     return <PageSkeleton kit="candidate" rows={4} />;
   }
 
+  const importPicker = (
+    <input ref={importInput} type="file" accept="application/pdf" hidden aria-label="Escolher PDF para importar" onChange={(event) => void handleImportFile(event.target.files?.[0])} />
+  );
+
   if (mode === "view") {
-    return <CurriculumView curriculum={curriculum} onEdit={startEditing} onCurriculumChange={setCurriculum} />;
+    return (
+      <>
+        {importPicker}
+        <CurriculumView curriculum={curriculum} onEdit={startEditing} onCurriculumChange={setCurriculum} onImport={startImport} importing={importing} />
+      </>
+    );
   }
 
   return (
     <WizardShell>
+      {importPicker}
+      {showImportInvite ? (
+        <Panel>
+          <PanelTitle>Quer adiantar?</PanelTitle>
+          <Lead>Preencha experiência, formação e links a partir do seu currículo em PDF. Você revisa tudo antes de salvar.</Lead>
+          <Actions>
+            <Button type="button" tone="brand" disabled={importing} onClick={() => { setShowImportInvite(false); startImport(); }}>Preencher a partir do PDF</Button>
+            <Button type="button" tone="ghost" onClick={() => setShowImportInvite(false)}>Agora não</Button>
+          </Actions>
+        </Panel>
+      ) : null}
       <div>
         <StepTrack>
           <StepFill style={{ width: `${progressPct}%` }} />
@@ -708,6 +784,7 @@ export function CandidateCurriculumPage() {
           <>
             <StepQuestion>Como podemos falar com você?</StepQuestion>
             <StepHelp>Usamos isso para avisar sobre novidades na sua candidatura.</StepHelp>
+            {!curriculum.candidate_profile ? <FieldNote>Depois de salvar, você poderá preencher experiência, formação e links a partir do seu currículo em PDF.</FieldNote> : null}
             <Grid>
               <Field>
                 Celular principal
@@ -856,7 +933,8 @@ export function CandidateCurriculumPage() {
           <>
             <StepQuestion>Resumo profissional</StepQuestion>
             <StepHelp>Duas ou três frases sobre seu perfil e objetivos já ajudam bastante.</StepHelp>
-            <Textarea value={profile.resume} onChange={(e) => setProfile((p) => ({ ...p, resume: e.target.value }))} placeholder="Conte um pouco sobre sua trajetória e o que você busca agora." />
+            <Textarea value={profile.resume} maxLength={RESUME_MAX} onChange={(e) => setProfile((p) => ({ ...p, resume: e.target.value }))} placeholder="Conte um pouco sobre sua trajetória e o que você busca agora." />
+            <FieldNote>{profile.resume.length}/{RESUME_MAX} caracteres</FieldNote>
           </>
         ) : null}
 
@@ -1097,6 +1175,7 @@ export function CandidateCurriculumPage() {
             <StepQuestion>Currículo em PDF</StepQuestion>
             <StepHelp>Opcional. Se você já tem um currículo pronto, envie o PDF para a equipe de recrutamento.</StepHelp>
             <CurriculumFileSection file={curriculum.curriculum_file} onChange={setCurriculum} />
+            <ImportButton canImport={Boolean(curriculum.candidate_profile)} importing={importing} onImport={startImport} />
           </>
         ) : null}
 
