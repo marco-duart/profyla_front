@@ -8,6 +8,7 @@ import { CandidateApplicationsPage } from "../../pages/CandidateApplications";
 import { CandidateApplicationDetailPage } from "../../pages/CandidateApplicationDetail";
 import { CandidateAccountPage } from "../../pages/CandidateAccount";
 import { CandidateCurriculumPage } from "../../pages/CandidateCurriculum";
+import { CandidateCurriculumImportPage } from "../../pages/CandidateCurriculumImport";
 import { CandidateOpportunitiesPage } from "../../pages/CandidateOpportunities";
 import { CandidateAssessmentsPage } from "../../pages/CandidateAssessments";
 import { CandidateDiscAssessmentPage } from "../../pages/CandidateDiscAssessment";
@@ -113,6 +114,7 @@ export function AppRouter() {
           <Route path="applications/:applicationId" element={<CandidateApplicationDetailPage />} />
           <Route path="account" element={<CandidateAccountPage />} />
           <Route path="curriculum" element={<CandidateCurriculumPage />} />
+          <Route path="curriculum/import" element={<CandidateCurriculumImportPage />} />
           <Route path="opportunities" element={<CandidateOpportunitiesPage />} />
           <Route path="opportunities/:id" element={<CandidateOpportunityDetailPage />} />
           <Route path="assessments" element={<CandidateAssessmentsPage />} />
