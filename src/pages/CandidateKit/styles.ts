@@ -47,6 +47,14 @@ export const Grid = styled("div", {
   },
 });
 
+// A field plus the notes/errors below it, kept OUT of the <label> so its accessible name stays stable.
+export const FieldGroup = styled("div", {
+  display: "grid",
+  gap: "$1",
+  alignContent: "start",
+  minWidth: 0,
+});
+
 export const Field = styled("label", {
   display: "grid",
   gap: "$2",
@@ -442,6 +450,62 @@ export const FieldNote = styled("span", {
   letterSpacing: 0,
   textTransform: "none",
   lineHeight: 1.5,
+});
+
+// Checkbox that matches the kit; the label wrapper gives it a 44px touch target.
+export const CheckboxField = styled("label", {
+  display: "flex",
+  alignItems: "center",
+  gap: "$3",
+  minHeight: "44px",
+  color: "$text",
+  fontSize: "$md",
+  cursor: "pointer",
+  variants: {
+    disabled: {
+      true: { cursor: "not-allowed", color: "$textMuted" },
+    },
+  },
+});
+
+export const Checkbox = styled("input", {
+  appearance: "none",
+  flexShrink: 0,
+  width: "22px",
+  height: "22px",
+  margin: 0,
+  border: "1px solid $border",
+  borderRadius: "$sm",
+  backgroundColor: "$surface",
+  cursor: "pointer",
+  display: "grid",
+  placeContent: "center",
+  transition: "border-color 140ms ease, background-color 140ms ease, box-shadow 140ms ease",
+  '&::after': {
+    content: '""',
+    width: "10px",
+    height: "6px",
+    borderLeft: "2px solid $text",
+    borderBottom: "2px solid $text",
+    transform: "rotate(-45deg) translate(1px, -1px)",
+    opacity: 0,
+  },
+  '&:checked': {
+    backgroundColor: "$brand",
+    borderColor: "$brand",
+  },
+  '&:checked::after': {
+    opacity: 1,
+  },
+  '&:focus-visible': {
+    outline: "none",
+    borderColor: "$brand",
+    boxShadow: "$glowBrand",
+  },
+  '&:disabled': {
+    opacity: 0.45,
+    cursor: "not-allowed",
+  },
 });
 
 // Fluid card grid for directory-style listings (vagas, etc.).
