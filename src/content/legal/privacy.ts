@@ -78,6 +78,7 @@ Você pode, a qualquer momento: confirmar que tratamos seus dados, acessá-los, 
 - No app: aba Perfil, em "Dados da conta e senha" e "Privacidade e e-mails". Lá você edita os dados, escolhe os e-mails, revoga o aviso dos testes, exporta uma cópia dos seus dados e exclui a conta.
 - No site: página Conta, na seção "Privacidade e dados".
 - Se não conseguir entrar, peça pelo e-mail de contato, a partir do endereço cadastrado. Respondemos em até 15 dias.
+- Passo a passo da exclusão da conta: [Exclusão de conta](/exclusao-de-conta).
 - Os Termos de Uso e esta Política são condição para usar o Profyla. Para retirá-los, exclua a conta.
 
 Você também pode reclamar à Autoridade Nacional de Proteção de Dados (ANPD).

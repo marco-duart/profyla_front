@@ -39,6 +39,7 @@ import { EmailConfirmedPage } from "../../pages/EmailConfirmed";
 import { ForgotPasswordPage } from "../../pages/ForgotPassword";
 import { ResetPasswordPage } from "../../pages/ResetPassword";
 import { LegalDocumentPage } from "../../pages/LegalDocument";
+import { AccountDeletionPage } from "../../pages/AccountDeletion";
 import { RegisterPage } from "../../pages/Register";
 import { useAuth } from "../../hooks/useAuth";
 
@@ -101,6 +102,7 @@ export function AppRouter() {
         <Route path="/termos" element={<LegalDocumentPage kind="terms" />} />
         <Route path="/privacidade" element={<LegalDocumentPage kind="privacy" />} />
         <Route path="/aviso-testes" element={<LegalDocumentPage kind="assessment_notice" />} />
+        <Route path="/exclusao-de-conta" element={<AccountDeletionPage />} />
         <Route
           path="/candidate"
           element={

@@ -16,6 +16,7 @@ export function LegalLinks() {
     <Row>
       <Link to="/termos">Termos de Uso</Link>
       <Link to="/privacidade">Política de Privacidade</Link>
+      <Link to="/exclusao-de-conta">Exclusão de conta</Link>
     </Row>
   );
 }
