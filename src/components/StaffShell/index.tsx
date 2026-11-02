@@ -114,6 +114,7 @@ export function StaffShell() {
           <NavSectionLabel>Visão geral</NavSectionLabel>
           <NavItem to="/staff/home">Painel da equipe</NavItem>
           <NavItem to="/staff/metrics">Métricas</NavItem>
+          <NavItem to="/staff/novidades">Novidades</NavItem>
 
           <NavSectionLabel>Recrutamento</NavSectionLabel>
           <NavItem to="/staff/kanban" data-featured="true">Kanban do processo</NavItem>

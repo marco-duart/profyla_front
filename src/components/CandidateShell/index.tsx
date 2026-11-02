@@ -78,6 +78,7 @@ export function CandidateShell() {
           <NavItem to="/candidate/applications">Candidaturas</NavItem>
           <NavItem to="/candidate/curriculum">Currículo</NavItem>
           <NavItem to="/candidate/assessments">Avaliações comportamentais</NavItem>
+          <NavItem to="/candidate/novidades">Novidades</NavItem>
           <NavItem to="/candidate/account">Conta</NavItem>
         </Nav>
 

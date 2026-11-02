@@ -40,6 +40,7 @@ import { ForgotPasswordPage } from "../../pages/ForgotPassword";
 import { ResetPasswordPage } from "../../pages/ResetPassword";
 import { LegalDocumentPage } from "../../pages/LegalDocument";
 import { AccountDeletionPage } from "../../pages/AccountDeletion";
+import { NovidadesPage } from "../../pages/Novidades";
 import { RegisterPage } from "../../pages/Register";
 import { useAuth } from "../../hooks/useAuth";
 
@@ -122,6 +123,7 @@ export function AppRouter() {
           <Route path="assessments" element={<CandidateAssessmentsPage />} />
           <Route path="assessments/disc" element={<CandidateDiscAssessmentPage />} />
           <Route path="assessments/eneagrama" element={<CandidateEneagramaAssessmentPage />} />
+          <Route path="novidades" element={<NovidadesPage kit="candidate" />} />
           <Route index element={<Navigate to="home" replace />} />
           <Route path="*" element={<NotFound homePath="/candidate/home" homeLabel="Voltar ao início" />} />
         </Route>
@@ -154,6 +156,7 @@ export function AppRouter() {
           <Route path="candidates" element={<StaffCandidatesPage />} />
           <Route path="candidates/compare" element={<StaffComparePage />} />
           <Route path="candidates/:id" element={<StaffCandidateDetailPage />} />
+          <Route path="novidades" element={<NovidadesPage kit="staff" />} />
           <Route path="account" element={<StaffAccountPage />} />
           <Route index element={<Navigate to="home" replace />} />
           <Route path="*" element={<NotFound homePath="/staff/home" homeLabel="Voltar ao painel" />} />

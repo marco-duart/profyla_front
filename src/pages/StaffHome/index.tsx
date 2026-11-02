@@ -1,3 +1,4 @@
+import { NovidadesBlock } from "../../components/Novidades";
 import { PageSkeleton } from "../../components/PageSkeleton";
 import { formatDateTime } from "../../utils/format";
 import { interviewTypeLabel } from "../../utils/labels";
@@ -238,6 +239,8 @@ export function StaffHomePage() {
           </List>
         </Panel>
       </Grid>
+
+      <NovidadesBlock seeAllTo="/staff/novidades" />
     </Page>
   );
 }
